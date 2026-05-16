@@ -1117,6 +1117,37 @@ Brand: Elegant luxury + warm romantic"
 - [ ] Mobile-first responsive design
 - [ ] prefers-reduced-motion support
 - [ ] Color contrast ≥4.5:1 (AA)
+
+---
+
+## 2026-05-17 Implementation Sync (Post-Build)
+
+### Delivered features not in original plan
+- [x] Hero 2-column layout with semantic class names (hero, hero-left, hero-right, hero-visual, phone-frame, phone-screen, phone-notch, thiep-preview, phone-info, floating-card, fc-1/fc-2)
+- [x] Phone mockup (w-260px, h-460px) with floating animation keyframes
+- [x] 8-template showcase with Vietnamese card names, gradient colors, tags, "Mới" badges, hover lift
+- [x] How-it-works auto-cycle steps (3500ms) with step-synced visual states (template grid → info form → share/RSVP)
+- [x] Pricing section (`#gia`) and Testimonials section
+- [x] AnimatedSection scroll-reveal wrapper via `useInView`
+- [x] Floating card animation (float-card keyframe with fc-1/fc-2 delays)
+- [x] Footer multi-column with product/tools/resources/cooperation links + multilingual links
+
+### Files delivered
+- `src/lib/useInView.ts` — IntersectionObserver scroll reveal hook
+- `src/lib/utils.ts` — cn() utility
+- `src/components/ui/` — button, badge, card, section-wrapper, icons
+- `src/app/page.tsx` — full landing rebuild
+- `src/app/globals.css` — landing tokens + animation keyframes
+- `src/app/layout.tsx` — fonts (Cormorant, Jakarta, Great Vibes)
+
+### Verification (final state)
+- [x] pnpm lint passes (no errors)
+- [x] pnpm build passes
+- [x] All original plan tasks implemented
+
+---
+
+*Plan completed: 2026-05-17*
 - [ ] Focus rings visible on interactive elements
 - [ ] Semantic HTML (header, nav, section, main, footer)
 - [ ] No hardcoded hex values — use design tokens

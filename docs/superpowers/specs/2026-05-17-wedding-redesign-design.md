@@ -244,4 +244,38 @@ Reference: `docs/superpowers/specs/2026-05-16-wedding-saas-design.md`
 
 ---
 
-*Last updated: 2026-05-17*
+## 2026-05-17 Implementation Sync (Current State)
+
+### Delivered landing updates (implemented)
+- Hero rebuilt to competitor-grade 2-column structure with:
+  - semantic classes (`hero`, `hero-left`, `hero-right`, `hero-visual`, `phone-frame`, `phone-screen`, `phone-notch`, `thiep-preview`, `phone-info`, `floating-card`, `fc-*`)
+  - full-height mobile mockup (`w-[260px]`, `h-[460px]`), floating stat cards, and decorative trust zone
+  - Vietnamese-first copy and dual CTA flow
+- Trust/social blocks upgraded with large numeric proof and support-chat style proof
+- Template showcase upgraded to 8 Vietnamese card concepts with tags, "Mới" badges, and calibrated gradients (Song Long Đỏ already aligned to `#7a1428 → #c4283a → #7a1428`)
+- How-it-works now has real step-synced visual states:
+  - step 1: template grid preview
+  - step 2: customize info preview
+  - step 3: share + RSVP preview
+  - auto-cycle (`3500ms`) and active-step sync
+- Added `Pricing` (`#gia`) and `Testimonials` sections; fixed anchor mismatch from old `#pricing`
+- Footer expanded with multi-column product/tools/resources/cooperation links and multilingual links
+
+### Motion system now active
+- Scroll reveal animation wrapper via `useInView` + `AnimatedSection`
+- Hover-lift motion on template and content cards
+- Floating keyframes for phone mockup and floating cards:
+  - `.phone-frame { animation: float 4s ease-in-out infinite; }`
+  - `.floating-card { animation: float-card 5s ease-in-out infinite; }`
+- `prefers-reduced-motion` fallback preserved in global styles
+
+### Files reflecting final delivered behavior
+- `src/app/page.tsx`
+- `src/app/globals.css`
+- `src/lib/useInView.ts`
+
+### Notes
+- Keep original project font/color system baseline; only fill missing UI/UX pieces and interaction polish.
+- Current implementation is build/lint clean.
+
+*Last updated: 2026-05-17 (synced with implemented UI state)*
