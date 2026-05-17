@@ -5,6 +5,7 @@ import DOMPurify from "isomorphic-dompurify";
 import { useState, useEffect } from "react";
 import { useInView } from "@/lib/useInView";
 import { Button } from "@/components/ui/button";
+import { TemplateActionModal } from "@/components/templates/template-action-modal";
 import { Badge } from "@/components/ui/badge";
 import { Card, CardContent } from "@/components/ui/card";
 import { SectionWrapper } from "@/components/ui/section-wrapper";
@@ -218,9 +219,20 @@ function TrustStrip() {
 }
 
 function TemplateShowcase() {
+  const [selectedTemplate, setSelectedTemplate] = useState<{
+    id: string;
+    name: string;
+    slug: string;
+    categoryLabel: string;
+    thumbnailUrl: string | null;
+    description: string | null;
+    isPremium: boolean;
+  } | null>(null);
+
   const templates = [
     {
       id: 1,
+      slug: "song-long-do",
       name: "Song Long – Đỏ",
       tags: ["Truyền thống", "Trang trọng"],
       bg: "linear-gradient(135deg, #7a1428 0%, #c4283a 50%, #7a1428 100%)",
@@ -230,6 +242,7 @@ function TemplateShowcase() {
     },
     {
       id: 2,
+      slug: "thanh-diep-xanh",
       name: "Thanh Diệp – Xanh",
       tags: ["Thiên nhiên", "Hiện đại"],
       bg: "linear-gradient(135deg, #1a3a2a, #2d6a4a)",
@@ -239,6 +252,7 @@ function TemplateShowcase() {
     },
     {
       id: 3,
+      slug: "hoa-lua-nau",
       name: "Hoa Lụa – Nâu",
       tags: ["Sang trọng", "Cổ điển"],
       bg: "linear-gradient(135deg, #4a2010, #9b6432)",
@@ -248,6 +262,7 @@ function TemplateShowcase() {
     },
     {
       id: 4,
+      slug: "hoang-kim-lam",
       name: "Hoàng Kim – Lam",
       tags: ["Hoàng gia", "Trang trọng"],
       bg: "linear-gradient(135deg, #1a2050, #2d3a8c)",
@@ -258,6 +273,7 @@ function TemplateShowcase() {
     },
     {
       id: 5,
+      slug: "mai-lan-trang",
       name: "Mai Lan – Trắng",
       tags: ["Tối giản", "Tinh tế"],
       bg: "linear-gradient(135deg, #f0e8e0, #e8d8c8)",
@@ -267,6 +283,7 @@ function TemplateShowcase() {
     },
     {
       id: 6,
+      slug: "song-phung-do",
       name: "Song Phụng – Đỏ",
       tags: ["Truyền thống", "Đỏ"],
       bg: "linear-gradient(135deg, #5a0a20, #8c1430, #5a0a20)",
@@ -276,6 +293,7 @@ function TemplateShowcase() {
     },
     {
       id: 7,
+      slug: "nhat-binh-tim",
       name: "Nhật Bình – Tím",
       tags: ["Áo dài", "Phong cách"],
       bg: "linear-gradient(135deg, #2a1a30, #5a2a70)",
@@ -286,6 +304,7 @@ function TemplateShowcase() {
     },
     {
       id: 8,
+      slug: "vuon-xuan-xanh",
       name: "Vườn Xuân – Xanh",
       tags: ["Boho", "Lãng mạn"],
       bg: "linear-gradient(135deg, #2a4020, #3a6030)",
@@ -296,7 +315,7 @@ function TemplateShowcase() {
   ];
 
   return (
-    <SectionWrapper id="templates" className="bg-linear-to-b from-white to-rose-50/30">
+    <SectionWrapper id="templates" className="bg-linear-to-b from-white to-rose-50/30 [&>div]:max-w-7xl">
       <AnimatedSection>
         <div className="text-center mb-12">
           <Badge variant="outline" className="mb-4">
@@ -311,10 +330,11 @@ function TemplateShowcase() {
           </p>
         </div>
 
-        <div className="grid sm:grid-cols-2 lg:grid-cols-4 gap-6">
+        <div className="grid grid-cols-2 lg:grid-cols-4 gap-6">
           {templates.map((t, i) => (
             <div
               key={t.id}
+              onClick={() => setSelectedTemplate({ id: String(t.id), name: t.name, slug: t.slug, categoryLabel: t.tags[0] || "Template", thumbnailUrl: null, description: null, isPremium: false })}
               className="group h-full cursor-pointer transition-all duration-300 hover:-translate-y-1"
               style={{ transitionDelay: `${i * 40}ms` }}
             >
@@ -361,14 +381,23 @@ function TemplateShowcase() {
         </div>
 
         <div className="text-center mt-12">
-          <Link href="/templates">
-            <Button size="lg">
-              View all templates
-              <ArrowRight className="w-4 h-4" />
-            </Button>
+          <Link
+            href="/templates"
+            className="inline-flex items-center justify-center gap-2 font-semibold transition-all duration-200 cursor-pointer h-14 px-7 text-lg rounded-2xl bg-rose-600 text-white hover:bg-rose-700 active:bg-rose-800 shadow-sm shadow-rose-200/50"
+          >
+            View all templates
+            <ArrowRight className="w-4 h-4" />
           </Link>
         </div>
       </AnimatedSection>
+
+      {selectedTemplate && (
+        <TemplateActionModal
+          template={{ ...selectedTemplate, category: selectedTemplate.categoryLabel }}
+          categoryLabel={selectedTemplate.categoryLabel}
+          onClose={() => setSelectedTemplate(null)}
+        />
+      )}
     </SectionWrapper>
   );
 }

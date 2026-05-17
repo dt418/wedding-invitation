@@ -1,7 +1,7 @@
 "use client";
 
+import Link from "next/link";
 import { useState } from "react";
-import Image from "next/image";
 import { TemplateActionModal } from "./template-action-modal";
 
 type Template = {
@@ -16,72 +16,72 @@ type Template = {
   createdAt: Date;
 };
 
-type GroupedTemplates = Record<string, Template[]>;
 
 interface TemplatesGalleryClientProps {
-  grouped: GroupedTemplates;
-  categoryLabels: Record<string, string>;
+  templates: Template[];
 }
 
 export function TemplatesGalleryClient({
-  grouped,
-  categoryLabels,
+  templates,
 }: TemplatesGalleryClientProps) {
   const [selectedTemplate, setSelectedTemplate] = useState<Template | null>(null);
 
   return (
     <>
-      <div className="max-w-6xl">
-      <h1 className="text-2xl font-semibold mb-2">Template Gallery</h1>
-      <p className="text-zinc-500 mb-8">Choose a template for your wedding invitation</p>
+      <div className="w-full">
+        <h1 className="text-2xl font-semibold mb-2">All Templates</h1>
+        <p className="text-zinc-500 mb-8">Choose a template for your wedding invitation</p>
 
-      {Object.entries(grouped).map(([cat, tmpls]) => (
-        <div key={cat} className="mb-12">
-          <h2 className="text-lg font-medium mb-4 text-zinc-700">
-            {categoryLabels[cat] || cat}
-          </h2>
-          <div className="grid grid-cols-1 md:grid-cols-2 lg:grid-cols-3 gap-6">
-            {tmpls.map((tmpl) => (
-              <button
-                key={tmpl.id}
-                onClick={() => setSelectedTemplate(tmpl)}
-                className="group text-left w-full"
+        <div className="grid grid-cols-2 md:grid-cols-3 lg:grid-cols-4 xl:grid-cols-5 gap-3">
+          {templates.map((tmpl) => (
+            <div
+              key={tmpl.id}
+              onClick={() => setSelectedTemplate(tmpl)}
+              className="group w-full cursor-pointer overflow-hidden rounded-lg shadow-md transition-all duration-300 hover:shadow-xl bg-white"
+            >
+              <Link
+                href={`/invite/${tmpl.slug}/demo`}
+                onClick={(e) => e.stopPropagation()}
+                className="block relative aspect-[9/16] w-full overflow-hidden bg-zinc-100"
               >
-                <div className="aspect-[4/3] bg-zinc-100 rounded-xl overflow-hidden mb-3 border">
-                  {tmpl.thumbnailUrl ? (
-                    <Image
-                      src={tmpl.thumbnailUrl}
-                      alt={tmpl.name}
-                      width={640}
-                      height={480}
-                      className="w-full h-full object-cover group-hover:scale-105 transition-transform"
-                    />
-                  ) : (
-                    <div className="w-full h-full flex items-center justify-center text-zinc-400">
-                      {tmpl.name}
-                    </div>
-                  )}
-                </div>
-                <div className="flex items-center justify-between">
-                  <span className="font-medium">{tmpl.name}</span>
-                  {tmpl.isPremium && (
-                    <span className="text-xs bg-amber-100 text-amber-700 px-2 py-0.5 rounded-full">
-                      Premium
+                {tmpl.thumbnailUrl ? (
+                  <img
+                    src={tmpl.thumbnailUrl}
+                    alt={tmpl.name}
+                    className="h-full w-full object-cover object-top transition-[object-position] duration-[12s] ease-in-out group-hover:object-bottom"
+                  />
+                ) : (
+                  <div className="flex h-full w-full items-center justify-center text-zinc-400">
+                    {tmpl.name}
+                  </div>
+                )}
+
+                <div className="absolute inset-0 bg-gradient-to-t from-black/80 via-black/20 to-transparent opacity-100 md:opacity-0 md:group-hover:opacity-100 transition-opacity duration-300" />
+
+                <div className="absolute bottom-0 left-0 right-0 p-4 opacity-100 md:opacity-0 md:group-hover:opacity-100 transition-opacity duration-300">
+                  <h3 className="mb-1 text-sm font-semibold text-white">{tmpl.name}</h3>
+                  <div className="mb-2 flex flex-wrap gap-1">
+                    <span className="rounded bg-white/20 px-1.5 py-0.5 text-[10px] text-white">
+                      {tmpl.category}
                     </span>
-                  )}
+                    {tmpl.isPremium && (
+                      <span className="rounded bg-amber-500/80 px-1.5 py-0.5 text-[10px] text-white">
+                        Premium
+                      </span>
+                    )}
+                  </div>
+                  {tmpl.description && <p className="text-xs text-white/80 line-clamp-2">{tmpl.description}</p>}
                 </div>
-                <p className="text-sm text-zinc-500 mt-1">{tmpl.description}</p>
-              </button>
-            ))}
-          </div>
+              </Link>
+            </div>
+          ))}
         </div>
-      ))}
-    </div>
+      </div>
 
     {selectedTemplate && (
       <TemplateActionModal
         template={selectedTemplate}
-        categoryLabel={categoryLabels[selectedTemplate.category] || selectedTemplate.category}
+        categoryLabel={selectedTemplate.category}
         onClose={() => setSelectedTemplate(null)}
       />
     )}
