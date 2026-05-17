@@ -1,26 +1,94 @@
 @import "tailwindcss";
 
 :root {
-  --background: #ffffff;
-  --foreground: #171717;
+  --background: #fdf2f8;
+  --foreground: #831843;
+  --color-primary: #db2777;
+  --color-on-primary: #ffffff;
+  --color-secondary: #f472b6;
+  --color-accent: #ca8a04;
+  --color-muted: #f0edf4;
+  --color-border: #fbcfe8;
+  --color-ring: #db2777;
+  --color-destructive: #dc2626;
 }
 
 @theme inline {
   --color-background: var(--background);
   --color-foreground: var(--foreground);
-  --font-sans: var(--font-geist-sans);
-  --font-mono: var(--font-geist-mono);
+  --font-sans: var(--font-jakarta);
+  --font-serif: var(--font-cormorant);
+  --font-script: var(--font-great-vibes);
 }
 
-@media (prefers-color-scheme: dark) {
-  :root {
-    --background: #0a0a0a;
-    --foreground: #ededed;
-  }
+* {
+  border-color: var(--color-border);
+}
+
+html,
+body {
+  min-height: 100%;
 }
 
 body {
-  background: var(--background);
+  background: radial-gradient(circle at top, #fff8fb 0%, var(--background) 45%, #ffffff 100%);
   color: var(--foreground);
-  font-family: Arial, Helvetica, sans-serif;
+  font-family: var(--font-jakarta), sans-serif;
+  text-rendering: optimizeLegibility;
 }
+
+h1,
+h2,
+h3,
+h4,
+h5,
+h6 {
+  font-family: var(--font-cormorant), serif;
+  letter-spacing: -0.01em;
+}
+
+.font-script {
+  font-family: var(--font-great-vibes), cursive;
+}
+
+html {
+  scroll-behavior: smooth;
+}
+
+/* Scroll reveal */
+.reveal {
+  opacity: 0;
+  transform: translateY(24px);
+  transition: opacity 0.6s ease, transform 0.6s ease;
+}
+.reveal.visible {
+  opacity: 1;
+  transform: translateY(0);
+}
+
+@media (prefers-reduced-motion: reduce) {
+  *,
+  *::before,
+  *::after {
+    animation-duration: 0.01ms !important;
+    animation-iteration-count: 1 !important;
+    transition-duration: 0.01ms !important;
+    scroll-behavior: auto !important;
+  }
+}
+
+/* Phone — lên xuống nhẹ */
+@keyframes float {
+  0%, 100% { transform: translateY(0); }
+  50%       { transform: translateY(-12px); }
+}
+.phone-frame { animation: float 4s ease-in-out infinite; }
+
+/* Floating card — nhẹ hơn */
+@keyframes float-card {
+  0%, 100% { transform: translateY(0); }
+  50%       { transform: translateY(-8px); }
+}
+.floating-card { animation: float-card 5s ease-in-out infinite; }
+.fc-1 { animation-delay: 0.5s; }
+.fc-2 { animation-delay: 1.5s; }
