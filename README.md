@@ -1,36 +1,95 @@
-This is a [Next.js](https://nextjs.org) project bootstrapped with [`create-next-app`](https://nextjs.org/docs/app/api-reference/cli/create-next-app).
+# Wedding Invitation Platform
 
-## Getting Started
+Next.js 16 wedding invitation SaaS with public invite pages, RSVP tracking, template system, and authenticated dashboard.
 
-First, run the development server:
+## Tech Stack
+
+- Next.js 16.2.6 (App Router, Turbopack)
+- React 19.2.4
+- TypeScript 5
+- Tailwind CSS v4
+- Drizzle ORM + PostgreSQL (`postgres` driver)
+- Zod v4
+- JWT auth (`wedding_token` cookie)
+- pnpm
+
+## Prerequisites
+
+- Node.js 20+
+- pnpm 9+
+- Docker (for local Postgres via `docker compose`)
+
+## Quick Start
+
+1. Install dependencies
 
 ```bash
-npm run dev
-# or
-yarn dev
-# or
-pnpm dev
-# or
-bun dev
+pnpm install
 ```
 
-Open [http://localhost:3000](http://localhost:3000) with your browser to see the result.
+2. Start local database
 
-You can start editing the page by modifying `app/page.tsx`. The page auto-updates as you edit the file.
+```bash
+docker compose up -d
+```
 
-This project uses [`next/font`](https://nextjs.org/docs/app/building-your-application/optimizing/fonts) to automatically optimize and load [Geist](https://vercel.com/font), a new font family for Vercel.
+3. Configure environment
 
-## Learn More
+```bash
+cp .env.example .env.local
+```
 
-To learn more about Next.js, take a look at the following resources:
+Required vars in `.env.local`:
 
-- [Next.js Documentation](https://nextjs.org/docs) - learn about Next.js features and API.
-- [Learn Next.js](https://nextjs.org/learn) - an interactive Next.js tutorial.
+```bash
+DATABASE_URL=postgresql://wedding:wedding123@localhost:5432/wedding_invitation
+JWT_SECRET=replace-with-32-char-secret
+NODE_ENV=development
+```
 
-You can check out [the Next.js GitHub repository](https://github.com/vercel/next.js) - your feedback and contributions are welcome!
+4. Run migrations + seed
 
-## Deploy on Vercel
+```bash
+pnpm db:migrate
+pnpm db:seed
+```
 
-The easiest way to deploy your Next.js app is to use the [Vercel Platform](https://vercel.com/new?utm_medium=default-template&filter=next.js&utm_source=create-next-app&utm_campaign=create-next-app-readme) from the creators of Next.js.
+5. Start app
 
-Check out our [Next.js deployment documentation](https://nextjs.org/docs/app/building-your-application/deploying) for more details.
+```bash
+pnpm dev
+```
+
+Open http://localhost:3000
+
+## Default Demo Account
+
+- Email: `demo@wedding.local`
+- Password: `Aa@123456#`
+
+## Core Commands
+
+```bash
+pnpm dev          # run dev server
+pnpm build        # production build
+pnpm lint         # eslint
+pnpm db:generate  # generate drizzle migration
+pnpm db:migrate   # apply migrations
+pnpm db:seed      # seed demo data
+```
+
+## App Surfaces
+
+- Public invite page: `/invite/[code]`
+- Auth pages: `/login`, `/register`
+- Dashboard pages: `/events`, `/events/[id]`, `/events/[id]/edit`, `/events/[id]/analytics`
+- Templates gallery: `/templates`
+
+## Docs
+
+Project planning/design docs live in:
+
+- `docs/superpowers/specs/`
+- `docs/superpowers/plans/`
+
+See `docs/superpowers/README.md` for doc index.

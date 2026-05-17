@@ -1,6 +1,7 @@
 "use client";
 
 import Link from "next/link";
+import DOMPurify from "isomorphic-dompurify";
 import { useState, useEffect } from "react";
 import { useInView } from "@/lib/useInView";
 import { Button } from "@/components/ui/button";
@@ -144,7 +145,9 @@ function HeroSection() {
                 <div className="thiep-preview flex-1 rounded-2xl border border-rose-200 p-5 text-center min-h-35 flex flex-col justify-center" style={{ background: "linear-gradient(135deg,#7a1428,#c4283a)" }}>
                   <div className="thiep-title text-xs tracking-widest mb-2" style={{ color: "#f9e4a0" }}>Trân trọng kính mời</div>
                   <div className="thiep-names font-serif text-2xl leading-tight" style={{ color: "#f9e4a0" }}>
-                    Minh Quân<span className="thiep-amp text-sm" style={{ color: "#f9e4a0" }}>{'\u0026'}</span> Thanh Lan
+                    Minh Quân<br />
+                    <span className="text-sm">&amp;</span><br />
+                    Thanh Lan
                   </div>
                   <div className="mock-deco w-14 h-px mx-auto my-3" style={{ background: "#f9e4a0" }} />
                   <div className="thiep-date text-xs text-zinc-100">15 · 06 · 2025 · 11:00 SA</div>
@@ -293,7 +296,7 @@ function TemplateShowcase() {
   ];
 
   return (
-    <SectionWrapper id="templates" className="bg-gradient-to-b from-white to-rose-50/30">
+    <SectionWrapper id="templates" className="bg-linear-to-b from-white to-rose-50/30">
       <AnimatedSection>
         <div className="text-center mb-12">
           <Badge variant="outline" className="mb-4">
@@ -325,7 +328,7 @@ function TemplateShowcase() {
                   className="h-52 flex items-center justify-center relative overflow-hidden"
                   style={{ background: t.bg }}
                 >
-                  <div className="w-28 h-40 rounded-sm shadow-2xl rotate-[-2deg] flex flex-col items-center justify-center gap-1 p-2 border border-white/20 backdrop-blur-sm bg-black/10">
+                  <div className="w-28 h-40 rounded-sm shadow-2xl -rotate-2 flex flex-col items-center justify-center gap-1 p-2 border border-white/20 backdrop-blur-sm bg-black/10">
                     <span className="text-[10px] tracking-widest" style={{ color: t.accent, opacity: 0.8 }}>
                       Kính mời
                     </span>
@@ -456,11 +459,11 @@ function HowItWorks() {
               {stepIdx === 0 && (
                 <div style={{ textAlign: "center" }}>
                   <div className="font-serif text-lg text-zinc-600 mb-6">Pick your favorite template</div>
-                  <div className="grid grid-cols-2 gap-3 w-[240px] mx-auto">
-                    <div className="aspect-[3/4] rounded-lg opacity-60" style={{ background: "linear-gradient(135deg,#7a1428,#c4283a)" }} />
-                    <div className="aspect-[3/4] rounded-lg border-[3px] border-[#fb3570] shadow-[0_0_0_2px_#fff]" style={{ background: "linear-gradient(135deg,#1a3a2a,#2d6a4a)" }} />
-                    <div className="aspect-[3/4] rounded-lg opacity-60" style={{ background: "linear-gradient(135deg,#4a2010,#9b6432)" }} />
-                    <div className="aspect-[3/4] rounded-lg opacity-60" style={{ background: "linear-gradient(135deg,#1a2050,#2d3a8c)" }} />
+                  <div className="grid grid-cols-2 gap-3 w-60 mx-auto">
+                    <div className="aspect-3/4 rounded-lg opacity-60" style={{ background: "linear-gradient(135deg,#7a1428,#c4283a)" }} />
+                    <div className="aspect-3/4 rounded-lg border-[3px] border-[#fb3570] shadow-[0_0_0_2px_#fff]" style={{ background: "linear-gradient(135deg,#1a3a2a,#2d6a4a)" }} />
+                    <div className="aspect-3/4 rounded-lg opacity-60" style={{ background: "linear-gradient(135deg,#4a2010,#9b6432)" }} />
+                    <div className="aspect-3/4 rounded-lg opacity-60" style={{ background: "linear-gradient(135deg,#1a2050,#2d3a8c)" }} />
                   </div>
                 </div>
               )}
@@ -565,10 +568,7 @@ function FeaturesSection() {
             <h3 className="text-lg font-semibold text-rose-900 mb-2">
               {feature.title}
             </h3>
-            <p
-              className="text-sm text-zinc-600"
-              dangerouslySetInnerHTML={{ __html: feature.description }}
-            />
+            <p className="text-sm text-zinc-600" dangerouslySetInnerHTML={{ __html: DOMPurify.sanitize(feature.description) }} />
           </Card>
         ))}
       </div>
@@ -579,7 +579,7 @@ function FeaturesSection() {
 
 function SocialProof() {
   return (
-    <SectionWrapper className="bg-gradient-to-b from-rose-50/50 to-white">
+    <SectionWrapper className="bg-linear-to-b from-rose-50/50 to-white">
       <AnimatedSection>
       <div className="text-center mb-12">
         <h2 className="text-4xl md:text-5xl font-serif font-semibold text-rose-900 mb-4">
@@ -618,7 +618,7 @@ function SocialProof() {
                 <Star key={i} className="w-4 h-4 text-amber-400 fill-amber-400" />
               ))}
             </div>
-            <p className="text-zinc-600 mb-4" dangerouslySetInnerHTML={{ __html: testimonial.text }} />
+            <p className="text-zinc-600 mb-4" dangerouslySetInnerHTML={{ __html: DOMPurify.sanitize(testimonial.text) }} />
             <div className="flex items-center gap-3">
               <div className="w-10 h-10 rounded-full bg-rose-100 flex items-center justify-center">
                 <Heart className="w-5 h-5 text-rose-400" />
@@ -887,7 +887,7 @@ function FAQSection() {
           {faqs.map((faq, i) => (
             <details key={i} className="rounded-xl border border-rose-100 overflow-hidden group">
               <summary className="px-6 py-4 flex items-center justify-between gap-4 cursor-pointer hover:bg-rose-50/50 list-none">
-                <span className="font-medium text-rose-900">{faq.q}</span>
+                <button className="font-medium text-rose-900 text-left flex-1" type="button">{faq.q}</button>
                 <ChevronDown className="w-4 h-4 text-rose-400 shrink-0 transition-transform duration-200 group-open:rotate-180" />
               </summary>
               <div className="px-6 pb-5 text-sm text-zinc-600 leading-relaxed">

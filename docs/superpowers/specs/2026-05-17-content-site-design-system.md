@@ -1,4 +1,7 @@
-# Design System - Tạo Thiệp Cưới Online Miễn Phí Trong 10 Phút
+# Design System - Legacy Content Site (Superseded)
+
+> Status: Superseded by `docs/superpowers/specs/2026-05-17-wedding-redesign-design.md`.
+> Kept for historical reference only.
 
 ## Mission
 

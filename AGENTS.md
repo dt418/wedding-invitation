@@ -129,7 +129,7 @@ Required in `.env.local`:
 - Downloaded Figma assets → appropriate `public/` subdirectory.
 
 ### Landing Structure Consistency
-- Section anchor IDs must stay in sync (e.g., `#gia` for pricing).
+- Section anchor IDs: `#templates`, `#how-it-works`, `#features`, `#pricing`.
 - Hero phone-mockup semantic classes when editing: `hero-visual`, `phone-frame`, `phone-screen`, `phone-notch`, `thiep-preview`, `phone-info`, `floating-card`, `fc-*`.
 - "How it works" active step must stay synced with right-side visual state.
 

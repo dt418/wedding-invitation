@@ -46,15 +46,16 @@ export function TemplateActionModal({
 
   return (
     <div
-      className="fixed inset-0 z-50 flex items-center justify-center p-4"
+      className="fixed inset-0 z-50 flex items-center justify-center p-4 [overscroll-behavior:contain] [touch-action:manipulation]"
       role="dialog"
       aria-modal="true"
       aria-labelledby="modal-title"
     >
-      <div
+      <button
+        type="button"
         className="absolute inset-0 bg-black/50 backdrop-blur-sm"
         onClick={onClose}
-        aria-hidden="true"
+        aria-label="Close modal"
       />
 
       <div className="relative bg-white rounded-2xl shadow-2xl max-w-md w-full overflow-hidden">
