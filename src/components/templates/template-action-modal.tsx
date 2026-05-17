@@ -5,6 +5,18 @@ import Link from "next/link";
 import Image from "next/image";
 import { X, Plus, Eye, Edit3, ImageIcon, MapPin, Globe, User, Share2, ClipboardCheck, MessageCircle } from "lucide-react";
 
+type TemplateHighlight = {
+  icon: "Edit3" | "ImageIcon" | "MapPin" | "Globe" | "User" | "Share2" | "ClipboardCheck" | "MessageCircle";
+  label: string;
+};
+
+type TemplateMetadata = {
+  highlights?: string[];
+  description?: string;
+  source?: string;
+  colorTokens?: Record<string, string>;
+};
+
 type Template = {
   id: string;
   name: string;
@@ -13,30 +25,56 @@ type Template = {
   thumbnailUrl: string | null;
   description: string | null;
   isPremium: boolean;
+  metadata?: unknown;
 };
+
+const iconMap = {
+  Edit3,
+  ImageIcon,
+  MapPin,
+  Globe,
+  User,
+  Share2,
+  ClipboardCheck,
+  MessageCircle,
+} as const;
+
+const categoryLabels: Record<string, string> = {
+  truyen_thong: "Truyền Thống",
+  thien_nhien: "Thiên Nhiên",
+  hien_dai: "Hiện Đại",
+  lang_man: "Lãng Mạn",
+  co_phuc: "Cổ Phục",
+  sang_trong: "Sang Trọng",
+  toi_gian: "Tối Giản",
+  typography: "Typography",
+  de_thuong: "Dễ Thương",
+};
+
+const defaultHighlights: TemplateHighlight[] = [
+  { icon: "Edit3", label: "Tùy chỉnh nội dung" },
+  { icon: "ImageIcon", label: "Ảnh không giới hạn" },
+  { icon: "MapPin", label: "Google Maps" },
+  { icon: "Globe", label: "Đa ngôn ngữ" },
+  { icon: "User", label: "Ghi tên khách mời" },
+  { icon: "Share2", label: "Chia sẻ qua link" },
+  { icon: "ClipboardCheck", label: "Xác nhận tham dự" },
+  { icon: "MessageCircle", label: "Nhận lời chúc" },
+];
 
 interface TemplateActionModalProps {
   template: Template;
-  categoryLabel: string;
   onClose: () => void;
 }
 
-const features = [
-  { icon: Edit3, label: "Tùy chỉnh nội dung" },
-  { icon: ImageIcon, label: "Ảnh không giới hạn" },
-  { icon: MapPin, label: "Google Maps" },
-  { icon: Globe, label: "Đa ngôn ngữ" },
-  { icon: User, label: "Ghi tên khách mời" },
-  { icon: Share2, label: "Chia sẻ qua link" },
-  { icon: ClipboardCheck, label: "Xác nhận tham dự" },
-  { icon: MessageCircle, label: "Nhận lời chúc" },
-];
-
 export function TemplateActionModal({
   template,
-  categoryLabel,
   onClose,
 }: TemplateActionModalProps) {
+  const categoryLabel = categoryLabels[template.category] ?? template.category;
+  const meta = template.metadata as TemplateMetadata | undefined;
+  const highlights = meta?.highlights?.slice(0, 3) ?? [];
+  const topDescription = meta?.description ?? template.description ?? "";
   const handleEscape = useCallback(
     (e: KeyboardEvent) => {
       if (e.key === "Escape") {
@@ -104,7 +142,7 @@ export function TemplateActionModal({
             <h2 id="modal-title" className="text-2xl lg:text-3xl font-bold mb-2 pr-8">
               {template.name}
             </h2>
-            <p className="text-base lg:text-lg text-zinc-500">{template.description}</p>
+            <p className="text-base lg:text-lg text-zinc-500">{topDescription}</p>
             <div className="flex flex-wrap gap-1.5 mt-3">
               <span className="badge badge-sm bg-white/50 border-zinc-200/30 text-zinc-600">
                 {categoryLabel}
@@ -118,14 +156,30 @@ export function TemplateActionModal({
           </div>
 
           <div className="px-6 lg:px-8 py-3">
+            {highlights.length > 0 && (
+              <>
+                <h3 className="text-sm font-medium text-zinc-500 mb-2">Điểm nổi bật</h3>
+                <ul className="space-y-2 mb-4">
+                  {highlights.map((highlight, index) => (
+                    <li key={index} className="text-sm text-zinc-600 leading-relaxed">
+                      {highlight}
+                    </li>
+                  ))}
+                </ul>
+              </>
+            )}
+
             <h3 className="text-sm font-medium text-zinc-500 mb-2">Tính năng</h3>
             <ul className="grid grid-cols-2 gap-x-4 gap-y-1.5">
-              {features.map((feature) => (
-                <li key={feature.label} className="flex items-center gap-1.5 text-xs text-zinc-600">
-                  <feature.icon className="w-3.5 h-3.5 text-rose-500 flex-shrink-0" />
-                  <span>{feature.label}</span>
-                </li>
-              ))}
+              {defaultHighlights.map((feature) => {
+                const IconComponent = iconMap[feature.icon];
+                return (
+                  <li key={feature.label} className="flex items-center gap-1.5 text-xs text-zinc-600">
+                    <IconComponent className="w-3.5 h-3.5 text-rose-500 flex-shrink-0" />
+                    <span>{feature.label}</span>
+                  </li>
+                );
+              })}
             </ul>
           </div>
 

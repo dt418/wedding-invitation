@@ -223,10 +223,12 @@ function TemplateShowcase() {
     id: string;
     name: string;
     slug: string;
+    category: string;
     categoryLabel: string;
     thumbnailUrl: string | null;
     description: string | null;
     isPremium: boolean;
+    metadata?: unknown;
   } | null>(null);
 
   const templates = [
@@ -334,7 +336,7 @@ function TemplateShowcase() {
           {templates.map((t, i) => (
             <div
               key={t.id}
-              onClick={() => setSelectedTemplate({ id: String(t.id), name: t.name, slug: t.slug, categoryLabel: t.tags[0] || "Template", thumbnailUrl: null, description: null, isPremium: false })}
+              onClick={() => setSelectedTemplate({ id: String(t.id), name: t.name, slug: t.slug, category: t.slug, categoryLabel: t.tags[0] || "Template", thumbnailUrl: null, description: null, isPremium: false })}
               className="group h-full cursor-pointer transition-all duration-300 hover:-translate-y-1"
               style={{ transitionDelay: `${i * 40}ms` }}
             >
@@ -393,8 +395,7 @@ function TemplateShowcase() {
 
       {selectedTemplate && (
         <TemplateActionModal
-          template={{ ...selectedTemplate, category: selectedTemplate.categoryLabel }}
-          categoryLabel={selectedTemplate.categoryLabel}
+          template={selectedTemplate as Parameters<typeof TemplateActionModal>[0]["template"]}
           onClose={() => setSelectedTemplate(null)}
         />
       )}

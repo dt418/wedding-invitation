@@ -14,6 +14,7 @@ type Template = {
   isActive: boolean;
   isPremium: boolean;
   createdAt: Date;
+  metadata?: unknown;
 };
 
 
@@ -81,7 +82,6 @@ export function TemplatesGalleryClient({
     {selectedTemplate && (
       <TemplateActionModal
         template={selectedTemplate}
-        categoryLabel={selectedTemplate.category}
         onClose={() => setSelectedTemplate(null)}
       />
     )}
