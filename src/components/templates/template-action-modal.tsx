@@ -124,9 +124,9 @@ export function TemplateActionModal({
                 <Image
                   src={template.thumbnailUrl}
                   alt={template.name}
-                  width={400}
-                  height={812}
-                  className="w-full h-auto object-cover object-top"
+                  fill
+                  sizes="(max-width: 1024px) 50vw, 400px"
+                  className="object-cover object-top"
                 />
               ) : (
                 <div className="flex w-full h-full items-center justify-center text-zinc-400">

@@ -1,6 +1,7 @@
 "use client";
 
 import { useState } from "react";
+import Image from "next/image";
 import { TemplateActionModal } from "./template-action-modal";
 
 type Template = {
@@ -39,11 +40,13 @@ export function TemplatesGalleryClient({
               onClick={() => setSelectedTemplate(tmpl)}
               className="group w-full cursor-pointer overflow-hidden rounded-lg shadow-md transition-all duration-300 hover:shadow-xl bg-white"
             >
-              <div className="block relative aspect-[9/16] w-full overflow-hidden bg-zinc-100">
+              <div className="block relative aspect-9/16 w-full overflow-hidden bg-zinc-100">
                 {tmpl.thumbnailUrl ? (
-                  <img
+                  <Image
                     src={tmpl.thumbnailUrl}
                     alt={tmpl.name}
+                    fill
+                    sizes="(max-width: 768px) 50vw, (max-width: 1280px) 25vw, 20vw"
                     className="h-full w-full object-cover object-top transition-[object-position] duration-[12s] ease-in-out group-hover:object-bottom"
                   />
                 ) : (
@@ -52,7 +55,7 @@ export function TemplatesGalleryClient({
                   </div>
                 )}
 
-                <div className="absolute inset-0 bg-gradient-to-t from-black/80 via-black/20 to-transparent opacity-100 md:opacity-0 md:group-hover:opacity-100 transition-opacity duration-300" />
+                <div className="absolute inset-0 bg-linear-to-t from-black/80 via-black/20 to-transparent opacity-100 md:opacity-0 md:group-hover:opacity-100 transition-opacity duration-300" />
 
                 <div className="absolute bottom-0 left-0 right-0 p-4 opacity-100 md:opacity-0 md:group-hover:opacity-100 transition-opacity duration-300">
                   <h3 className="mb-1 text-sm font-semibold text-white">{tmpl.name}</h3>
