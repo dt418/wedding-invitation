@@ -219,12 +219,22 @@ function TrustStrip() {
 }
 
 function TemplateShowcase() {
+  const [templateDetailsBySlug, setTemplateDetailsBySlug] = useState<Record<string, {
+    id: string;
+    name: string;
+    slug: string;
+    category: string;
+    thumbnailUrl: string | null;
+    description: string | null;
+    isPremium: boolean;
+    metadata?: unknown;
+  }>>({});
+
   const [selectedTemplate, setSelectedTemplate] = useState<{
     id: string;
     name: string;
     slug: string;
     category: string;
-    categoryLabel: string;
     thumbnailUrl: string | null;
     description: string | null;
     isPremium: boolean;
@@ -316,6 +326,27 @@ function TemplateShowcase() {
     },
   ];
 
+  useEffect(() => {
+    fetch("/api/templates")
+      .then((r) => r.json())
+      .then((data) => {
+        const map: Record<string, typeof templateDetailsBySlug[string]> = {};
+        for (const t of data) {
+          map[t.slug] = {
+            id: t.id,
+            name: t.name,
+            slug: t.slug,
+            category: t.category,
+            thumbnailUrl: t.thumbnailUrl ?? null,
+            description: t.description ?? null,
+            isPremium: t.isPremium ?? false,
+            metadata: t.metadata ?? null,
+          };
+        }
+        setTemplateDetailsBySlug(map);
+      });
+  }, []);
+
   return (
     <SectionWrapper id="templates" className="bg-linear-to-b from-white to-rose-50/30 [&>div]:max-w-7xl">
       <AnimatedSection>
@@ -336,7 +367,12 @@ function TemplateShowcase() {
           {templates.map((t, i) => (
             <div
               key={t.id}
-              onClick={() => setSelectedTemplate({ id: String(t.id), name: t.name, slug: t.slug, category: t.slug, categoryLabel: t.tags[0] || "Template", thumbnailUrl: null, description: null, isPremium: false })}
+              onClick={() => {
+                const dbTemplate = templateDetailsBySlug[t.slug];
+                if (dbTemplate) {
+                  setSelectedTemplate(dbTemplate);
+                }
+              }}
               className="group h-full cursor-pointer transition-all duration-300 hover:-translate-y-1"
               style={{ transitionDelay: `${i * 40}ms` }}
             >
