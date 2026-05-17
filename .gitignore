@@ -51,3 +51,8 @@ next-env.d.ts
 .agents/
 .claude/
 .config/opencode/
+
+# graphify output (generated, not committed)
+graphify-out/
+.graphify_*.json
+.graphify_*.txt
