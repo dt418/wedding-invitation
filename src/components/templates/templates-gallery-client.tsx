@@ -1,6 +1,5 @@
 "use client";
 
-import Link from "next/link";
 import { useState } from "react";
 import { TemplateActionModal } from "./template-action-modal";
 
@@ -40,11 +39,7 @@ export function TemplatesGalleryClient({
               onClick={() => setSelectedTemplate(tmpl)}
               className="group w-full cursor-pointer overflow-hidden rounded-lg shadow-md transition-all duration-300 hover:shadow-xl bg-white"
             >
-              <Link
-                href={`/invite/${tmpl.slug}/demo`}
-                onClick={(e) => e.stopPropagation()}
-                className="block relative aspect-[9/16] w-full overflow-hidden bg-zinc-100"
-              >
+              <div className="block relative aspect-[9/16] w-full overflow-hidden bg-zinc-100">
                 {tmpl.thumbnailUrl ? (
                   <img
                     src={tmpl.thumbnailUrl}
@@ -73,7 +68,7 @@ export function TemplatesGalleryClient({
                   </div>
                   {tmpl.description && <p className="text-xs text-white/80 line-clamp-2">{tmpl.description}</p>}
                 </div>
-              </Link>
+              </div>
             </div>
           ))}
         </div>

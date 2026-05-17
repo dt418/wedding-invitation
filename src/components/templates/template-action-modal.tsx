@@ -103,7 +103,7 @@ export function TemplateActionModal({
     >
       <button
         type="button"
-        className="absolute inset-0 bg-black/50 backdrop-blur-sm cursor-default"
+        className="absolute inset-0 bg-zinc-900/45 cursor-default"
         onClick={onClose}
         aria-label="Close modal"
       />
@@ -137,7 +137,7 @@ export function TemplateActionModal({
           </div>
         </div>
 
-        <div className="flex flex-col flex-1 min-w-0 bg-zinc-50 overflow-y-auto">
+        <div className="flex flex-col flex-1 min-w-0 bg-white/70 backdrop-blur-xl backdrop-saturate-150 overflow-y-auto">
           <div className="flex-shrink-0 p-6 lg:p-8 pb-4 lg:pb-6">
             <h2 id="modal-title" className="text-2xl lg:text-3xl font-bold mb-2 pr-8">
               {template.name}
@@ -185,22 +185,21 @@ export function TemplateActionModal({
 
           <div className="flex-1" />
 
-          <div className="flex-shrink-0 px-6 lg:px-8 pb-6 lg:pb-8">
-            <p className="text-xs text-zinc-400 tracking-wide mb-1">Tạo miễn phí · Thử 3 ngày · Đẹp mới thanh toán</p>
-            <p className="text-xs text-zinc-300 mb-3">Bạn có thể đổi mẫu bất cứ lúc nào khi chỉnh sửa</p>
-            <div className="flex gap-3">
+          <div className="flex-shrink-0 px-6 lg:px-8 pb-6 lg:pb-8 space-y-4">
+            <p className="text-xs text-zinc-400 tracking-wide">Tạo miễn phí · Thử 3 ngày · Đẹp mới thanh toán</p>
+            <div className="grid grid-cols-2 gap-3">
               <Link
                 href={`/events/new?templateId=${template.id}`}
-                className="btn btn-primary rounded-xl flex-1 gap-2"
+                className="inline-flex items-center justify-center gap-2 font-semibold transition-all duration-200 cursor-pointer h-14 px-7 text-lg rounded-2xl bg-rose-600 text-white hover:bg-rose-700 active:bg-rose-800 shadow-sm shadow-rose-200/50"
               >
-                <Plus className="w-5 h-5" />
+                <Plus className="w-5 h-5" aria-hidden="true" />
                 Tạo thiệp
               </Link>
               <Link
                 href={`/invite/${template.slug}/demo`}
-                className="btn btn-outline rounded-xl flex-1 gap-2"
+                className="inline-flex items-center justify-center gap-2 font-semibold transition-all duration-200 cursor-pointer h-14 px-7 text-lg rounded-2xl bg-transparent border-2 border-rose-300 text-rose-600 hover:bg-rose-50 active:bg-rose-100"
               >
-                <Eye className="w-5 h-5" />
+                <Eye className="w-5 h-5" aria-hidden="true" />
                 Xem demo
               </Link>
             </div>
