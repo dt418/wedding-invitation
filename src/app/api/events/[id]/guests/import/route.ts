@@ -75,33 +75,35 @@ export async function POST(req: NextRequest, { params }: { params: Promise<{ id:
     }
 
     try {
-      const [guest] = await db
-        .insert(guests)
-        .values({
+      await db.transaction(async (tx) => {
+        const [guest] = await tx
+          .insert(guests)
+          .values({
+            eventId,
+            ...parsedRow.data,
+          })
+          .returning();
+
+        const inviteCode = generateInviteCode();
+        const inviteUrl = generateInviteUrl(event.slug, inviteCode);
+        const baseUrl = process.env.NEXT_PUBLIC_BASE_URL || "http://localhost:3000";
+        const qrCodeUrl = await generateQrDataUrl(`${baseUrl}${inviteUrl}`);
+
+        await tx.insert(invites).values({
           eventId,
-          ...parsedRow.data,
-        })
-        .returning();
+          guestId: guest.id,
+          inviteCode,
+          inviteUrl,
+          qrCodeUrl,
+          status: "pending",
+        });
 
-      const inviteCode = generateInviteCode();
-      const inviteUrl = generateInviteUrl(event.slug, inviteCode);
-      const baseUrl = process.env.NEXT_PUBLIC_BASE_URL || "http://localhost:3000";
-      const qrCodeUrl = await generateQrDataUrl(`${baseUrl}${inviteUrl}`);
-
-      await db.insert(invites).values({
-        eventId,
-        guestId: guest.id,
-        inviteCode,
-        inviteUrl,
-        qrCodeUrl,
-        status: "pending",
-      });
-
-      successRows.push({
-        row: rowNum,
-        name: parsedRow.data.name,
-        inviteCode,
-        inviteUrl,
+        successRows.push({
+          row: rowNum,
+          name: parsedRow.data.name,
+          inviteCode,
+          inviteUrl,
+        });
       });
     } catch {
       failedRows.push({

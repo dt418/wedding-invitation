@@ -1,6 +1,6 @@
 import { NextRequest, NextResponse } from "next/server";
 import { db } from "@/db";
-import { templateSections } from "@/db/schema";
+import { events, templateSections } from "@/db/schema";
 import { verifyToken } from "@/lib/auth";
 import { eq, and } from "drizzle-orm";
 
@@ -15,6 +15,11 @@ export async function GET(req: NextRequest, { params }: { params: Promise<{ id: 
   if (!userId) return NextResponse.json({ error: "Unauthorized" }, { status: 401 });
 
   const { id: eventId } = await params;
+
+  const event = await db.query.events.findFirst({
+    where: and(eq(events.userId, userId), eq(events.id, eventId)),
+  });
+  if (!event) return NextResponse.json({ error: "Not found" }, { status: 404 });
 
   const all = await db.query.sections.findMany();
   const overrides = await db.query.templateSections.findMany({
@@ -44,6 +49,12 @@ export async function PATCH(req: NextRequest, { params }: { params: Promise<{ id
   if (!userId) return NextResponse.json({ error: "Unauthorized" }, { status: 401 });
 
   const { id: eventId } = await params;
+
+  const event = await db.query.events.findFirst({
+    where: and(eq(events.userId, userId), eq(events.id, eventId)),
+  });
+  if (!event) return NextResponse.json({ error: "Not found" }, { status: 404 });
+
   const body = await req.json();
 
   const { sectionType, customContent, customTheme, visibility } = body;
