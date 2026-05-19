@@ -1,95 +1,77 @@
 # Wedding Invitation Platform
 
-Next.js 16 wedding invitation SaaS with public invite pages, RSVP tracking, template system, and authenticated dashboard.
+A cinematic, luxury wedding invitation SaaS — editorial design meets schema-driven content architecture. Create stunning, customizable wedding invitations with unlimited template variation through a single invariant rendering engine.
 
-## Tech Stack
+## Stack
 
-- Next.js 16.2.6 (App Router, Turbopack)
-- React 19.2.4
-- TypeScript 5
-- Tailwind CSS v4
-- Drizzle ORM + PostgreSQL (`postgres` driver)
-- Zod v4
-- JWT auth (`wedding_token` cookie)
-- pnpm
-
-## Prerequisites
-
-- Node.js 20+
-- pnpm 9+
-- Docker (for local Postgres via `docker compose`)
+| Layer | Technology |
+|-------|------------|
+| Framework | Next.js 16.2.6 (App Router, Turbopack) |
+| Language | TypeScript 5 |
+| UI | React 19.2.4, Tailwind CSS v4 |
+| Database | PostgreSQL via Drizzle ORM + `postgres` driver |
+| Auth | JWT cookie auth (`wedding_token`) |
+| Validation | Zod v4 |
+| Package Manager | pnpm |
 
 ## Quick Start
 
-1. Install dependencies
-
 ```bash
+# Install dependencies
 pnpm install
-```
 
-2. Start local database
-
-```bash
+# Start PostgreSQL (via Docker)
 docker compose up -d
-```
 
-3. Configure environment
-
-```bash
+# Configure environment
 cp .env.example .env.local
-```
+# Edit .env.local: set DATABASE_URL and JWT_SECRET
 
-Required vars in `.env.local`:
-
-```bash
-DATABASE_URL=postgresql://wedding:wedding123@localhost:5432/wedding_invitation
-JWT_SECRET=replace-with-32-char-secret
-NODE_ENV=development
-```
-
-4. Run migrations + seed
-
-```bash
+# Run migrations and seed demo data
 pnpm db:migrate
 pnpm db:seed
-```
 
-5. Start app
-
-```bash
+# Start development server
 pnpm dev
 ```
 
-Open http://localhost:3000
+**Demo account:** `demo@wedding.local` / `Aa@123456#`
 
-## Default Demo Account
+## Core Routes
 
-- Email: `demo@wedding.local`
-- Password: `Aa@123456#`
+| Route | Description |
+|-------|-------------|
+| `/invite/[code]` | Public invite page (no auth required) |
+| `/login`, `/register` | Authentication |
+| `/events` | Dashboard — list all events |
+| `/events/[id]` | Event detail |
+| `/events/[id]/edit` | Section editor & preview |
+| `/events/[id]/guests` | Guest management |
+| `/events/[id]/invites` | Invite generation & delivery |
+| `/events/[id]/analytics` | Page view & open tracking |
 
 ## Core Commands
 
 ```bash
-pnpm dev          # run dev server
-pnpm build        # production build
-pnpm lint         # eslint
-pnpm db:generate  # generate drizzle migration
-pnpm db:migrate   # apply migrations
-pnpm db:seed      # seed demo data
+pnpm dev          # Start dev server (Turbopack)
+pnpm build        # Production build
+pnpm lint         # ESLint
+pnpm test         # Vitest (dev watch)
+pnpm test:run     # Vitest (single run)
+pnpm db:generate  # Generate Drizzle migration from schema changes
+pnpm db:migrate   # Apply migrations
+pnpm db:seed      # Seed demo user and template data
 ```
 
-## App Surfaces
+## Architecture Principle
 
-- Public invite page: `/invite/[code]`
-- Auth pages: `/login`, `/register`
-- Dashboard pages: `/events`, `/events/[id]`, `/events/[id]/edit`, `/events/[id]/analytics`
-- Templates gallery: `/templates`
+```
+Invitation Engine + Theme System + JSON Schema Content + Dynamic Section Renderer = Unlimited Templates
+```
 
-## Docs
+Templates are not hardcoded pages. The platform separates:
+- **Template content** — defined as JSONB section schemas, not HTML
+- **Visual theme** — defined as color token sets, not inline styles
+- **Rendering logic** — a single invariant engine maps section types to components
 
-Project planning/design docs live in:
-
-- `docs/superpowers/specs/`
-- `docs/superpowers/plans/`
-
-See `docs/superpowers/README.md` for doc index.
+This design enables infinite template variation from a fixed code surface. See [ARCHITECTURE.md](./ARCHITECTURE.md) and [THEME_SYSTEM.md](./THEME_SYSTEM.md) for details.
