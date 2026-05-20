@@ -1,24 +1,45 @@
 @import "tailwindcss";
 
 :root {
-  --background: #fdf2f8;
-  --foreground: #831843;
-  --color-primary: #db2777;
-  --color-on-primary: #ffffff;
-  --color-secondary: #f472b6;
-  --color-accent: #ca8a04;
-  --color-muted: #f0edf4;
-  --color-border: #fbcfe8;
-  --color-ring: #db2777;
-  --color-destructive: #dc2626;
+  --background: #FFF8F0;
+  --foreground: #1A1A1A;
+  --color-primary: #E11D48;
+  --color-primary-foreground: #ffffff;
+  --color-secondary: #FDE047;
+  --color-secondary-foreground: #1A1A1A;
+  --color-accent: #C41E3A;
+  --color-muted: #FDF4FF;
+  --color-muted-foreground: #831843;
+  --color-border: #FBCFE8;
+  --color-ring: #E11D48;
+  --color-destructive: #DC2626;
+  --color-destructive-foreground: #ffffff;
+  --radius: 0.625rem;
 }
 
 @theme inline {
   --color-background: var(--background);
   --color-foreground: var(--foreground);
+  --color-primary: var(--color-primary);
+  --color-primary-foreground: var(--color-primary-foreground);
+  --color-secondary: var(--color-secondary);
+  --color-secondary-foreground: var(--color-secondary-foreground);
+  --color-accent: var(--color-accent);
+  --color-muted: var(--color-muted);
+  --color-muted-foreground: var(--color-muted-foreground);
+  --color-border: var(--color-border);
+  --color-ring: var(--color-ring);
+  --color-destructive: var(--color-destructive);
+  --color-destructive-foreground: var(--color-destructive-foreground);
+  --radius: var(--radius);
   --font-sans: var(--font-jakarta);
   --font-serif: var(--font-cormorant);
   --font-script: var(--font-great-vibes);
+}
+
+button:not(:disabled),
+[role="button"]:not(:disabled) {
+  cursor: pointer;
 }
 
 * {

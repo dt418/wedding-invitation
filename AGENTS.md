@@ -11,12 +11,14 @@ This version has breaking changes — APIs, conventions, and file structure may 
 - **Next.js 16.2.6** (App Router, Turbopack) — `next dev` uses Turbopack
 - **React 19.2.4** — mind breaking changes vs React 18
 - **Tailwind CSS v4** — no `tailwind.config.js`; config via CSS `@theme` or postcss
+- **shadcn/ui** — component library (Base UI), installed via `npx shadcn@latest add`
 - **Drizzle ORM** with `drizzle-orm` + `postgres` (pg driver, NOT mysql2)
 - **Neon Postgres** (serverless, `postgres` package) — `DATABASE_URL` env var
 - **pnpm** — not npm/yarn/bun
 - **TypeScript 5**
 - **Zod v4** — `import { z } from "zod/v4"` or just `"zod"` (note version differences)
 - **JWT auth** — cookie name `wedding_token`, sign via `src/lib/auth.ts`
+- **sonner** — toast notifications
 
 ## Dev Commands
 

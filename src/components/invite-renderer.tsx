@@ -20,11 +20,11 @@ const sectionRenderers: Record<string, React.ComponentType<{
   hero: ({ content, colors }) => (
     <section
       className="min-h-[60vh] flex items-center justify-center text-center px-8 py-20"
-      style={{ backgroundColor: colors.background || "#FFF8F0" }}
+      style={{ backgroundColor: colors.background || "var(--color-background)" }}
     >
       <div>
         {(content.coupleNames as string) && (
-          <h1 className="text-5xl font-bold mb-4" style={{ color: colors.primary || "#C41E3A" }}>
+          <h1 className="text-5xl font-bold mb-4" style={{ color: colors.primary || "var(--color-primary)" }}>
             {String(content.coupleNames)}
           </h1>
         )}

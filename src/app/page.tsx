@@ -765,7 +765,7 @@ function ContentPreview() {
 
       <div className="grid md:grid-cols-3 gap-6">
         {articles.map((article) => (
-          <Card key={article.title} hover className="p-6 cursor-pointer">
+          <Card key={article.title} className="p-6 cursor-pointer hover:shadow-lg hover:-translate-y-1 transition-all duration-300">
             <div className="flex items-center gap-2 text-xs text-rose-500 mb-3">
               <Badge variant="accent" className="text-xs">{article.category}</Badge>
               <span className="text-zinc-400">·</span>

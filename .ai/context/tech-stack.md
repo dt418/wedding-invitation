@@ -9,8 +9,9 @@
 
 ### Styling
 - **Tailwind CSS v4** - No tailwind.config.js; config via CSS @theme
+- **shadcn/ui + Base UI** - Component library (button, card, badge, etc.)
+- **class-variance-authority** - Variant composition
 - **Design tokens** - CSS custom properties for theming
-- **clsx + tailwind-merge** - Class composition via `cn()` utility
 
 ### Key Libraries
 - **lucide-react** - Icon library (only icons source)
@@ -22,6 +23,7 @@
 - **papaparse** - CSV parsing for guest import
 - **dompurify** - HTML sanitization
 - **drizzle-zod** - Drizzle-Zod integration
+- **sonner** - Toast notifications
 
 ### Project Structure
 ```
@@ -135,18 +137,32 @@ import { db } from "@/db/index";
 Tokens defined in `src/app/globals.css`:
 ```css
 :root {
-  --color-primary: ...
-  --color-secondary: ...
-  --color-accent: ...
-  --font-heading: ...
-  --font-body: ...
+  --background: #FFF8F0;
+  --foreground: #1A1A1A;
+  --color-primary: #E11D48;
+  --color-primary-foreground: #ffffff;
+  --color-secondary: #FDE047;
+  --color-secondary-foreground: #1A1A1A;
+  --color-muted: #FDF4FF;
+  --color-muted-foreground: #831843;
+  --color-border: #FBCFE8;
+  --color-destructive: #DC2626;
+  --radius: 0.625rem;
 }
 ```
 
 Usage in components:
 ```typescript
-const styles = {
-  color: colors.primary,
-  fontFamily: fonts.heading,
-};
+// Via Tailwind utilities
+className="bg-primary text-primary-foreground"
+
+// Via CSS variables
+style={{ backgroundColor: 'var(--background)' }}
 ```
+
+## shadcn/ui Components
+
+Installed via shadcn CLI:
+- `button` - Action buttons with variants
+- `card` - Content containers
+- `badge` - Status indicators

@@ -141,7 +141,7 @@ export default function SettingsPage() {
           </div>
         </CardContent>
         <CardFooter>
-          <Button variant="primary" size="md" onClick={handleSave} disabled={saving}>
+          <Button variant="default" size="md" onClick={handleSave} disabled={saving}>
             {saving ? <Loader2 className="w-4 h-4 animate-spin" aria-hidden="true" /> : null}
             {saving ? "Saving..." : "Save changes"}
           </Button>
@@ -208,7 +208,7 @@ export default function SettingsPage() {
           </div>
         </CardContent>
         <CardFooter>
-          <Button variant="primary" size="md" onClick={handleSave} disabled={saving}>
+          <Button variant="default" size="md" onClick={handleSave} disabled={saving}>
             {saving ? <Loader2 className="w-4 h-4 animate-spin" aria-hidden="true" /> : null}
             {saving ? "Saving..." : "Save preferences"}
           </Button>

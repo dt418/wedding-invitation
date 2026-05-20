@@ -24,7 +24,13 @@ export default async function InvitePage({ params }: PageProps) {
 
   if (!res.ok) notFound();
 
-  const data = await res.json();
+  let data;
+  try {
+    data = await res.json();
+  } catch {
+    notFound();
+  }
+
   const { sections, variant } = data;
 
   const visibleSections = sections.filter(

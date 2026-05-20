@@ -37,8 +37,12 @@ export default function RsvpForm({ inviteCode, guestName, colorTokens }: RsvpFor
     if (res.ok) {
       setSubmitted(true);
     } else {
-      const data = await res.json();
-      setError(data.error || "Failed to submit RSVP");
+      try {
+        const data = await res.json();
+        setError(data.error || "Failed to submit RSVP");
+      } catch {
+        setError("Failed to submit RSVP");
+      }
     }
   }
 

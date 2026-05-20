@@ -46,17 +46,17 @@ export async function registerAction(formData: FormData) {
     maxAge: 60 * 60 * 24 * 7,
   });
 
-  redirect("/events");
+  redirect("/login?registered=true");
 }
 
-export async function loginAction(formData: FormData) {
+export async function loginAction(_prevState: unknown, formData: FormData) {
   const parsed = loginSchema.safeParse({
     email: formData.get("email"),
     password: formData.get("password"),
   });
 
   if (!parsed.success) {
-    return;
+    redirect("/login?error=invalid_credentials");
   }
 
   const { email, password } = parsed.data;
@@ -66,14 +66,14 @@ export async function loginAction(formData: FormData) {
   });
 
   if (!user) {
-    return;
+    redirect("/login?error=invalid_credentials");
   }
 
   const { verifyPassword } = await import("@/lib/auth");
   const valid = await verifyPassword(password, user.passwordHash);
 
   if (!valid) {
-    return;
+    redirect("/login?error=invalid_credentials");
   }
 
   const token = signToken({ userId: user.id, email: user.email, role: user.role });
@@ -92,5 +92,5 @@ export async function loginAction(formData: FormData) {
 export async function logoutAction() {
   const cookieStore = await cookies();
   cookieStore.delete("wedding_token");
-  redirect("/login");
+  redirect("/login?loggedOut=true");
 }

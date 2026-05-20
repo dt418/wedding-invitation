@@ -1,5 +1,7 @@
 import { logoutAction } from "@/app/(auth)/actions";
 import Link from "next/link";
+import { Toaster } from "sonner";
+import LoginSuccessToastWrapper from "@/components/login-success-toast";
 
 export default function DashboardLayout({
   children,
@@ -7,7 +9,10 @@ export default function DashboardLayout({
   children: React.ReactNode;
 }) {
   return (
-    <div className="min-h-screen bg-zinc-50">
+    <>
+      <Toaster position="top-right" richColors closeButton theme="light" />
+      <LoginSuccessToastWrapper />
+      <div className="min-h-screen bg-zinc-50">
       <header className="sticky top-0 z-50 bg-white border-b px-6 py-4">
         <div className="flex items-center justify-between max-w-7xl mx-auto">
           <div className="flex items-center gap-8">
@@ -49,5 +54,6 @@ export default function DashboardLayout({
       </header>
       <main className="max-w-7xl mx-auto px-6 py-8">{children}</main>
     </div>
+    </>
   );
 }
