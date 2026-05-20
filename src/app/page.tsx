@@ -9,21 +9,7 @@ import { TemplateActionModal } from "@/components/templates/template-action-moda
 import { Badge } from "@/components/ui/badge";
 import { Card, CardContent } from "@/components/ui/card";
 import { SectionWrapper } from "@/components/ui/section-wrapper";
-import {
-  Heart,
-  Sparkles,
-  Users,
-  Calendar,
-  MapPin,
-  Gift,
-  ArrowRight,
-  Check,
-  Shield,
-  Zap,
-  Palette,
-  Star,
-  ChevronDown,
-} from "@/components/ui/icons";
+import { Icons } from "@/components/ui/icons";
 
 function AnimatedSection({
   children,
@@ -53,7 +39,7 @@ function Header() {
     <header className="sticky top-0 z-50 w-full bg-white/80 backdrop-blur-xl border-b border-rose-100">
       <div className="max-w-6xl mx-auto px-6 h-16 flex items-center justify-between">
         <div className="flex items-center gap-2">
-          <Heart className="w-6 h-6 text-rose-500 fill-rose-500" />
+          <Icons.heart className="w-6 h-6 text-rose-500 fill-rose-500" />
           <span className="text-lg font-semibold text-rose-900 font-serif">
             Wedding Invite
           </span>
@@ -181,7 +167,7 @@ function HeroSection() {
       </div>
 
       <div className="absolute bottom-6 left-1/2 -translate-x-1/2 animate-bounce">
-        <ChevronDown className="w-6 h-6 text-rose-400" />
+        <Icons.chevronDown className="w-6 h-6 text-rose-400" />
       </div>
     </section>
   );
@@ -189,10 +175,10 @@ function HeroSection() {
 
 function TrustStrip() {
   const stats = [
-    { value: "46,000+", label: "couples created invitations", icon: Heart },
-    { value: "120,000+", label: "registrations", icon: Users },
-    { value: "340,000+", label: "invitations created", icon: Gift },
-    { value: "2.6M+", label: "views", icon: Star },
+    { value: "46,000+", label: "couples created invitations", icon: Icons.heart },
+    { value: "120,000+", label: "registrations", icon: Icons.users },
+    { value: "340,000+", label: "invitations created", icon: Icons.gift },
+    { value: "2.6M+", label: "views", icon: Icons.star },
   ];
 
   return (
@@ -352,7 +338,7 @@ function TemplateShowcase() {
       <AnimatedSection>
         <div className="text-center mb-12">
           <Badge variant="outline" className="mb-4">
-            <Palette className="w-3.5 h-3.5" />
+            <Icons.palette className="w-3.5 h-3.5" />
             Templates
           </Badge>
           <h2 className="text-4xl md:text-5xl font-serif font-semibold text-rose-900 mb-4">
@@ -424,7 +410,7 @@ function TemplateShowcase() {
             className="inline-flex items-center justify-center gap-2 font-semibold transition-all duration-200 cursor-pointer h-14 px-7 text-lg rounded-2xl bg-rose-600 text-white hover:bg-rose-700 active:bg-rose-800 shadow-sm shadow-rose-200/50"
           >
             View all templates
-            <ArrowRight className="w-4 h-4" />
+            <Icons.arrowRight className="w-4 h-4" />
           </Link>
         </div>
       </AnimatedSection>
@@ -580,32 +566,32 @@ function FeaturesSection() {
     {
       title: "RSVP Management",
       description: "Track responses in real time. Know exactly who will attend, dietary preferences, and meal choices.",
-      icon: Calendar,
+      icon: Icons.calendar,
     },
     {
       title: "Guest List Import",
       description: "Import your guest list from CSV or add guests manually. We help keep everything organized.",
-      icon: Users,
+      icon: Icons.users,
     },
     {
       title: "QR Code & Share Link",
       description: "Every invitation includes a shareable link and QR code for easy access across printed materials.",
-      icon: MapPin,
+      icon: Icons.mapPin,
     },
     {
       title: "Gift Contribution Link",
       description: "Connect contribution links so guests can quickly find and send gifts based on your preferences.",
-      icon: Gift,
+      icon: Icons.gift,
     },
     {
       title: "Looks Great on Every Device",
       description: "Your invitation looks beautiful on phones, tablets, and desktops for every guest.",
-      icon: Zap,
+      icon: Icons.zap,
     },
     {
       title: "Privacy Protection",
       description: "Your data stays secure. Control who sees what and protect guest privacy at every step.",
-      icon: Shield,
+      icon: Icons.shield,
     },
   ];
 
@@ -614,7 +600,7 @@ function FeaturesSection() {
       <AnimatedSection>
       <div className="text-center mb-12">
         <Badge variant="outline" className="mb-4">
-          <Sparkles className="w-3.5 h-3.5" />
+          <Icons.sparkles className="w-3.5 h-3.5" />
           Key <em>features</em>
         </Badge>
         <h2 className="text-4xl md:text-5xl font-serif font-semibold text-rose-900 mb-4">
@@ -681,13 +667,13 @@ function SocialProof() {
           <Card key={testimonial.name} className="p-6 transition-all duration-300 hover:shadow-lg hover:-translate-y-1">
             <div className="flex gap-1 mb-4">
               {Array.from({ length: testimonial.rating }).map((_, i) => (
-                <Star key={i} className="w-4 h-4 text-amber-400 fill-amber-400" />
+                <Icons.star key={i} className="w-4 h-4 text-amber-400 fill-amber-400" />
               ))}
             </div>
             <p className="text-zinc-600 mb-4" dangerouslySetInnerHTML={{ __html: DOMPurify.sanitize(testimonial.text) }} />
             <div className="flex items-center gap-3">
               <div className="w-10 h-10 rounded-full bg-rose-100 flex items-center justify-center">
-                <Heart className="w-5 h-5 text-rose-400" />
+                <Icons.heart className="w-5 h-5 text-rose-400" />
               </div>
               <div>
                 <div className="font-medium text-rose-900">{testimonial.name}</div>
@@ -701,7 +687,7 @@ function SocialProof() {
       <Card className="p-6 md:p-8 bg-white border-rose-200 transition-all duration-300 hover:shadow-lg">
         <div className="flex items-start gap-4">
           <div className="w-11 h-11 rounded-full bg-rose-100 flex items-center justify-center shrink-0">
-            <Users className="w-5 h-5 text-rose-500" />
+            <Icons.users className="w-5 h-5 text-rose-500" />
           </div>
           <div className="w-full">
             <div className="flex items-center justify-between mb-4">
@@ -752,7 +738,7 @@ function ContentPreview() {
     <SectionWrapper className="bg-rose-50/30">
       <div className="text-center mb-10">
         <Badge variant="outline" className="mb-4">
-          <Sparkles className="w-3.5 h-3.5" />
+          <Icons.sparkles className="w-3.5 h-3.5" />
           Wedding Guide
         </Badge>
         <h2 className="text-4xl md:text-5xl font-serif font-semibold text-rose-900 mb-4">
@@ -818,7 +804,7 @@ function PricingSection() {
             <ul className="text-left space-y-2.5 mb-8">
               {features.map((item) => (
                 <li key={item} className="flex items-start gap-2 text-sm text-zinc-700">
-                  <Check className="w-4 h-4 text-rose-600 mt-0.5 shrink-0" />
+                  <Icons.check className="w-4 h-4 text-rose-600 mt-0.5 shrink-0" />
                   <span>{item}</span>
                 </li>
               ))}
@@ -938,7 +924,7 @@ function FAQSection() {
       <div className="max-w-3xl mx-auto">
         <div className="text-center mb-12">
           <Badge variant="outline" className="mb-4">
-            <Heart className="w-3.5 h-3.5" />
+            <Icons.heart className="w-3.5 h-3.5" />
             FAQ
           </Badge>
           <h2 className="text-4xl md:text-5xl font-serif font-semibold text-rose-900 mb-4">
@@ -954,7 +940,7 @@ function FAQSection() {
             <details key={i} className="rounded-xl border border-rose-100 overflow-hidden group">
               <summary className="px-6 py-4 flex items-center justify-between gap-4 cursor-pointer hover:bg-rose-50/50 list-none">
                 <button className="font-medium text-rose-900 text-left flex-1" type="button">{faq.q}</button>
-                <ChevronDown className="w-4 h-4 text-rose-400 shrink-0 transition-transform duration-200 group-open:rotate-180" />
+                <Icons.chevronDown className="w-4 h-4 text-rose-400 shrink-0 transition-transform duration-200 group-open:rotate-180" />
               </summary>
               <div className="px-6 pb-5 text-sm text-zinc-600 leading-relaxed">
                 {faq.a}
@@ -971,7 +957,7 @@ function FinalCTA() {
   return (
     <section className="py-24 bg-linear-to-r from-rose-600 to-pink-600 text-white">
       <div className="max-w-4xl mx-auto px-6 text-center">
-        <Heart className="w-12 h-12 mx-auto mb-6 fill-white/20" />
+        <Icons.heart className="w-12 h-12 mx-auto mb-6 fill-white/20" />
         <h2 className="text-4xl md:text-5xl font-serif font-semibold mb-6">
           Start Your Journey Together
         </h2>
@@ -986,7 +972,7 @@ function FinalCTA() {
               className="bg-white text-rose-600 hover:bg-rose-50 shadow-lg"
             >
               Create Your Invitation Free
-              <ArrowRight className="w-5 h-5" />
+              <Icons.arrowRight className="w-5 h-5" />
             </Button>
           </Link>
           <Link href="#how-it-works">
@@ -1011,7 +997,7 @@ function Footer() {
         <div className="grid md:grid-cols-4 gap-12 mb-12">
           <div>
             <Link href="/" className="flex items-center gap-2 mb-4">
-              <Heart className="w-6 h-6 text-rose-400 fill-rose-400" />
+              <Icons.heart className="w-6 h-6 text-rose-400 fill-rose-400" />
               <span className="text-lg font-semibold text-white font-serif">
                 Wedding Invite
               </span>
