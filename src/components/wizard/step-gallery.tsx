@@ -1,6 +1,7 @@
 "use client";
 
 import { useState, useRef } from "react";
+import Image from "next/image";
 import { StepHeader, StepContent } from "./wizard-components";
 import { Button } from "@/components/ui/button";
 import { Card } from "@/components/ui/card";
@@ -137,20 +138,23 @@ export function StepGallery({ data, onChange }: StepGalleryProps) {
               <div className="aspect-square relative bg-muted">
                 {item.url.startsWith("data:") ? (
                   // Base64 image
-                  <img
+                  <Image
                     src={item.url}
                     alt={item.caption || `Image ${index + 1}`}
-                    className="w-full h-full object-cover"
+                    fill
+                    unoptimized
+                    className="object-cover"
                   />
                 ) : item.url ? (
                   // URL image
-                  <img
+                  <Image
                     src={item.url}
                     alt={item.caption || `Image ${index + 1}`}
-                    className="w-full h-full object-cover"
+                    fill
+                    className="object-cover"
                     onError={(e) => {
-                      (e.target as HTMLImageElement).src = "";
-                      (e.target as HTMLImageElement).className = "hidden";
+                      (e.currentTarget as HTMLImageElement).src = "";
+                      (e.currentTarget as HTMLImageElement).className = "hidden";
                     }}
                   />
                 ) : (

@@ -1,6 +1,7 @@
 import { logoutAction } from "@/app/(auth)/actions";
 import { getCurrentUser } from "@/app/(auth)/get-current-user";
 import Link from "next/link";
+import Image from "next/image";
 import { Toaster } from "sonner";
 import LoginSuccessToastWrapper from "@/components/login-success-toast";
 import { Button } from "@/components/ui/button";
@@ -53,10 +54,11 @@ export default async function DashboardLayout({
                     {/* Avatar */}
                     <div className="relative">
                       {user.avatarUrl ? (
-                        <img
+                        <Image
                           src={user.avatarUrl}
                           alt={user.name || "User"}
-                          className="w-9 h-9 rounded-full object-cover border-2 border-rose-100"
+                          fill
+                          className="rounded-full object-cover border-2 border-rose-100"
                         />
                       ) : (
                         <div className="w-9 h-9 rounded-full bg-rose-100 flex items-center justify-center text-rose-600">
