@@ -49,6 +49,7 @@ import {
   BookOpen,
   Lock,
   Loader2,
+  Pencil,
 } from "lucide-react";
 
 // Create Icons namespace with camelCase aliases for compatibility
@@ -102,6 +103,7 @@ const Icons = {
   bookOpen: BookOpen,
   lock: Lock,
   loader2: Loader2,
+  edit: Pencil, // Placeholder for backward compatibility, can be removed later
 };
 
 export { Icons };

@@ -407,56 +407,46 @@ export function EventWizard({ templateId }: EventWizardProps) {
         </div>
       </div>
 
-      {/* Preview Panel */}
-      {showPreview && (
-        <div className="hidden xl:block w-96 border-l bg-muted/30 p-6 overflow-auto">
-          <h3 className="font-semibold mb-4">Xem trước</h3>
-          <div className="sticky top-6">
-            <div className="bg-white rounded-xl shadow-lg overflow-hidden">
-              {/* Mini Preview */}
-              <div className="p-4">
-                <div className="aspect-3/4 bg-linear-to-br from-rose-100 to-amber-100 rounded-lg flex items-center justify-center">
-                  <div className="text-center">
-                    <div className="text-5xl mb-4">
-                    </div>
-                    <div className="text-lg font-semibold">
-                      {formData.groomName || "..."} & {formData.brideName || "..."}
-                    </div>
-                  </div>
+      {/* Mini Card Preview - Vertical Layout */}
+      <div className="hidden xl:flex xl:flex-col w-80 border-l bg-muted/30 p-6 overflow-auto">
+        <h3 className="font-semibold mb-4">Xem trước</h3>
+        <div className="sticky top-6">
+          <div className="bg-white rounded-xl shadow-lg overflow-hidden">
+            <div className="aspect-3/4 bg-linear-to-br from-rose-100 to-amber-100">
+              <div className="w-full h-full flex flex-col items-center justify-center p-6 text-center">
+                <div className="text-5xl mb-4">囍</div>
+                <div className="text-lg font-semibold">
+                  {formData.groomName || "..."} & {formData.brideName || "..."}
                 </div>
-              </div>
-
-              {/* Quick Info */}
-              <div className="p-4 border-t space-y-2 text-sm">
                 {formData.eventDate && (
-                  <div className="flex justify-between">
-                    <span className="text-muted-foreground">Ngày</span>
-                    <span>{new Date(formData.eventDate).toLocaleDateString("vi-VN")}</span>
+                  <div className="text-sm text-muted-foreground mt-2">
+                    {new Date(formData.eventDate).toLocaleDateString("vi-VN")}
                   </div>
                 )}
                 {formData.venueName && (
-                  <div className="flex justify-between">
-                    <span className="text-muted-foreground">Địa điểm</span>
-                    <span className="truncate ml-2">{formData.venueName}</span>
-                  </div>
-                )}
-                {formData.timeline.length > 0 && (
-                  <div className="flex justify-between">
-                    <span className="text-muted-foreground">Lịch trình</span>
-                    <span>{formData.timeline.length} hoạt động</span>
-                  </div>
-                )}
-                {formData.images.length > 0 && (
-                  <div className="flex justify-between">
-                    <span className="text-muted-foreground">Album</span>
-                    <span>{formData.images.length} ảnh</span>
+                  <div className="text-xs text-muted-foreground mt-1">
+                    {formData.venueName}
                   </div>
                 )}
               </div>
             </div>
+            <div className="p-4 border-t space-y-2 text-sm">
+              {formData.timeline.length > 0 && (
+                <div className="flex justify-between">
+                  <span className="text-muted-foreground">Lịch trình</span>
+                  <span>{formData.timeline.length} hoạt động</span>
+                </div>
+              )}
+              {formData.images.length > 0 && (
+                <div className="flex justify-between">
+                  <span className="text-muted-foreground">Album</span>
+                  <span>{formData.images.length} ảnh</span>
+                </div>
+              )}
+            </div>
           </div>
         </div>
-      )}
+      </div>
     </div>
   );
 }
