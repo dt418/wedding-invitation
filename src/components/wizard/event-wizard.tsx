@@ -1,6 +1,6 @@
 "use client";
 
-import { useState, useCallback, useEffect, useRef } from "react";
+import { useState, useCallback, useEffect } from "react";
 import { useRouter } from "next/navigation";
 import { Stepper } from "./wizard-components";
 import { StepTemplate } from "./step-template";
@@ -83,16 +83,6 @@ const INITIAL_DATA: FormData = {
   rsvpEnabled: true,
   guestbookEnabled: true,
 };
-
-const STEPS_TITLES = [
-  "Mẫu thiệp",
-  "Cặp đôi",
-  "Sự kiện",
-  "Lịch trình",
-  "Album ảnh",
-  "Lời nhắn",
-  "Xem trước",
-];
 
 interface EventWizardProps {
   templateId?: string;
