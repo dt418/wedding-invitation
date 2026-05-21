@@ -152,8 +152,9 @@ export function StepTemplate({ selectedTemplateId, onTemplateSelect, templates =
           </div>
 
           {/* Scrollable Templates Grid */}
-          <div className="flex-1 overflow-y-auto pr-2 -mr-2">
-            <div className="grid grid-cols-2 lg:grid-cols-3 gap-4 pb-4">
+          <div className="flex-1 min-h-0">
+            <div className="h-full overflow-y-auto pr-2 -mr-2">
+              <div className="grid grid-cols-2 lg:grid-cols-3 gap-4 pb-4">
               {visibleTemplates.map((template) => (
               <Card
                 key={template.id}
@@ -245,8 +246,8 @@ export function StepTemplate({ selectedTemplateId, onTemplateSelect, templates =
 
       {/* Bottom Action Bar */}
       <div className="pt-4 mt-4 border-t shrink-0">
-        <div className="flex items-center justify-between gap-4">
-          {hasMore ? (
+        <div className="flex items-center justify-end gap-4">
+          {hasMore && (
             <Button
               variant="outline"
               onClick={() => setVisibleCount(prev => prev + ITEMS_PER_PAGE)}
@@ -255,25 +256,20 @@ export function StepTemplate({ selectedTemplateId, onTemplateSelect, templates =
               <Icons.arrowDown className="w-4 h-4" />
               Xem thêm ({filteredTemplates.length - visibleCount})
             </Button>
-          ) : (
-            <div />
           )}
-          <div className="flex gap-2">
-            <span className="text-sm text-muted-foreground self-center">
-              {filteredTemplates.length} mẫu thiệp
-            </span>
-            <Button
-              onClick={() => {
-                if (selectedTemplateId) {
-                  onTemplateSelect(selectedTemplateId);
-                }
-              }}
-              disabled={!selectedTemplateId}
-            >
-              Lưu & Tiếp tục
-              <Icons.arrowRight className="w-4 h-4 ml-2" />
-            </Button>
-          </div>
+          <Button
+            size="lg"
+            onClick={() => {
+              if (selectedTemplateId) {
+                onTemplateSelect(selectedTemplateId);
+              }
+            }}
+            disabled={!selectedTemplateId}
+            className="min-w-[160px]"
+          >
+            Lưu & Tiếp tục
+            <Icons.arrowRight className="w-4 h-4 ml-2" />
+          </Button>
         </div>
       </div>
     </div>
