@@ -207,7 +207,12 @@ export async function sendInvites(
       guest: true,
       event: true,
     },
-  });
+  }) as Array<{
+    id: string;
+    inviteCode: string;
+    guest: { name: string; email: string | null; zaloId: string | null; phone: string | null } | null;
+    event: { groomName: string; brideName: string; eventDate: Date; eventTime: string; venueName: string; venueAddress: string } | null;
+  }>;
 
   await db.insert(inviteSendJobs).values({
     id: jobId,

@@ -11,17 +11,19 @@ export async function POST(request: NextRequest) {
   if (event === "send_message_result") {
     const { message_id, status, error } = data;
 
-    const statusMap: Record<string, string> = {
+    const statusMap: Record<string, "sent" | "delivered" | "opened" | "failed"> = {
       "0": "sent",
       "1": "delivered",
       "2": "opened",
       "-1": "failed",
     };
 
+    const mappedStatus = statusMap[status] || "sent";
+
     await db
       .update(inviteDeliveries)
       .set({
-        status: statusMap[status] || "sent",
+        status: mappedStatus,
         providerMessageId: message_id,
         error: error || null,
       })

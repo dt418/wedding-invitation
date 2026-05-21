@@ -1,6 +1,5 @@
 import { NextRequest, NextResponse } from "next/server";
 import { verifyToken } from "@/lib/auth";
-import { db } from "@/db";
 import { sendInvites } from "@/lib/delivery";
 
 export async function POST(
@@ -38,7 +37,7 @@ export async function POST(
   }
 
   try {
-    const result = await sendInvites(eventId, user.id, {
+    const result = await sendInvites(eventId, user.userId, {
       inviteIds,
       channel,
       zaloChannel,

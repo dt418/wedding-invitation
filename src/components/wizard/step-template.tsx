@@ -6,7 +6,7 @@ import { StepHeader } from "./wizard-components";
 import { Button } from "@/components/ui/button";
 import { Icons } from "@/components/ui/icons";
 import { cn } from "@/lib/utils";
-import { getAllCategories, getCategoryLabel, type Locale } from "@/lib/i18n";
+import { getAllCategories, type Locale } from "@/lib/i18n";
 
 const ITEMS_PER_PAGE = 12;
 

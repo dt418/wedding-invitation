@@ -1,5 +1,4 @@
 import { NextRequest } from "next/server";
-import { verifyToken } from "@/lib/auth";
 import { db } from "@/db";
 import { inviteSendJobs } from "@/db/schema";
 import { eq } from "drizzle-orm";
