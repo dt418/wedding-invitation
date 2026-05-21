@@ -1,4 +1,5 @@
-const { createCanvas, registerFont } = require('canvas');
+const { createCanvas } = require('canvas');
+const sharp = require('sharp');
 const fs = require('fs');
 const path = require('path');
 
@@ -176,7 +177,7 @@ const TEMPLATES = [
   { slug: "hoa-lua-nau", accent: "#DEB887", text: "#FFFFFF", bg: "#A0522D", cat: "minimal", label: "Hoa Lụa Nâu" },
 ];
 
-function createTemplatePreview(tpl) {
+async function createTemplatePreview(tpl) {
   const w = 400, h = 711;
   const canvas = createCanvas(w, h);
   const ctx = canvas.getContext('2d');
@@ -288,12 +289,14 @@ function createTemplatePreview(tpl) {
 
   const buffer = canvas.toBuffer('image/png');
   const outputPath = path.join(OUTPUT_DIR, `${tpl.slug}.webp`);
-
-  // Write as PNG first, then rename (canvas doesn't support webp directly)
-  const pngPath = path.join(OUTPUT_DIR, `${tpl.slug}.png`);
-  fs.writeFileSync(pngPath, buffer);
-  fs.renameSync(pngPath, outputPath);
+  await sharp(buffer).webp({ quality: 85 }).toFile(outputPath);
   console.log(`Created: ${tpl.slug}.webp`);
+}
+
+async function main() {
+  for (const tpl of TEMPLATES) {
+    await createTemplatePreview(tpl);
+  }
 }
 
 function adjustColor(hex, amount) {
@@ -309,5 +312,4 @@ if (!fs.existsSync(OUTPUT_DIR)) {
 }
 
 console.log("Generating themed template placeholders...\n");
-TEMPLATES.forEach(tpl => createTemplatePreview(tpl));
-console.log("\nDone! Generated 27 theme-matched placeholder images.");
+main().then(() => console.log("\nDone! Generated 27 theme-matched placeholder images.")).catch(console.error);

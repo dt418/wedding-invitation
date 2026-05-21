@@ -111,7 +111,7 @@ export function TemplateActionModal({
       <div className="relative flex flex-row w-[900px] lg:w-[1000px] xl:w-[1100px] max-w-[90vw] h-[600px] lg:h-[680px] xl:h-[750px] max-h-[85vh] m-auto bg-white/80 backdrop-blur-sm rounded-3xl shadow-2xl overflow-hidden border border-zinc-200/20">
         <button
           onClick={onClose}
-          className="absolute right-4 top-4 z-20 w-10 h-10 flex items-center justify-center rounded-full bg-white/90 hover:bg-white shadow-lg text-zinc-500 hover:text-zinc-800 transition-all duration-200 cursor-pointer border border-zinc-200/50"
+          className="absolute right-4 top-4 z-20 w-10 h-10 flex items-center justify-center rounded-full bg-white/90 hover:bg-white shadow-lg text-zinc-500 hover:text-zinc-800 transition-transform transition-opacity duration-200 cursor-pointer border border-zinc-200/50 motion-reduce:transition-none focus:outline-none focus-visible:ring-2 focus-visible:ring-rose-500 focus-visible:ring-offset-2"
           aria-label="Close modal"
         >
           <X className="w-4 h-4" />
