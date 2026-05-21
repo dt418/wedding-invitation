@@ -11,6 +11,7 @@ import { StepGallery } from "./step-gallery";
 import { StepMessages } from "./step-messages";
 import { StepPreview } from "./step-preview";
 import { Icons } from "@/components/ui/icons";
+import { Button } from "../ui/button";
 
 interface TemplateFromApi {
   id: string;
@@ -112,7 +113,10 @@ export function EventWizard({ templateId }: EventWizardProps) {
     if (saved) {
       try {
         const parsed = JSON.parse(saved);
-        setFormData({ ...parsed, templateId: templateId || parsed.templateId || "" });
+        const newFormData = { ...parsed, templateId: templateId || parsed.templateId || "" };
+        setFormData(newFormData);
+        setIsHydrated(true);
+        return;
       } catch (e) {
         console.error("Failed to parse saved draft", e);
       }
@@ -195,11 +199,6 @@ export function EventWizard({ templateId }: EventWizardProps) {
     }
   };
 
-  const handleBack = () => {
-    if (currentStep > 0) {
-      setCurrentStep((prev) => prev - 1);
-    }
-  };
 
   const handleStepClick = (index: number) => {
     if (index <= currentStep || completedSteps.includes(index)) {
@@ -386,7 +385,7 @@ export function EventWizard({ templateId }: EventWizardProps) {
               onClick={handleNext}
               disabled={isLoading}
               size="lg"
-              className="min-w-[180px]"
+              className="min-w-45"
             >
               {isLoading ? (
                 <>
@@ -417,9 +416,10 @@ export function EventWizard({ templateId }: EventWizardProps) {
             <div className="bg-white rounded-xl shadow-lg overflow-hidden">
               {/* Mini Preview */}
               <div className="p-4">
-                <div className="aspect-[3/4] bg-gradient-to-br from-rose-100 to-amber-100 rounded-lg flex items-center justify-center">
+                <div className="aspect-3/4 bg-linear-to-br from-rose-100 to-amber-100 rounded-lg flex items-center justify-center">
                   <div className="text-center">
-                    <div className="text-5xl mb-4">囍</div>
+                    <div className="text-5xl mb-4">
+                    </div>
                     <div className="text-lg font-semibold">
                       {formData.groomName || "..."} & {formData.brideName || "..."}
                     </div>
