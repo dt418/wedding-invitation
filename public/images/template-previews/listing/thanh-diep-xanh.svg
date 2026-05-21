@@ -1,0 +1,21 @@
+<svg width="400" height="711" xmlns="http://www.w3.org/2000/svg">
+  <defs>
+    <linearGradient id="bg" x1="0%" y1="0%" x2="100%" y2="100%">
+      <stop offset="0%" stop-color="#2E8B57"/>
+      <stop offset="100%" stop-color="#106d39"/>
+    </linearGradient>
+  </defs>
+  <rect width="400" height="711" fill="url(#bg)"/>
+  <rect x="16" y="16" width="368" height="679" rx="12" fill="none" stroke="#FFFFFF" stroke-width="2" opacity="0.3"/>
+  <rect x="24" y="24" width="352" height="663" rx="8" fill="none" stroke="#FFFFFF" stroke-width="1" opacity="0.2"/>
+  <circle cx="200" cy="100" r="40" fill="#FFFFFF" opacity="0.1"/>
+  <circle cx="200" cy="100" r="30" fill="#90EE90" opacity="0.3"/>
+  <circle cx="200" cy="100" r="18" fill="#90EE90" opacity="0.5"/>
+  <text x="200" y="200" text-anchor="middle" font-family="system-ui" font-size="24" font-weight="600" fill="#FFFFFF" opacity="0.9">Thanh Diep Xanh</text>
+  <line x1="100" y1="240" x2="300" y2="240" stroke="#90EE90" stroke-width="1" opacity="0.5"/>
+  <circle cx="200" cy="240" r="4" fill="#90EE90"/>
+  <circle cx="200" cy="400" r="35" fill="none" stroke="#90EE90" stroke-width="3" opacity="0.7"/>
+  <circle cx="200" cy="400" r="25" fill="none" stroke="#90EE90" stroke-width="2" opacity="0.5"/>
+  <text x="200" y="520" text-anchor="middle" font-family="system-ui" font-size="14" fill="#FFFFFF" opacity="0.6">Wedding Invitation</text>
+  <text x="200" y="600" text-anchor="middle" font-family="system-ui" font-size="10" fill="#FFFFFF" opacity="0.4">chungdoi.com</text>
+</svg>
