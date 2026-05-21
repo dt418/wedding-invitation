@@ -122,7 +122,7 @@ export function StepTemplate({ selectedTemplateId, onTemplateSelect, templates =
   };
 
   return (
-    <div className="space-y-6">
+    <div className="flex flex-col h-[calc(100vh-8rem)]">
       <StepHeader
         title="Chọn mẫu thiệp"
         description="Chọn mẫu thiệp phù hợp với phong cách đám cưới của bạn"
@@ -130,11 +130,11 @@ export function StepTemplate({ selectedTemplateId, onTemplateSelect, templates =
         totalSteps={7}
       />
 
-      <div className="flex gap-6">
+      <div className="flex flex-1 gap-6 min-h-0">
         {/* Template Grid */}
-        <div className="flex-1">
+        <div className="flex-1 flex flex-col min-h-0">
           {/* Category Filter */}
-          <div className="flex gap-2 mb-4 overflow-x-auto pb-2">
+          <div className="flex gap-2 mb-4 overflow-x-auto pb-2 shrink-0">
             {CATEGORIES.map((category) => (
               <button
                 key={category}
@@ -151,9 +151,10 @@ export function StepTemplate({ selectedTemplateId, onTemplateSelect, templates =
             ))}
           </div>
 
-          {/* Templates Grid */}
-          <div className="grid grid-cols-2 lg:grid-cols-3 gap-4">
-            {visibleTemplates.map((template) => (
+          {/* Scrollable Templates Grid */}
+          <div className="flex-1 overflow-y-auto pr-2 -mr-2">
+            <div className="grid grid-cols-2 lg:grid-cols-3 gap-4 pb-4">
+              {visibleTemplates.map((template) => (
               <Card
                 key={template.id}
                 onClick={() => handleSelectTemplate(template)}
@@ -197,24 +198,13 @@ export function StepTemplate({ selectedTemplateId, onTemplateSelect, templates =
               </Card>
             ))}
           </div>
-          {hasMore && (
-            <div className="mt-6 flex justify-center">
-              <Button
-                variant="outline"
-                onClick={() => setVisibleCount(prev => prev + ITEMS_PER_PAGE)}
-                className="gap-2"
-              >
-                <Icons.arrowDown className="w-4 h-4" />
-                Xem thêm ({filteredTemplates.length - visibleCount} còn lại)
-              </Button>
-            </div>
-          )}
+          </div>
         </div>
 
         {/* Preview Panel */}
         {previewTemplate && (
-          <div className="hidden lg:block w-80">
-            <Card className="sticky top-4">
+          <div className="hidden lg:block w-80 shrink-0">
+            <Card className="sticky top-0">
               <div className="p-4 border-b">
                 <h3 className="font-medium">Xem trước</h3>
                 <p className="text-sm text-muted-foreground">{previewTemplate.name}</p>
@@ -251,6 +241,40 @@ export function StepTemplate({ selectedTemplateId, onTemplateSelect, templates =
             </Card>
           </div>
         )}
+      </div>
+
+      {/* Bottom Action Bar */}
+      <div className="pt-4 mt-4 border-t shrink-0">
+        <div className="flex items-center justify-between gap-4">
+          {hasMore ? (
+            <Button
+              variant="outline"
+              onClick={() => setVisibleCount(prev => prev + ITEMS_PER_PAGE)}
+              className="gap-2"
+            >
+              <Icons.arrowDown className="w-4 h-4" />
+              Xem thêm ({filteredTemplates.length - visibleCount})
+            </Button>
+          ) : (
+            <div />
+          )}
+          <div className="flex gap-2">
+            <span className="text-sm text-muted-foreground self-center">
+              {filteredTemplates.length} mẫu thiệp
+            </span>
+            <Button
+              onClick={() => {
+                if (selectedTemplateId) {
+                  onTemplateSelect(selectedTemplateId);
+                }
+              }}
+              disabled={!selectedTemplateId}
+            >
+              Lưu & Tiếp tục
+              <Icons.arrowRight className="w-4 h-4 ml-2" />
+            </Button>
+          </div>
+        </div>
       </div>
     </div>
   );
