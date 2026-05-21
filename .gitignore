@@ -56,3 +56,6 @@ next-env.d.ts
 graphify-out/
 .graphify_*.json
 .graphify_*.txt
+
+# worktrees (isolated workspaces)
+.worktrees/
