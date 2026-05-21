@@ -111,7 +111,7 @@ export function TemplateActionModal({
       <div className="relative flex flex-row w-[900px] lg:w-[1000px] xl:w-[1100px] max-w-[90vw] h-[600px] lg:h-[680px] xl:h-[750px] max-h-[85vh] m-auto bg-white/80 backdrop-blur-sm rounded-3xl shadow-2xl overflow-hidden border border-zinc-200/20">
         <button
           onClick={onClose}
-          className="absolute right-3 top-3 z-20 w-8 h-8 flex items-center justify-center rounded-full bg-white/50 hover:bg-white/80 text-zinc-500 hover:text-zinc-700 transition-colors cursor-pointer"
+          className="absolute right-4 top-4 z-20 w-10 h-10 flex items-center justify-center rounded-full bg-white/90 hover:bg-white shadow-lg text-zinc-500 hover:text-zinc-800 transition-all duration-200 cursor-pointer border border-zinc-200/50"
           aria-label="Close modal"
         >
           <X className="w-4 h-4" />
@@ -137,56 +137,56 @@ export function TemplateActionModal({
           </div>
         </div>
 
-        <div className="flex flex-col flex-1 min-w-0 bg-white/70 backdrop-blur-xl backdrop-saturate-150 overflow-y-auto">
-          <div className="flex-shrink-0 p-6 lg:p-8 pb-4 lg:pb-6">
-            <h2 id="modal-title" className="text-2xl lg:text-3xl font-bold mb-2 pr-8">
-              {template.name}
-            </h2>
-            <p className="text-base lg:text-lg text-zinc-500">{topDescription}</p>
-            <div className="flex flex-wrap gap-1.5 mt-3">
-              <span className="badge badge-sm bg-white/50 border-zinc-200/30 text-zinc-600">
-                {categoryLabel}
-              </span>
-              {template.isPremium && (
-                <span className="badge badge-sm bg-amber-100 text-amber-700 border-amber-200/30">
-                  Premium
+        <div className="flex flex-col flex-1 min-w-0 bg-white/70 backdrop-blur-xl backdrop-saturate-150">
+          <div className="overflow-y-auto flex-1">
+            <div className="p-6 lg:p-8 pb-4 lg:pb-6">
+              <h2 id="modal-title" className="text-2xl lg:text-3xl font-bold mb-2 pr-8">
+                {template.name}
+              </h2>
+              <p className="text-base lg:text-lg text-zinc-500">{topDescription}</p>
+              <div className="flex flex-wrap gap-1.5 mt-3">
+                <span className="badge badge-sm bg-white/50 border-zinc-200/30 text-zinc-600">
+                  {categoryLabel}
                 </span>
+                {template.isPremium && (
+                  <span className="badge badge-sm bg-amber-100 text-amber-700 border-amber-200/30">
+                    Premium
+                  </span>
+                )}
+              </div>
+            </div>
+
+            <div className="px-6 lg:px-8 py-3">
+              {highlights.length > 0 && (
+                <>
+                  <h3 className="text-sm font-medium text-zinc-500 mb-2">Điểm nổi bật</h3>
+                  <ul className="space-y-2 mb-4">
+                    {highlights.map((highlight, index) => (
+                      <li key={index} className="text-sm text-zinc-600 leading-relaxed">
+                        {highlight}
+                      </li>
+                    ))}
+                  </ul>
+                </>
               )}
+
+              <h3 className="text-sm font-medium text-zinc-500 mb-2">Tính năng</h3>
+              <ul className="grid grid-cols-2 gap-x-4 gap-y-1.5">
+                {defaultHighlights.map((feature) => {
+                  const IconComponent = iconMap[feature.icon];
+                  return (
+                    <li key={feature.label} className="flex items-center gap-1.5 text-xs text-zinc-600">
+                      <IconComponent className="w-3.5 h-3.5 text-rose-500 flex-shrink-0" />
+                      <span>{feature.label}</span>
+                    </li>
+                  );
+                })}
+              </ul>
             </div>
           </div>
 
-          <div className="px-6 lg:px-8 py-3">
-            {highlights.length > 0 && (
-              <>
-                <h3 className="text-sm font-medium text-zinc-500 mb-2">Điểm nổi bật</h3>
-                <ul className="space-y-2 mb-4">
-                  {highlights.map((highlight, index) => (
-                    <li key={index} className="text-sm text-zinc-600 leading-relaxed">
-                      {highlight}
-                    </li>
-                  ))}
-                </ul>
-              </>
-            )}
-
-            <h3 className="text-sm font-medium text-zinc-500 mb-2">Tính năng</h3>
-            <ul className="grid grid-cols-2 gap-x-4 gap-y-1.5">
-              {defaultHighlights.map((feature) => {
-                const IconComponent = iconMap[feature.icon];
-                return (
-                  <li key={feature.label} className="flex items-center gap-1.5 text-xs text-zinc-600">
-                    <IconComponent className="w-3.5 h-3.5 text-rose-500 flex-shrink-0" />
-                    <span>{feature.label}</span>
-                  </li>
-                );
-              })}
-            </ul>
-          </div>
-
-          <div className="flex-1" />
-
-          <div className="flex-shrink-0 px-6 lg:px-8 pb-6 lg:pb-8 space-y-4">
-            <p className="text-xs text-zinc-400 tracking-wide">Tạo miễn phí · Thử 3 ngày · Đẹp mới thanh toán</p>
+          <div className="flex-shrink-0 px-6 lg:px-8 py-4 border-t border-zinc-200/50 bg-white/80">
+            <p className="text-xs text-zinc-400 tracking-wide mb-3">Tạo miễn phí · Thử 3 ngày · Đẹp mới thanh toán</p>
             <div className="grid grid-cols-2 gap-3">
               <Link
                 href={`/events/new?templateId=${template.id}`}
