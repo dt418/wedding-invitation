@@ -10,8 +10,10 @@ import { StepTimeline } from "./step-timeline";
 import { StepGallery } from "./step-gallery";
 import { StepMessages } from "./step-messages";
 import { StepPreview } from "./step-preview";
+import InviteRenderer from "@/components/invite-renderer";
 import { Icons } from "@/components/ui/icons";
 import { Button } from "../ui/button";
+import { cn } from "@/lib/utils";
 
 interface TemplateFromApi {
   id: string;
@@ -127,6 +129,8 @@ export function EventWizard({ templateId }: EventWizardProps) {
   const [errors, setErrors] = useState<string[]>([]);
   const [isLoading, setIsLoading] = useState(false);
   const [showPreview, setShowPreview] = useState(true);
+  const [previewMode, setPreviewMode] = useState<"editor" | "preview">("editor");
+  const [previewDevice, setPreviewDevice] = useState<"desktop" | "mobile">("desktop");
   const [templates, setTemplates] = useState<TemplateFromApi[]>([]);
 
   const isLastStep = currentStep === 6;
@@ -344,28 +348,83 @@ export function EventWizard({ templateId }: EventWizardProps) {
         </div>
       </div>
 
-      {/* Main Content */}
-      <div className="flex-1 flex flex-col">
-        {/* Mobile Header */}
-        <div className="lg:hidden border-b p-4 flex items-center justify-between">
-          <div>
-            <h1 className="font-semibold">Tạo thiệp cưới</h1>
-            <p className="text-xs text-muted-foreground">
-              Bước {currentStep + 1}: {STEPS_TITLES[currentStep]}
-            </p>
-          </div>
-          <button
-            onClick={() => setShowPreview(!showPreview)}
-            className="p-2 rounded-lg hover:bg-muted"
-          >
-            <Icons.eye className="w-5 h-5" />
-          </button>
-        </div>
+{/* Main Content */}
+        <div className="flex-1 flex flex-col overflow-hidden">
+          {/* Editor/Preview Toggle - Sticky, Full Width */}
+          <div className="sticky top-0 z-40 bg-background border-b px-6 py-3 flex items-center justify-between gap-4">
+            <div className="flex items-center gap-2">
+              <button
+                onClick={() => setPreviewMode("editor")}
+                className={cn(
+                  "px-4 py-2 rounded-lg text-sm font-medium transition-colors flex items-center gap-2",
+                  previewMode === "editor"
+                    ? "bg-rose-600 text-white"
+                    : "bg-muted hover:bg-muted/80"
+                )}
+              >
+                <Icons.edit className="w-4 h-4" />
+                Editor
+              </button>
+              <button
+                onClick={() => setPreviewMode("preview")}
+                disabled={!formData.templateId}
+                className={cn(
+                  "px-4 py-2 rounded-lg text-sm font-medium transition-colors flex items-center gap-2",
+                  previewMode === "preview"
+                    ? "bg-rose-600 text-white"
+                    : "bg-muted hover:bg-muted/80",
+                  !formData.templateId && "opacity-50 cursor-not-allowed"
+                )}
+              >
+                <Icons.eye className="w-4 h-4" />
+                Preview
+              </button>
+            </div>
 
-{/* Form Content */}
-        <div className="flex-1 overflow-auto">
-          <div className="max-w-4xl mx-auto p-6 pb-24">
-            {renderStep()}
+            {previewMode === "preview" && (
+              <div className="flex items-center gap-1">
+                <button
+                  onClick={() => setPreviewDevice("desktop")}
+                  className={cn(
+                    "px-3 py-1 text-xs rounded-full transition-colors",
+                    previewDevice === "desktop"
+                      ? "bg-rose-100 text-rose-700"
+                      : "bg-muted text-muted-foreground"
+                  )}
+                >
+                  Desktop
+                </button>
+                <button
+                  onClick={() => setPreviewDevice("mobile")}
+                  className={cn(
+                    "px-3 py-1 text-xs rounded-full transition-colors",
+                    previewDevice === "mobile"
+                      ? "bg-rose-100 text-rose-700"
+                      : "bg-muted text-muted-foreground"
+                  )}
+                >
+                  Mobile
+                </button>
+              </div>
+            )}
+          </div>
+
+          {/* Content Area */}
+          <div className="flex-1 overflow-auto">
+            {previewMode === "editor" ? (
+              <div className="max-w-4xl mx-auto p-6 pb-24">
+                {renderStep()}
+              </div>
+            ) : (
+              <div className="h-full bg-zinc-100 p-6">
+                <div className="bg-white rounded-xl shadow-xl overflow-hidden mx-auto max-w-4xl h-[calc(100vh-180px)]">
+                  <InviteRenderer
+                    sections={[]}
+                    previewMode={previewDevice}
+                  />
+                </div>
+              </div>
+            )}
           </div>
         </div>
 
@@ -405,48 +464,6 @@ export function EventWizard({ templateId }: EventWizardProps) {
             </Button>
           </div>
         </div>
-      </div>
-
-      {/* Mini Card Preview - Vertical Layout */}
-      <div className="hidden xl:flex xl:flex-col w-80 border-l bg-muted/30 p-6 overflow-auto">
-        <h3 className="font-semibold mb-4">Xem trước</h3>
-        <div className="sticky top-6">
-          <div className="bg-white rounded-xl shadow-lg overflow-hidden">
-            <div className="aspect-3/4 bg-linear-to-br from-rose-100 to-amber-100">
-              <div className="w-full h-full flex flex-col items-center justify-center p-6 text-center">
-                <div className="text-5xl mb-4">囍</div>
-                <div className="text-lg font-semibold">
-                  {formData.groomName || "..."} & {formData.brideName || "..."}
-                </div>
-                {formData.eventDate && (
-                  <div className="text-sm text-muted-foreground mt-2">
-                    {new Date(formData.eventDate).toLocaleDateString("vi-VN")}
-                  </div>
-                )}
-                {formData.venueName && (
-                  <div className="text-xs text-muted-foreground mt-1">
-                    {formData.venueName}
-                  </div>
-                )}
-              </div>
-            </div>
-            <div className="p-4 border-t space-y-2 text-sm">
-              {formData.timeline.length > 0 && (
-                <div className="flex justify-between">
-                  <span className="text-muted-foreground">Lịch trình</span>
-                  <span>{formData.timeline.length} hoạt động</span>
-                </div>
-              )}
-              {formData.images.length > 0 && (
-                <div className="flex justify-between">
-                  <span className="text-muted-foreground">Album</span>
-                  <span>{formData.images.length} ảnh</span>
-                </div>
-              )}
-            </div>
-          </div>
-        </div>
-      </div>
     </div>
   );
 }

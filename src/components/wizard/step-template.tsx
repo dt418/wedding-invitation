@@ -11,8 +11,6 @@ import { cn } from "@/lib/utils";
 
 const ITEMS_PER_PAGE = 12;
 
-type ViewMode = "editor" | "preview";
-
 interface Template {
   id: string;
   name: string;
@@ -173,12 +171,7 @@ export function StepTemplate({
   templates = DEFAULT_TEMPLATES,
 }: StepTemplateProps) {
   const [selectedCategory, setSelectedCategory] = useState("Tất cả");
-  const [viewMode, setViewMode] = useState<ViewMode>("editor");
   const [visibleCount, setVisibleCount] = useState(ITEMS_PER_PAGE);
-
-  const previewTemplate = selectedTemplateId
-    ? templates.find((t) => t.id === selectedTemplateId) ?? null
-    : null;
 
   const filteredTemplates =
     selectedCategory === "Tất cả"
@@ -190,7 +183,6 @@ export function StepTemplate({
 
   const handleSelectTemplate = (template: Template) => {
     onTemplateSelect(template.id);
-    setViewMode("preview");
   };
 
   const handleCategoryChange = (category: string) => {
@@ -199,7 +191,7 @@ export function StepTemplate({
   };
 
 return (
-    <div className="flex flex-col h-[calc(100vh-8rem)]">
+    <div className="flex flex-col">
       <StepHeader
         title="Chọn mẫu thiệp"
         description="Chọn mẫu thiệp phù hợp với phong cách đám cưới của bạn"
@@ -207,114 +199,46 @@ return (
         totalSteps={7}
       />
 
-      <div className="flex items-center gap-2 mb-4 border-b pb-4 shrink-0">
-        <button
-          onClick={() => setViewMode("editor")}
-          className={cn(
-            "px-4 py-2 rounded-lg text-sm font-medium transition-colors",
-            viewMode === "editor"
-              ? "bg-rose-600 text-white"
-              : "bg-muted hover:bg-muted/80"
-          )}
-        >
-          <span className="flex items-center gap-2">
-            <Icons.edit className="w-4 h-4" />
-            Editor
-          </span>
-        </button>
-        <button
-          onClick={() => setViewMode("preview")}
-          disabled={!previewTemplate}
-          className={cn(
-            "px-4 py-2 rounded-lg text-sm font-medium transition-colors",
-            viewMode === "preview"
-              ? "bg-rose-600 text-white"
-              : "bg-muted hover:bg-muted/80",
-            !previewTemplate && "opacity-50 cursor-not-allowed"
-          )}
-        >
-          <span className="flex items-center gap-2">
-            <Icons.eye className="w-4 h-4" />
-            Preview
-          </span>
-        </button>
-      </div>
-
-      <div className="flex-1 min-h-0">
-        {viewMode === "editor" ? (
-          <div className="flex flex-col h-full">
-            <div className="flex gap-2 mb-4 overflow-x-auto pb-2 shrink-0">
-              {CATEGORIES.map((category) => (
-                <button
-                  key={category}
-                  onClick={() => handleCategoryChange(category)}
-                  className={cn(
-                    "px-4 py-2 rounded-full text-sm font-medium whitespace-nowrap transition-all",
-                    selectedCategory === category
-                      ? "bg-rose-600 text-white"
-                      : "bg-muted hover:bg-muted/80 text-muted-foreground"
-                  )}
-                >
-                  {category}
-                </button>
-              ))}
-            </div>
-
-            <div className="flex-1 min-h-0 overflow-hidden">
-              <div className="h-full overflow-y-auto pr-2 -mr-2">
-                <div className="grid grid-cols-2 md:grid-cols-3 lg:grid-cols-4 gap-3 pb-4">
-                  {visibleTemplates.map((template) => (
-                    <TemplateCard
-                      key={template.id}
-                      template={template}
-                      isSelected={selectedTemplateId === template.id}
-                      onSelect={() => handleSelectTemplate(template)}
-                    />
-                  ))}
-                </div>
-              </div>
-            </div>
-          </div>
-        ) : (
-          <div className="h-full bg-muted/30 rounded-xl overflow-hidden">
-            {previewTemplate ? (
-              <TemplatePreview template={previewTemplate} />
-            ) : (
-              <div className="h-full flex items-center justify-center text-muted-foreground">
-                Chưa chọn mẫu thiệp
-              </div>
+      <div className="flex gap-2 mb-4 overflow-x-auto pb-2">
+        {CATEGORIES.map((category) => (
+          <button
+            key={category}
+            onClick={() => handleCategoryChange(category)}
+            className={cn(
+              "px-4 py-2 rounded-full text-sm font-medium whitespace-nowrap transition-all",
+              selectedCategory === category
+                ? "bg-rose-600 text-white"
+                : "bg-muted hover:bg-muted/80 text-muted-foreground"
             )}
-          </div>
-        )}
+          >
+            {category}
+          </button>
+        ))}
       </div>
 
-      <div className="pt-4 mt-4 border-t shrink-0">
-        <div className="flex items-center justify-end gap-4">
-          {hasMore && viewMode === "editor" && (
-            <Button
-              variant="outline"
-              onClick={() => setVisibleCount((prev) => prev + ITEMS_PER_PAGE)}
-              className="gap-2"
-            >
-              <Icons.arrowDown className="w-4 h-4" />
-              Xem thêm ({filteredTemplates.length - visibleCount})
-            </Button>
-          )}
+      <div className="grid grid-cols-2 md:grid-cols-3 lg:grid-cols-4 gap-3">
+        {visibleTemplates.map((template) => (
+          <TemplateCard
+            key={template.id}
+            template={template}
+            isSelected={selectedTemplateId === template.id}
+            onSelect={() => handleSelectTemplate(template)}
+          />
+        ))}
+      </div>
+
+      {hasMore && (
+        <div className="mt-4 flex justify-center">
           <Button
-            size="lg"
-            onClick={() => {
-              if (selectedTemplateId) {
-                onTemplateSelect(selectedTemplateId);
-              }
-            }}
-            disabled={!selectedTemplateId}
-            className="min-w-[160px]"
+            variant="outline"
+            onClick={() => setVisibleCount((prev) => prev + ITEMS_PER_PAGE)}
+            className="gap-2"
           >
-            Lưu & Tiếp tục
-            <Icons.arrowRight className="w-4 h-4 ml-2" />
+            <Icons.arrowDown className="w-4 h-4" />
+            Xem thêm ({filteredTemplates.length - visibleCount})
           </Button>
         </div>
-      </div>
+      )}
     </div>
   );
 }
