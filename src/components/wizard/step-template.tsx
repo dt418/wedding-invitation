@@ -97,16 +97,25 @@ const getCategoryKey = (label: string): string => {
   return entry ? entry[0] : label;
 };
 
-export function StepTemplate({ selectedTemplateId, onTemplateSelect, templates = DEFAULT_TEMPLATES }: StepTemplateProps) {
+export function StepTemplate({
+  selectedTemplateId,
+  onTemplateSelect,
+  templates = DEFAULT_TEMPLATES,
+}: StepTemplateProps) {
   const [selectedCategory, setSelectedCategory] = useState("Tất cả");
   const [previewTemplate, setPreviewTemplate] = useState<Template | null>(
-    selectedTemplateId ? (templates.find(t => t.id === selectedTemplateId) ?? null) : null
+    selectedTemplateId
+      ? (templates.find((t) => t.id === selectedTemplateId) ?? null)
+      : null,
   );
   const [visibleCount, setVisibleCount] = useState(ITEMS_PER_PAGE);
 
-  const filteredTemplates = selectedCategory === "Tất cả"
-    ? templates
-    : templates.filter(t => t.category === getCategoryKey(selectedCategory));
+  const filteredTemplates =
+    selectedCategory === "Tất cả"
+      ? templates
+      : templates.filter(
+          (t) => t.category === getCategoryKey(selectedCategory),
+        );
 
   const visibleTemplates = filteredTemplates.slice(0, visibleCount);
   const hasMore = visibleCount < filteredTemplates.length;
@@ -141,9 +150,11 @@ export function StepTemplate({ selectedTemplateId, onTemplateSelect, templates =
                 onClick={() => handleCategoryChange(category)}
                 className={`
                   px-4 py-2 rounded-full text-sm font-medium whitespace-nowrap transition-all
-                  ${selectedCategory === category
-                    ? "bg-rose-600 text-white"
-                    : "bg-muted hover:bg-muted/80 text-muted-foreground"}
+                  ${
+                    selectedCategory === category
+                      ? "bg-rose-600 text-white"
+                      : "bg-muted hover:bg-muted/80 text-muted-foreground"
+                  }
                 `}
               >
                 {category}
@@ -155,51 +166,105 @@ export function StepTemplate({ selectedTemplateId, onTemplateSelect, templates =
           <div className="flex-1 min-h-0">
             <div className="h-full overflow-y-auto pr-2 -mr-2">
               <div className="grid grid-cols-2 lg:grid-cols-3 gap-4 pb-4">
-              {visibleTemplates.map((template) => (
-              <Card
-                key={template.id}
-                onClick={() => handleSelectTemplate(template)}
-                className={`
-                  cursor-pointer transition-all overflow-hidden p-0 relative
-                  ${selectedTemplateId === template.id
-                    ? "ring-2 ring-rose-600 shadow-lg"
-                    : "hover:shadow-md hover:-translate-y-1"}
-                `}
-              >
-                <div className="relative aspect-[3/4] bg-muted">
-                  {template.thumbnailUrl ? (
-                    <Image
-                      src={template.thumbnailUrl}
-                      alt={template.name}
-                      fill
-                      className="object-cover"
-                    />
-                  ) : (
-                    <div className="absolute inset-0 flex items-center justify-center text-muted-foreground">
-                      <Icons.image className="w-8 h-8" />
+                {visibleTemplates.map((template) => (
+                  <Card
+                    key={template.id}
+                    onClick={() => handleSelectTemplate(template)}
+                    className={`
+                      cursor-pointer transition-all overflow-hidden p-0 relative
+                      ${
+                        selectedTemplateId === template.id
+                          ? "ring-2 ring-rose-600 shadow-lg"
+                          : "hover:shadow-md hover:-translate-y-1"
+                      }
+                    `}
+                  >
+                    <div className="relative aspect-3/4 bg-muted">
+                      {template.thumbnailUrl ? (
+                        <Image
+                          src={template.thumbnailUrl}
+                          alt={template.name}
+                          fill
+                          className="object-cover"
+                        />
+                      ) : (
+                        <div className="absolute inset-0 flex items-center justify-center text-muted-foreground">
+                          <Icons.image className="w-8 h-8" />
+                        </div>
+                      )}
+                      {template.isPremium && (
+                        <Badge className="absolute top-2 right-2 bg-amber-500">
+                          Premium
+                        </Badge>
+                      )}
+                      {selectedTemplateId === template.id && (
+                        <div className="absolute top-2 left-2 z-10">
+                          <div className="w-6 h-6 bg-rose-600 rounded-full flex items-center justify-center shadow-md">
+                            <Icons.check className="w-4 h-4 text-white" />
+                          </div>
+                        </div>
+                      )}
                     </div>
-                  )}
-                  {template.isPremium && (
-                    <Badge className="absolute top-2 right-2 bg-amber-500">
-                      Premium
-                    </Badge>
-                  )}
-                  {selectedTemplateId === template.id && (
-                    <div className="absolute top-2 left-2 z-10">
-                      <div className="w-6 h-6 bg-rose-600 rounded-full flex items-center justify-center shadow-md">
-                        <Icons.check className="w-4 h-4 text-white" />
+                    <div className="p-3">
+                      <div className="font-medium text-sm">{template.name}</div>
+                      <div className="text-xs text-muted-foreground">
+                        {CATEGORY_MAP[template.category] || template.category}
                       </div>
                     </div>
-                  )}
+                  </Card>
+                ))}
+              </div>
+            </div>
+          </div>
+
+          {previewTemplate && (
+            <div className="hidden lg:block w-80 shrink-0">
+              <Card className="sticky top-0">
+                <div className="p-4 border-b">
+                  <h3 className="font-medium">Xem trước</h3>
+                  <p className="text-sm text-muted-foreground">
+                    {previewTemplate.name}
+                  </p>
                 </div>
-                <div className="p-3">
-                  <div className="font-medium text-sm">{template.name}</div>
-                  <div className="text-xs text-muted-foreground">{CATEGORY_MAP[template.category] || template.category}</div>
+                <div className="p-4">
+                  <div className="relative aspect-3/4 bg-linear-to-br from-rose-100 to-rose-200 rounded-lg overflow-hidden">
+                    {previewTemplate.thumbnailUrl ? (
+                      <Image
+                        src={previewTemplate.thumbnailUrl}
+                        alt={previewTemplate.name}
+                        fill
+                        className="object-cover"
+                      />
+                    ) : (
+                      <div className="absolute inset-0 flex items-center justify-center">
+                        <div className="text-center p-4">
+                          <div className="text-4xl mb-4">囍</div>
+                          <div className="text-sm font-medium">
+                            {previewTemplate.name}
+                          </div>
+                        </div>
+                      </div>
+                    )}
+                  </div>
+                  <div className="mt-4 space-y-2 text-sm">
+                    <div className="flex justify-between">
+                      <span className="text-muted-foreground">Danh mục</span>
+                      <span className="font-medium">
+                        {CATEGORY_MAP[previewTemplate.category] ||
+                          previewTemplate.category}
+                      </span>
+                    </div>
+                    <div className="flex justify-between">
+                      <span className="text-muted-foreground">Kiểu</span>
+                      <span>
+                        {previewTemplate.isPremium ? "Premium" : "Miễn phí"}
+                      </span>
+                    </div>
+                  </div>
                 </div>
               </Card>
-            ))}
-          </div>
-          </div>
+            </div>
+)}
         </div>
 
         {/* Preview Panel */}
@@ -208,7 +273,9 @@ export function StepTemplate({ selectedTemplateId, onTemplateSelect, templates =
             <Card className="sticky top-0">
               <div className="p-4 border-b">
                 <h3 className="font-medium">Xem trước</h3>
-                <p className="text-sm text-muted-foreground">{previewTemplate.name}</p>
+                <p className="text-sm text-muted-foreground">
+                  {previewTemplate.name}
+                </p>
               </div>
               <div className="p-4">
                 <div className="relative aspect-[3/4] bg-gradient-to-br from-rose-100 to-rose-200 rounded-lg overflow-hidden">
@@ -223,7 +290,9 @@ export function StepTemplate({ selectedTemplateId, onTemplateSelect, templates =
                     <div className="absolute inset-0 flex items-center justify-center">
                       <div className="text-center p-4">
                         <div className="text-4xl mb-4">囍</div>
-                        <div className="text-sm font-medium">{previewTemplate.name}</div>
+                        <div className="text-sm font-medium">
+                          {previewTemplate.name}
+                        </div>
                       </div>
                     </div>
                   )}
@@ -231,11 +300,16 @@ export function StepTemplate({ selectedTemplateId, onTemplateSelect, templates =
                 <div className="mt-4 space-y-2 text-sm">
                   <div className="flex justify-between">
                     <span className="text-muted-foreground">Danh mục</span>
-                    <span className="font-medium">{CATEGORY_MAP[previewTemplate.category] || previewTemplate.category}</span>
+                    <span className="font-medium">
+                      {CATEGORY_MAP[previewTemplate.category] ||
+                        previewTemplate.category}
+                    </span>
                   </div>
                   <div className="flex justify-between">
                     <span className="text-muted-foreground">Kiểu</span>
-                    <span>{previewTemplate.isPremium ? "Premium" : "Miễn phí"}</span>
+                    <span>
+                      {previewTemplate.isPremium ? "Premium" : "Miễn phí"}
+                    </span>
                   </div>
                 </div>
               </div>
@@ -250,7 +324,7 @@ export function StepTemplate({ selectedTemplateId, onTemplateSelect, templates =
           {hasMore && (
             <Button
               variant="outline"
-              onClick={() => setVisibleCount(prev => prev + ITEMS_PER_PAGE)}
+              onClick={() => setVisibleCount((prev) => prev + ITEMS_PER_PAGE)}
               className="gap-2"
             >
               <Icons.arrowDown className="w-4 h-4" />
