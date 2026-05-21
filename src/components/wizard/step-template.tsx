@@ -6,6 +6,7 @@ import { StepHeader } from "./wizard-components";
 import { Button } from "@/components/ui/button";
 import { Icons } from "@/components/ui/icons";
 import { cn } from "@/lib/utils";
+import { getAllCategories, getCategoryLabel, type Locale } from "@/lib/i18n";
 
 const ITEMS_PER_PAGE = 12;
 
@@ -23,6 +24,7 @@ interface StepTemplateProps {
   selectedTemplateId: string;
   onTemplateSelect: (templateId: string, variantId?: string) => void;
   templates?: Template[];
+  locale?: Locale;
 }
 
 const CATEGORY_MAP: Record<string, string> = {
@@ -35,8 +37,6 @@ const CATEGORY_MAP: Record<string, string> = {
   toi_gian: "Tối giản",
   de_thuong: "Dễ thương",
 };
-
-const CATEGORIES = ["Tất cả", ...Object.values(CATEGORY_MAP)];
 
 function getCategoryKey(label: string): string {
   return Object.entries(CATEGORY_MAP).find(([, v]) => v === label)?.[0] ?? label;
@@ -126,12 +126,18 @@ export function StepTemplate({
   selectedTemplateId,
   onTemplateSelect,
   templates = DEFAULT_TEMPLATES,
+  locale = "vi",
 }: StepTemplateProps) {
-  const [selectedCategory, setSelectedCategory] = useState("Tất cả");
+  const [selectedCategory, setSelectedCategory] = useState<string>("Tất cả");
   const [visibleCount, setVisibleCount] = useState(ITEMS_PER_PAGE);
 
+  const allCategories = [
+    { key: "all", label: locale === "en" ? "All" : "Tất cả" },
+    ...getAllCategories(locale).map((c) => ({ key: c.key, label: c.label })),
+  ];
+
   const filteredTemplates =
-    selectedCategory === "Tất cả"
+    selectedCategory === "Tất cả" || selectedCategory === "All"
       ? templates
       : templates.filter((t) => t.category === getCategoryKey(selectedCategory));
 
@@ -150,25 +156,25 @@ export function StepTemplate({
 return (
     <div className="flex flex-col">
       <StepHeader
-        title="Chọn mẫu thiệp"
-        description="Chọn mẫu thiệp phù hợp với phong cách đám cưới của bạn"
+        title={locale === "en" ? "Choose Template" : "Chọn mẫu thiệp"}
+        description={locale === "en" ? "Pick a template that matches your wedding style" : "Chọn mẫu thiệp phù hợp với phong cách đám cưới của bạn"}
         step={0}
         totalSteps={7}
       />
 
       <div className="flex gap-2 mb-4 overflow-x-auto pb-2">
-        {CATEGORIES.map((category) => (
+        {allCategories.map((category) => (
           <button
-            key={category}
-            onClick={() => handleCategoryChange(category)}
+            key={category.key}
+            onClick={() => handleCategoryChange(category.label)}
             className={cn(
               "px-4 py-2 rounded-full text-sm font-medium whitespace-nowrap transition-all",
-              selectedCategory === category
+              selectedCategory === category.label
                 ? "bg-rose-600 text-white"
                 : "bg-muted hover:bg-muted/80 text-muted-foreground"
             )}
           >
-            {category}
+            {category.label}
           </button>
         ))}
       </div>
