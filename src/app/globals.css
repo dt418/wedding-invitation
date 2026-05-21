@@ -113,3 +113,50 @@ html {
 .floating-card { animation: float-card 5s ease-in-out infinite; }
 .fc-1 { animation-delay: 0.5s; }
 .fc-2 { animation-delay: 1.5s; }
+
+/* Tab content animations */
+@keyframes tab-slide-in {
+  from {
+    opacity: 0;
+    transform: translateY(8px);
+  }
+  to {
+    opacity: 1;
+    transform: translateY(0);
+  }
+}
+
+@keyframes tab-slide-out {
+  from {
+    opacity: 1;
+    transform: translateY(0);
+  }
+  to {
+    opacity: 0;
+    transform: translateY(-8px);
+  }
+}
+
+.tab-content-enter {
+  animation: tab-slide-in 200ms ease-out forwards;
+}
+
+.tab-content-exit {
+  animation: tab-slide-out 150ms ease-in forwards;
+}
+
+/* Accordion section animation */
+.section-panel {
+  animation: section-expand 200ms ease-out;
+}
+
+@keyframes section-expand {
+  from {
+    opacity: 0;
+    transform: translateY(-4px);
+  }
+  to {
+    opacity: 1;
+    transform: translateY(0);
+  }
+}
