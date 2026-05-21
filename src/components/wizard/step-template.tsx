@@ -3,9 +3,12 @@
 import { useState } from "react";
 import Image from "next/image";
 import { StepHeader } from "./wizard-components";
+import { Button } from "@/components/ui/button";
 import { Card } from "@/components/ui/card";
 import { Badge } from "@/components/ui/badge";
 import { Icons } from "@/components/ui/icons";
+
+const ITEMS_PER_PAGE = 12;
 
 interface Template {
   id: string;
@@ -99,14 +102,23 @@ export function StepTemplate({ selectedTemplateId, onTemplateSelect, templates =
   const [previewTemplate, setPreviewTemplate] = useState<Template | null>(
     selectedTemplateId ? (templates.find(t => t.id === selectedTemplateId) ?? null) : null
   );
+  const [visibleCount, setVisibleCount] = useState(ITEMS_PER_PAGE);
 
   const filteredTemplates = selectedCategory === "Tất cả"
     ? templates
     : templates.filter(t => t.category === getCategoryKey(selectedCategory));
 
+  const visibleTemplates = filteredTemplates.slice(0, visibleCount);
+  const hasMore = visibleCount < filteredTemplates.length;
+
   const handleSelectTemplate = (template: Template) => {
     setPreviewTemplate(template);
     onTemplateSelect(template.id);
+  };
+
+  const handleCategoryChange = (category: string) => {
+    setSelectedCategory(category);
+    setVisibleCount(ITEMS_PER_PAGE);
   };
 
   return (
@@ -126,7 +138,7 @@ export function StepTemplate({ selectedTemplateId, onTemplateSelect, templates =
             {CATEGORIES.map((category) => (
               <button
                 key={category}
-                onClick={() => setSelectedCategory(category)}
+                onClick={() => handleCategoryChange(category)}
                 className={`
                   px-4 py-2 rounded-full text-sm font-medium whitespace-nowrap transition-all
                   ${selectedCategory === category
@@ -141,7 +153,7 @@ export function StepTemplate({ selectedTemplateId, onTemplateSelect, templates =
 
           {/* Templates Grid */}
           <div className="grid grid-cols-2 lg:grid-cols-3 gap-4">
-            {filteredTemplates.map((template) => (
+            {visibleTemplates.map((template) => (
               <Card
                 key={template.id}
                 onClick={() => handleSelectTemplate(template)}
@@ -180,11 +192,23 @@ export function StepTemplate({ selectedTemplateId, onTemplateSelect, templates =
                 </div>
                 <div className="p-3">
                   <div className="font-medium text-sm">{template.name}</div>
-                  <div className="text-xs text-muted-foreground">{template.category}</div>
+                  <div className="text-xs text-muted-foreground">{CATEGORY_MAP[template.category] || template.category}</div>
                 </div>
               </Card>
             ))}
           </div>
+          {hasMore && (
+            <div className="mt-6 flex justify-center">
+              <Button
+                variant="outline"
+                onClick={() => setVisibleCount(prev => prev + ITEMS_PER_PAGE)}
+                className="gap-2"
+              >
+                <Icons.arrowDown className="w-4 h-4" />
+                Xem thêm ({filteredTemplates.length - visibleCount} còn lại)
+              </Button>
+            </div>
+          )}
         </div>
 
         {/* Preview Panel */}
@@ -216,7 +240,7 @@ export function StepTemplate({ selectedTemplateId, onTemplateSelect, templates =
                 <div className="mt-4 space-y-2 text-sm">
                   <div className="flex justify-between">
                     <span className="text-muted-foreground">Danh mục</span>
-                    <span className="font-medium">{previewTemplate.category}</span>
+                    <span className="font-medium">{CATEGORY_MAP[previewTemplate.category] || previewTemplate.category}</span>
                   </div>
                   <div className="flex justify-between">
                     <span className="text-muted-foreground">Kiểu</span>
