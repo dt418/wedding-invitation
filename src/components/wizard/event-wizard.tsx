@@ -111,11 +111,13 @@ export function EventWizard({ templateId }: EventWizardProps) {
   useEffect(() => {
     const saved = localStorage.getItem("eventWizardDraft");
     if (saved) {
-try {
+      try {
         const parsed = JSON.parse(saved);
         const newFormData = { ...parsed, templateId: templateId || parsed.templateId || "" };
-        // eslint-disable-next-line react-hooks/set-state-in-effect -- localStorage read is synchronous
+        // eslint-disable-next-line react-hooks/set-state-in-effect
         setFormData(newFormData);
+      } catch (e) {
+        console.error("Failed to parse saved draft", e);
       }
     }
     setIsHydrated(true);

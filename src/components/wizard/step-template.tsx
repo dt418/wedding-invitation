@@ -7,6 +7,7 @@ import { Button } from "@/components/ui/button";
 import { Card } from "@/components/ui/card";
 import { Badge } from "@/components/ui/badge";
 import { Icons } from "@/components/ui/icons";
+import { cn } from "@/lib/utils";
 
 const ITEMS_PER_PAGE = 12;
 
@@ -92,11 +93,6 @@ const CATEGORY_MAP: Record<string, string> = {
 
 const CATEGORIES = ["Tất cả", ...Object.values(CATEGORY_MAP)];
 
-const getCategoryKey = (label: string): string => {
-  const entry = Object.entries(CATEGORY_MAP).find(([, v]) => v === label);
-  return entry ? entry[0] : label;
-};
-
 export function StepTemplate({
   selectedTemplateId,
   onTemplateSelect,
@@ -113,9 +109,7 @@ export function StepTemplate({
   const filteredTemplates =
     selectedCategory === "Tất cả"
       ? templates
-      : templates.filter(
-          (t) => t.category === getCategoryKey(selectedCategory),
-        );
+      : templates.filter((t) => t.category === selectedCategory);
 
   const visibleTemplates = filteredTemplates.slice(0, visibleCount);
   const hasMore = visibleCount < filteredTemplates.length;
@@ -170,16 +164,14 @@ export function StepTemplate({
                   <Card
                     key={template.id}
                     onClick={() => handleSelectTemplate(template)}
-                    className={`
-                      cursor-pointer transition-all overflow-hidden p-0 relative
-                      ${
-                        selectedTemplateId === template.id
-                          ? "ring-2 ring-rose-600 shadow-lg"
-                          : "hover:shadow-md hover:-translate-y-1"
-                      }
-                    `}
+                    className={cn(
+                      "h-[280px] flex flex-col cursor-pointer transition-all overflow-hidden p-0 relative",
+                      selectedTemplateId === template.id
+                        ? "ring-2 ring-rose-600 shadow-lg shadow-rose-200"
+                        : "hover:shadow-md hover:-translate-y-1"
+                    )}
                   >
-                    <div className="relative aspect-3/4 bg-muted">
+                    <div className="h-[200px] relative bg-muted shrink-0">
                       {template.thumbnailUrl ? (
                         <Image
                           src={template.thumbnailUrl}
@@ -205,10 +197,10 @@ export function StepTemplate({
                         </div>
                       )}
                     </div>
-                    <div className="p-3">
+                    <div className="p-3 shrink-0">
                       <div className="font-medium text-sm">{template.name}</div>
                       <div className="text-xs text-muted-foreground">
-                        {CATEGORY_MAP[template.category] || template.category}
+                        {template.category}
                       </div>
                     </div>
                   </Card>
