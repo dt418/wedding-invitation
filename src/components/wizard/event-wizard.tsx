@@ -2,7 +2,7 @@
 
 import { useState, useCallback, useEffect, useRef } from "react";
 import { useRouter } from "next/navigation";
-import { Stepper, StepNavigation } from "./wizard-components";
+import { Stepper } from "./wizard-components";
 import { StepTemplate } from "./step-template";
 import { StepCoupleInfo } from "./step-couple-info";
 import { StepEventDetails } from "./step-event-details";
@@ -125,6 +125,8 @@ export function EventWizard({ templateId }: EventWizardProps) {
   const [isLoading, setIsLoading] = useState(false);
   const [showPreview, setShowPreview] = useState(true);
   const [templates, setTemplates] = useState<TemplateFromApi[]>([]);
+
+  const isLastStep = currentStep === 6;
 
   // Fetch templates from API
   useEffect(() => {
@@ -362,19 +364,47 @@ export function EventWizard({ templateId }: EventWizardProps) {
           </button>
         </div>
 
-        {/* Form Content */}
+{/* Form Content */}
         <div className="flex-1 overflow-auto">
-          <div className="max-w-4xl mx-auto p-6">
+          <div className="max-w-4xl mx-auto p-6 pb-24">
             {renderStep()}
+          </div>
+        </div>
 
-            <StepNavigation
-              onBack={handleBack}
-              onNext={handleNext}
-              onSaveDraft={handleSaveDraft}
-              isFirstStep={currentStep === 0}
-              isLastStep={currentStep === 6}
-              isLoading={isLoading}
-            />
+        {/* Bottom Action Bar */}
+        <div className="fixed bottom-0 left-0 right-0 bg-background border-t p-4 z-50">
+          <div className="max-w-4xl mx-auto flex items-center justify-between gap-4">
+            <Button
+              variant="outline"
+              onClick={handleSaveDraft}
+              disabled={isLoading}
+            >
+              <Icons.save className="w-4 h-4 mr-2" />
+              Lưu nháp
+            </Button>
+            <Button
+              onClick={handleNext}
+              disabled={isLoading}
+              size="lg"
+              className="min-w-[180px]"
+            >
+              {isLoading ? (
+                <>
+                  <Icons.loader2 className="w-4 h-4 mr-2 animate-spin" />
+                  Đang lưu...
+                </>
+              ) : isLastStep ? (
+                <>
+                  Xuất bản
+                  <Icons.rocket className="w-4 h-4 ml-2" />
+                </>
+              ) : (
+                <>
+                  Lưu & Tiếp tục
+                  <Icons.arrowRight className="w-4 h-4 ml-2" />
+                </>
+              )}
+            </Button>
           </div>
         </div>
       </div>
