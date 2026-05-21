@@ -1,6 +1,7 @@
 "use client";
 
 import { useState } from "react";
+import Image from "next/image";
 import { StepHeader } from "./wizard-components";
 import { Card } from "@/components/ui/card";
 import { Badge } from "@/components/ui/badge";
@@ -10,7 +11,7 @@ interface Template {
   id: string;
   name: string;
   slug: string;
-  thumbnailUrl: string;
+  thumbnailUrl: string | null;
   category: string;
   isPremium: boolean;
   colorTokens?: Record<string, string>;
@@ -27,54 +28,71 @@ const DEFAULT_TEMPLATES: Template[] = [
   {
     id: "1",
     name: "Song Long Đỏ",
-    slug: "double_dragon_red",
-    thumbnailUrl: "/images/template-previews/listing/double_dragon_red.webp",
+    slug: "song-long-do",
+    thumbnailUrl: null,
     category: "Truyền thống",
     isPremium: false,
   },
   {
     id: "2",
     name: "Long Phụng Đỏ",
-    slug: "dragon_phoenix_red",
-    thumbnailUrl: "/images/template-previews/listing/dragon_phoenix_red.webp",
+    slug: "long-phung-do",
+    thumbnailUrl: null,
     category: "Cổ điển",
     isPremium: true,
   },
   {
     id: "3",
     name: "Vườn Xuân Xanh",
-    slug: "spring_garden_green",
-    thumbnailUrl: "/images/template-previews/listing/spring_garden_green.webp",
+    slug: "vuon-xuan-xanh",
+    thumbnailUrl: null,
     category: "Thiên nhiên",
     isPremium: false,
   },
   {
     id: "4",
     name: "Anh Đào Hồng",
-    slug: "cherry_blossom_pink",
-    thumbnailUrl: "/images/template-previews/listing/cherry_blossom_pink.webp",
+    slug: "anh-dao-hong",
+    thumbnailUrl: null,
     category: "Lãng mạn",
     isPremium: false,
   },
   {
     id: "5",
     name: "Thanh Diệp Xanh",
-    slug: "elegant_leaf_green",
-    thumbnailUrl: "/images/template-previews/listing/elegant_leaf_green.webp",
+    slug: "thanh-diep-xanh",
+    thumbnailUrl: null,
     category: "Hiện đại",
     isPremium: true,
   },
   {
     id: "6",
     name: "Hoàng Kim Đỏ",
-    slug: "royal_red",
-    thumbnailUrl: "/images/template-previews/listing/royal_red.webp",
+    slug: "hoang-kim-do",
+    thumbnailUrl: null,
     category: "Sang trọng",
     isPremium: true,
   },
 ];
 
-const CATEGORIES = ["Tất cả", "Truyền thống", "Cổ điển", "Hiện đại", "Thiên nhiên", "Lãng mạn", "Sang trọng"];
+const CATEGORY_MAP: Record<string, string> = {
+  truyen_thong: "Truyền thống",
+  thien_nhien: "Thiên nhiên",
+  hien_dai: "Hiện đại",
+  lang_man: "Lãng mạn",
+  co_phuc: "Cổ điển",
+  sang_trong: "Sang trọng",
+  toi_gian: "Tối giản",
+  de_thuong: "Dễ thương",
+  typography: "Typography",
+};
+
+const CATEGORIES = ["Tất cả", ...Object.values(CATEGORY_MAP)];
+
+const getCategoryKey = (label: string): string => {
+  const entry = Object.entries(CATEGORY_MAP).find(([, v]) => v === label);
+  return entry ? entry[0] : label;
+};
 
 export function StepTemplate({ selectedTemplateId, onTemplateSelect, templates = DEFAULT_TEMPLATES }: StepTemplateProps) {
   const [selectedCategory, setSelectedCategory] = useState("Tất cả");
@@ -84,7 +102,7 @@ export function StepTemplate({ selectedTemplateId, onTemplateSelect, templates =
 
   const filteredTemplates = selectedCategory === "Tất cả"
     ? templates
-    : templates.filter(t => t.category === selectedCategory);
+    : templates.filter(t => t.category === getCategoryKey(selectedCategory));
 
   const handleSelectTemplate = (template: Template) => {
     setPreviewTemplate(template);
@@ -135,9 +153,18 @@ export function StepTemplate({ selectedTemplateId, onTemplateSelect, templates =
                 `}
               >
                 <div className="relative aspect-[3/4] bg-muted">
-                  <div className="absolute inset-0 flex items-center justify-center text-muted-foreground">
-                    <Icons.image className="w-8 h-8" />
-                  </div>
+                  {template.thumbnailUrl ? (
+                    <Image
+                      src={template.thumbnailUrl}
+                      alt={template.name}
+                      fill
+                      className="object-cover"
+                    />
+                  ) : (
+                    <div className="absolute inset-0 flex items-center justify-center text-muted-foreground">
+                      <Icons.image className="w-8 h-8" />
+                    </div>
+                  )}
                   {template.isPremium && (
                     <Badge className="absolute top-2 right-2 bg-amber-500">
                       Premium
@@ -170,12 +197,21 @@ export function StepTemplate({ selectedTemplateId, onTemplateSelect, templates =
               </div>
               <div className="p-4">
                 <div className="relative aspect-[3/4] bg-gradient-to-br from-rose-100 to-rose-200 rounded-lg overflow-hidden">
-                  <div className="absolute inset-0 flex items-center justify-center">
-                    <div className="text-center p-4">
-                      <div className="text-4xl mb-4">囍</div>
-                      <div className="text-sm font-medium">{previewTemplate.name}</div>
+                  {previewTemplate.thumbnailUrl ? (
+                    <Image
+                      src={previewTemplate.thumbnailUrl}
+                      alt={previewTemplate.name}
+                      fill
+                      className="object-cover"
+                    />
+                  ) : (
+                    <div className="absolute inset-0 flex items-center justify-center">
+                      <div className="text-center p-4">
+                        <div className="text-4xl mb-4">囍</div>
+                        <div className="text-sm font-medium">{previewTemplate.name}</div>
+                      </div>
                     </div>
-                  </div>
+                  )}
                 </div>
                 <div className="mt-4 space-y-2 text-sm">
                   <div className="flex justify-between">

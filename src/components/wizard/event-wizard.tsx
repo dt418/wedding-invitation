@@ -12,6 +12,15 @@ import { StepMessages } from "./step-messages";
 import { StepPreview } from "./step-preview";
 import { Icons } from "@/components/ui/icons";
 
+interface TemplateFromApi {
+  id: string;
+  name: string;
+  slug: string;
+  thumbnailUrl: string | null;
+  category: string;
+  isPremium: boolean;
+}
+
 interface FormData {
   templateId: string;
   templateVariantId: string;
@@ -115,6 +124,21 @@ export function EventWizard({ templateId }: EventWizardProps) {
   const [errors, setErrors] = useState<string[]>([]);
   const [isLoading, setIsLoading] = useState(false);
   const [showPreview, setShowPreview] = useState(true);
+  const [templates, setTemplates] = useState<TemplateFromApi[]>([]);
+
+  // Fetch templates from API
+  useEffect(() => {
+    async function fetchTemplates() {
+      try {
+        const res = await fetch("/api/templates");
+        const data = await res.json();
+        setTemplates(data);
+      } catch (error) {
+        console.error("Failed to fetch templates", error);
+      }
+    }
+    fetchTemplates();
+  }, []);
 
   // Save to localStorage with debounce
   useEffect(() => {
@@ -234,6 +258,7 @@ export function EventWizard({ templateId }: EventWizardProps) {
           <StepTemplate
             selectedTemplateId={formData.templateId}
             onTemplateSelect={(id) => updateField("templateId", id)}
+            templates={templates}
           />
         );
       case 1:
