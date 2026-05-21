@@ -94,6 +94,7 @@ Required in `.env.local`:
 - Use `import type` for type-only imports to reduce bundle size
 - Auth check inside each route/action — don't rely solely on middleware
 - Prefer `React.cache()` for server-side DB call deduplication within a request
+- Always commit with a descriptive commit message; never use `--allow-empty-message` or skip description
 
 ## Figma-to-Code Design System Rules
 
