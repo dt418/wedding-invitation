@@ -89,25 +89,28 @@ interface EventWizardProps {
 export function EventWizard({ templateId }: EventWizardProps) {
   const router = useRouter();
   const [currentStep, setCurrentStep] = useState(0);
-  const initialized = useRef(false);
+  const [isHydrated, setIsHydrated] = useState(false);
 
-  // Initialize from localStorage using lazy initializer
-  const [formData, setFormData] = useState<FormData>(() => {
-    if (typeof window !== "undefined") {
-      const saved = localStorage.getItem("eventWizardDraft");
-      if (saved) {
-        try {
-          return JSON.parse(saved);
-        } catch (e) {
-          console.error("Failed to parse saved draft", e);
-        }
+  // Initialize with default values to avoid hydration mismatch
+  const [formData, setFormData] = useState<FormData>({
+    ...INITIAL_DATA,
+    templateId: templateId || "",
+  });
+
+  // Load from localStorage after hydration
+  useEffect(() => {
+    const saved = localStorage.getItem("eventWizardDraft");
+    if (saved) {
+      try {
+        const parsed = JSON.parse(saved);
+        setFormData({ ...parsed, templateId: templateId || parsed.templateId || "" });
+      } catch (e) {
+        console.error("Failed to parse saved draft", e);
       }
     }
-    return {
-      ...INITIAL_DATA,
-      templateId: templateId || "",
-    };
-  });
+    setIsHydrated(true);
+  }, [templateId]);
+
   const [completedSteps, setCompletedSteps] = useState<number[]>([]);
   const [errors, setErrors] = useState<string[]>([]);
   const [isLoading, setIsLoading] = useState(false);
@@ -115,14 +118,13 @@ export function EventWizard({ templateId }: EventWizardProps) {
 
   // Save to localStorage with debounce
   useEffect(() => {
-    if (initialized.current) {
+    if (isHydrated) {
       const timeout = setTimeout(() => {
         localStorage.setItem("eventWizardDraft", JSON.stringify(formData));
       }, 1000);
       return () => clearTimeout(timeout);
     }
-    initialized.current = true;
-  }, [formData]);
+  }, [formData, isHydrated]);
 
   const updateField = useCallback((field: string, value: unknown) => {
     setFormData((prev) => ({ ...prev, [field]: value }));
