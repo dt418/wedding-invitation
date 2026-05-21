@@ -1,6 +1,6 @@
 "use client";
 
-import { useState, useCallback, useEffect, useRef } from "react";
+import { useState, useCallback, useEffect } from "react";
 import { useRouter } from "next/navigation";
 import { Stepper } from "./wizard-components";
 import { StepTemplate } from "./step-template";
@@ -41,7 +41,12 @@ interface FormData {
   venueName: string;
   venueAddress: string;
   mapUrl: string;
-  timeline: Array<{ time: string; type: string; title: string; description: string }>;
+  timeline: Array<{
+    time: string;
+    type: string;
+    title: string;
+    description: string;
+  }>;
   images: Array<{ url: string; caption: string }>;
   thankYouNote: string;
   groomBank: string;
@@ -84,16 +89,6 @@ const INITIAL_DATA: FormData = {
   guestbookEnabled: true,
 };
 
-const STEPS_TITLES = [
-  "Mẫu thiệp",
-  "Cặp đôi",
-  "Sự kiện",
-  "Lịch trình",
-  "Album ảnh",
-  "Lời nhắn",
-  "Xem trước",
-];
-
 interface EventWizardProps {
   templateId?: string;
 }
@@ -115,7 +110,10 @@ export function EventWizard({ templateId }: EventWizardProps) {
     if (saved) {
       try {
         const parsed = JSON.parse(saved);
-        const newFormData = { ...parsed, templateId: templateId || parsed.templateId || "" };
+        const newFormData = {
+          ...parsed,
+          templateId: templateId || parsed.templateId || "",
+        };
         // eslint-disable-next-line react-hooks/set-state-in-effect
         setFormData(newFormData);
       } catch (e) {
@@ -129,8 +127,12 @@ export function EventWizard({ templateId }: EventWizardProps) {
   const [errors, setErrors] = useState<string[]>([]);
   const [isLoading, setIsLoading] = useState(false);
   const [showPreview, setShowPreview] = useState(true);
-  const [previewMode, setPreviewMode] = useState<"editor" | "preview">("editor");
-  const [previewDevice, setPreviewDevice] = useState<"desktop" | "mobile">("desktop");
+  const [previewMode, setPreviewMode] = useState<"editor" | "preview">(
+    "editor",
+  );
+  const [previewDevice, setPreviewDevice] = useState<"desktop" | "mobile">(
+    "desktop",
+  );
   const [templates, setTemplates] = useState<TemplateFromApi[]>([]);
 
   const isLastStep = currentStep === 6;
@@ -202,7 +204,6 @@ export function EventWizard({ templateId }: EventWizardProps) {
     }
   };
 
-
   const handleStepClick = (index: number) => {
     if (index <= currentStep || completedSteps.includes(index)) {
       setCurrentStep(index);
@@ -261,24 +262,14 @@ export function EventWizard({ templateId }: EventWizardProps) {
         return (
           <StepTemplate
             selectedTemplateId={formData.templateId}
-            onTemplateSelect={(id) => updateField("templateId", id)}
+            onTemplateSelect={(id: unknown) => updateField("templateId", id)}
             templates={templates}
           />
         );
       case 1:
-        return (
-          <StepCoupleInfo
-            data={formData}
-            onChange={updateField}
-          />
-        );
+        return <StepCoupleInfo data={formData} onChange={updateField} />;
       case 2:
-        return (
-          <StepEventDetails
-            data={formData}
-            onChange={updateField}
-          />
-        );
+        return <StepEventDetails data={formData} onChange={updateField} />;
       case 3:
         return (
           <StepTimeline
@@ -294,12 +285,7 @@ export function EventWizard({ templateId }: EventWizardProps) {
           />
         );
       case 5:
-        return (
-          <StepMessages
-            data={formData}
-            onChange={updateField}
-          />
-        );
+        return <StepMessages data={formData} onChange={updateField} />;
       case 6:
         return (
           <StepPreview
@@ -348,48 +334,47 @@ export function EventWizard({ templateId }: EventWizardProps) {
         </div>
       </div>
 
-{/* Main Content */}
-        <div className="flex-1 flex flex-col overflow-hidden">
-          {/* Editor/Preview Toggle - Sticky, Full Width */}
-          <div className="sticky top-0 z-40 bg-background border-b px-6 py-3 flex items-center justify-between gap-4">
-            <div className="flex items-center gap-2">
-              <button
-                onClick={() => setPreviewMode("editor")}
-                className={cn(
-                  "px-4 py-2 rounded-lg text-sm font-medium transition-colors flex items-center gap-2",
-                  previewMode === "editor"
-                    ? "bg-rose-600 text-white"
-                    : "bg-muted hover:bg-muted/80"
-                )}
-              >
-                <Icons.edit className="w-4 h-4" />
-                Editor
-              </button>
-              <button
-                onClick={() => setPreviewMode("preview")}
-                disabled={!formData.templateId}
-                className={cn(
-                  "px-4 py-2 rounded-lg text-sm font-medium transition-colors flex items-center gap-2",
-                  previewMode === "preview"
-                    ? "bg-rose-600 text-white"
-                    : "bg-muted hover:bg-muted/80",
-                  !formData.templateId && "opacity-50 cursor-not-allowed"
-                )}
-              >
-                <Icons.eye className="w-4 h-4" />
-                Preview
-              </button>
-            </div>
+      {/* Main Content */}
+      <div className="flex-1 flex flex-col overflow-hidden">
+        {/* Editor/Preview Toggle - Sticky */}
+        <div className="sticky top-0 z-40 bg-background border-b px-4 py-2">
+          <div className="flex items-center gap-2">
+            <button
+              onClick={() => setPreviewMode("editor")}
+              className={cn(
+                "px-4 py-2 rounded-lg text-sm font-medium transition-colors flex items-center gap-2",
+                previewMode === "editor"
+                  ? "bg-rose-600 text-white"
+                  : "bg-muted hover:bg-muted/80",
+              )}
+            >
+              <Icons.edit className="w-4 h-4" />
+              Editor
+            </button>
+            <button
+              onClick={() => setPreviewMode("preview")}
+              disabled={!formData.templateId}
+              className={cn(
+                "px-4 py-2 rounded-lg text-sm font-medium transition-colors flex items-center gap-2",
+                previewMode === "preview"
+                  ? "bg-rose-600 text-white"
+                  : "bg-muted hover:bg-muted/80",
+                !formData.templateId && "opacity-50 cursor-not-allowed",
+              )}
+            >
+              <Icons.eye className="w-4 h-4" />
+              Preview
+            </button>
 
             {previewMode === "preview" && (
-              <div className="flex items-center gap-1">
+              <div className="ml-auto flex items-center gap-1">
                 <button
                   onClick={() => setPreviewDevice("desktop")}
                   className={cn(
                     "px-3 py-1 text-xs rounded-full transition-colors",
                     previewDevice === "desktop"
                       ? "bg-rose-100 text-rose-700"
-                      : "bg-muted text-muted-foreground"
+                      : "bg-muted text-muted-foreground",
                   )}
                 >
                   Desktop
@@ -400,7 +385,7 @@ export function EventWizard({ templateId }: EventWizardProps) {
                     "px-3 py-1 text-xs rounded-full transition-colors",
                     previewDevice === "mobile"
                       ? "bg-rose-100 text-rose-700"
-                      : "bg-muted text-muted-foreground"
+                      : "bg-muted text-muted-foreground",
                   )}
                 >
                   Mobile
@@ -408,62 +393,58 @@ export function EventWizard({ templateId }: EventWizardProps) {
               </div>
             )}
           </div>
+        </div>
 
-          {/* Content Area */}
-          <div className="flex-1 overflow-auto">
-            {previewMode === "editor" ? (
-              <div className="max-w-4xl mx-auto p-6 pb-24">
-                {renderStep()}
+        {/* Content Area */}
+        <div className="flex-1 overflow-auto">
+          {previewMode === "editor" ? (
+            <div className="max-w-4xl mx-auto p-6 pb-24">{renderStep()}</div>
+          ) : (
+            <div className="h-full bg-zinc-100 p-6">
+              <div className="bg-white rounded-xl shadow-xl overflow-hidden mx-auto max-w-4xl h-[calc(100vh-180px)]">
+                <InviteRenderer sections={[]} previewMode={previewDevice} />
               </div>
+            </div>
+          )}
+        </div>
+      </div>
+
+      {/* Bottom Action Bar */}
+      <div className="fixed bottom-0 left-0 right-0 bg-background border-t p-4 z-50">
+        <div className="max-w-4xl mx-auto flex items-center justify-between gap-4">
+          <Button
+            variant="outline"
+            onClick={handleSaveDraft}
+            disabled={isLoading}
+          >
+            <Icons.save className="w-4 h-4 mr-2" />
+            Lưu nháp
+          </Button>
+          <Button
+            onClick={handleNext}
+            disabled={isLoading}
+            size="lg"
+            className="min-w-45"
+          >
+            {isLoading ? (
+              <>
+                <Icons.loader2 className="w-4 h-4 mr-2 animate-spin" />
+                Đang lưu...
+              </>
+            ) : isLastStep ? (
+              <>
+                Xuất bản
+                <Icons.rocket className="w-4 h-4 ml-2" />
+              </>
             ) : (
-              <div className="h-full bg-zinc-100 p-6">
-                <div className="bg-white rounded-xl shadow-xl overflow-hidden mx-auto max-w-4xl h-[calc(100vh-180px)]">
-                  <InviteRenderer
-                    sections={[]}
-                    previewMode={previewDevice}
-                  />
-                </div>
-              </div>
+              <>
+                Lưu & Tiếp tục
+                <Icons.arrowRight className="w-4 h-4 ml-2" />
+              </>
             )}
-          </div>
+          </Button>
         </div>
-
-        {/* Bottom Action Bar */}
-        <div className="fixed bottom-0 left-0 right-0 bg-background border-t p-4 z-50">
-          <div className="max-w-4xl mx-auto flex items-center justify-between gap-4">
-            <Button
-              variant="outline"
-              onClick={handleSaveDraft}
-              disabled={isLoading}
-            >
-              <Icons.save className="w-4 h-4 mr-2" />
-              Lưu nháp
-            </Button>
-            <Button
-              onClick={handleNext}
-              disabled={isLoading}
-              size="lg"
-              className="min-w-45"
-            >
-              {isLoading ? (
-                <>
-                  <Icons.loader2 className="w-4 h-4 mr-2 animate-spin" />
-                  Đang lưu...
-                </>
-              ) : isLastStep ? (
-                <>
-                  Xuất bản
-                  <Icons.rocket className="w-4 h-4 ml-2" />
-                </>
-              ) : (
-                <>
-                  Lưu & Tiếp tục
-                  <Icons.arrowRight className="w-4 h-4 ml-2" />
-                </>
-              )}
-            </Button>
-          </div>
-        </div>
+      </div>
     </div>
   );
 }

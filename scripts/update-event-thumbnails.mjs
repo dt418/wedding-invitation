@@ -12,11 +12,6 @@ async function updateEventThumbnails() {
     return;
   }
 
-  // Get template slug from templateId (via seed data mapping)
-  const templateSlugMap = {
-    // Map templateId to slug - we'll query the templates table
-  };
-
   const templates = await db.query.templates.findMany({
     columns: { id: true, slug: true },
   });

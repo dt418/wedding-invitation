@@ -1,3 +1,4 @@
+/* eslint-disable @typescript-eslint/no-require-imports */
 const { createCanvas } = require('canvas');
 const sharp = require('sharp');
 const fs = require('fs');
@@ -45,18 +46,6 @@ function drawFloralPattern(ctx, x, y, color) {
   ctx.beginPath();
   ctx.arc(x, y, 8, 0, Math.PI * 2);
   ctx.fill();
-}
-
-function drawGeometricPattern(ctx, w, h, color) {
-  ctx.strokeStyle = color;
-  ctx.lineWidth = 1;
-  ctx.globalAlpha = 0.15;
-  for (let i = 0; i < w; i += 40) {
-    for (let j = 0; j < h; j += 40) {
-      ctx.strokeRect(i, j, 35, 35);
-    }
-  }
-  ctx.globalAlpha = 1;
 }
 
 function drawCherryBlossom(ctx, x, y, color) {

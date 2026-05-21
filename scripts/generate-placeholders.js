@@ -1,16 +1,9 @@
+/* eslint-disable @typescript-eslint/no-require-imports */
 const { createCanvas } = require('canvas');
 const fs2 = require('fs');
 const path2 = require('path');
 
 const OUTPUT_DIR = path2.join(__dirname, '../public/images/template-previews/listing');
-
-function adjustColor(hex, amount) {
-  const num = parseInt(hex.replace("#", ""), 16);
-  const r = Math.min(255, Math.max(0, (num >> 16) + amount));
-  const g = Math.min(255, Math.max(0, ((num >> 8) & 0xFF) + amount));
-  const b = Math.min(255, Math.max(0, (num & 0xFF) + amount));
-  return "#" + ((r << 16 | g << 8 | b).toString(16).padStart(6, "0"));
-}
 
 function gradient(ctx, x1, y1, x2, y2, c1, c2) {
   const g = ctx.createLinearGradient(x1, y1, x2, y2);

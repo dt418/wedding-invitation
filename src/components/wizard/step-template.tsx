@@ -4,8 +4,6 @@ import { useState } from "react";
 import Image from "next/image";
 import { StepHeader } from "./wizard-components";
 import { Button } from "@/components/ui/button";
-import { Card } from "@/components/ui/card";
-import { Badge } from "@/components/ui/badge";
 import { Icons } from "@/components/ui/icons";
 import { cn } from "@/lib/utils";
 
@@ -109,47 +107,6 @@ function TemplateCard({
         <div className="font-medium text-sm truncate">{template.name}</div>
         <div className="text-xs text-muted-foreground truncate">
           {CATEGORY_MAP[template.category] || template.category}
-        </div>
-      </div>
-    </div>
-  );
-}
-
-function TemplatePreview({ template }: { template: Template }) {
-  return (
-    <div className="flex flex-col h-full">
-      <div className="flex-1 flex items-center justify-center p-8">
-        <div className="relative w-full max-w-md aspect-[3/4] bg-gradient-to-br from-rose-100 to-amber-100 rounded-xl shadow-2xl overflow-hidden">
-          {template.thumbnailUrl ? (
-            <Image
-              src={template.thumbnailUrl}
-              alt={template.name}
-              fill
-              className="object-cover"
-            />
-          ) : (
-            <div className="absolute inset-0 flex items-center justify-center">
-              <div className="text-center p-6">
-                <div className="text-6xl mb-4">囍</div>
-                <div className="text-lg font-medium">{template.name}</div>
-              </div>
-            </div>
-          )}
-        </div>
-      </div>
-      <div className="p-6 border-t bg-background">
-        <h3 className="text-lg font-semibold mb-2">{template.name}</h3>
-        <div className="grid grid-cols-2 gap-4 text-sm">
-          <div className="flex justify-between">
-            <span className="text-muted-foreground">Danh mục</span>
-            <span className="font-medium">
-              {CATEGORY_MAP[template.category] || template.category}
-            </span>
-          </div>
-          <div className="flex justify-between">
-            <span className="text-muted-foreground">Loại</span>
-            <span>{template.isPremium ? "Premium" : "Miễn phí"}</span>
-          </div>
         </div>
       </div>
     </div>
