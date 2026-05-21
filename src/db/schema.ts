@@ -67,6 +67,29 @@ export const templateCategoryEnum = pgEnum("template_category", [
   "de_thuong",
 ]);
 
+export const deliveryChannelEnum = pgEnum("delivery_channel", [
+  "zalo_mini_app",
+  "zalo_bot",
+  "email",
+  "messenger",
+]);
+
+export const deliveryStatusEnum = pgEnum("delivery_status", [
+  "pending",
+  "sent",
+  "delivered",
+  "opened",
+  "failed",
+]);
+
+export const inviteJobsStatusEnum = pgEnum("invite_jobs_status", [
+  "queued",
+  "processing",
+  "completed",
+  "cancelled",
+  "failed",
+]);
+
 // ─── Users ────────────────────────────────────────────────────────────────────
 
 export const users = pgTable(
@@ -253,6 +276,11 @@ export const guests = pgTable(
     phone: varchar("phone", { length: 20 }),
     address: text("address"),
 
+    // Zalo integration
+    zaloId: varchar("zalo_id", { length: 100 }),
+    zaloFollowerId: varchar("zalo_follower_id", { length: 100 }),
+    zaloName: varchar("zalo_name", { length: 255 }),
+
     // Grouping
     relation: varchar("relation", { length: 50 }), // groom_side | bride_side | friend
     tableNumber: integer("table_number"),
@@ -302,6 +330,67 @@ export const invites = pgTable(
     index("idx_invites_event_guest").on(table.eventId, table.guestId),
     // Status filtering
     index("idx_invites_status").on(table.status),
+  ],
+);
+
+// ─── Invite Deliveries ───────────────────────────────────────────────────────
+
+export const inviteDeliveries = pgTable(
+  "invite_deliveries",
+  {
+    id: uuid("id").primaryKey().defaultRandom(),
+    inviteId: uuid("invite_id")
+      .notNull()
+      .references(() => invites.id, { onDelete: "cascade" }),
+    guestId: uuid("guest_id").references(() => guests.id),
+    channel: deliveryChannelEnum("channel").notNull(),
+    status: deliveryStatusEnum("status").notNull().default("pending"),
+    providerMessageId: text("provider_message_id"),
+    providerRefId: text("provider_ref_id"),
+    metadata: jsonb("metadata").$type<Record<string, unknown>>().default({}),
+    idempotencyKey: varchar("idempotency_key", { length: 255 }).unique(),
+    error: text("error"),
+    retryCount: integer("retry_count").default(0),
+    sentAt: timestamp("sent_at"),
+    deliveredAt: timestamp("delivered_at"),
+    openedAt: timestamp("opened_at"),
+    createdAt: timestamp("created_at").notNull().defaultNow(),
+    updatedAt: timestamp("updated_at").notNull().defaultNow(),
+  },
+  (table) => [
+    index("idx_invite_deliveries_invite_id").on(table.inviteId),
+    index("idx_invite_deliveries_status").on(table.status),
+    index("idx_invite_deliveries_idempotency").on(table.idempotencyKey),
+  ],
+);
+
+// ─── Invite Send Jobs ─────────────────────────────────────────────────────────
+
+export const inviteSendJobs = pgTable(
+  "invite_send_jobs",
+  {
+    id: uuid("id").primaryKey().defaultRandom(),
+    eventId: uuid("event_id")
+      .notNull()
+      .references(() => events.id, { onDelete: "cascade" }),
+    userId: uuid("user_id")
+      .notNull()
+      .references(() => users.id),
+    channel: varchar("channel", { length: 20 }).notNull(),
+    status: inviteJobsStatusEnum("status").notNull().default("queued"),
+    totalCount: integer("total_count").default(0),
+    successCount: integer("success_count").default(0),
+    failedCount: integer("failed_count").default(0),
+    error: text("error"),
+    scheduledAt: timestamp("scheduled_at"),
+    startedAt: timestamp("started_at"),
+    completedAt: timestamp("completed_at"),
+    createdAt: timestamp("created_at").notNull().defaultNow(),
+    updatedAt: timestamp("updated_at").notNull().defaultNow(),
+  },
+  (table) => [
+    index("idx_invite_send_jobs_event_id").on(table.eventId),
+    index("idx_invite_send_jobs_user_id").on(table.userId),
   ],
 );
 
