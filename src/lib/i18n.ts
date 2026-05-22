@@ -165,6 +165,8 @@ export const translations = {
       invalidCredentials: "Email hoặc mật khẩu không đúng.",
       loginFailed: "Đăng nhập thất bại. Vui lòng thử lại.",
       loggedOut: "Đã đăng xuất thành công.",
+      welcomeBack: "Chào mừng trở lại!",
+      loginSuccess: "Bạn đã đăng nhập thành công.",
     },
     auth: {
       email: "Email",
@@ -365,6 +367,8 @@ export const translations = {
       invalidCredentials: "Invalid email or password.",
       loginFailed: "Login failed. Please try again.",
       loggedOut: "Logged out successfully.",
+      welcomeBack: "Welcome back!",
+      loginSuccess: "You have successfully logged in.",
     },
     auth: {
       email: "Email",
@@ -565,6 +569,8 @@ export const translations = {
       invalidCredentials: "邮箱或密码不正确。",
       loginFailed: "登录失败。请重试。",
       loggedOut: "已成功退出。",
+      welcomeBack: "欢迎回来！",
+      loginSuccess: "您已成功登录。",
     },
     auth: {
       email: "邮箱",
@@ -765,6 +771,8 @@ export const translations = {
       invalidCredentials: "メールまたはパスワードが正しくありません。",
       loginFailed: "ログインに失敗しました。もう一度お試しください。",
       loggedOut: "ログアウトしました。",
+      welcomeBack: "おかえりなさい！",
+      loginSuccess: "ログインに成功しました。",
     },
     auth: {
       email: "メール",
@@ -965,6 +973,8 @@ export const translations = {
       invalidCredentials: "이메일 또는 비밀번호가 올바르지 않습니다.",
       loginFailed: "로그인에 실패했습니다. 다시 시도해 주세요.",
       loggedOut: "로그아웃되었습니다.",
+      welcomeBack: "돌아오신 것을 환영합니다!",
+      loginSuccess: "로그인에 성공했습니다.",
     },
     auth: {
       email: "이메일",
