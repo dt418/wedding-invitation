@@ -1,13 +1,21 @@
 import { registerAction } from "../actions";
+import { getLocale, t } from "@/lib/i18n-server";
 
-export default function RegisterPage() {
+export default async function RegisterPage() {
+  const locale = await getLocale();
+  const translations = t("auth", locale) as { registerTitle?: string; name?: string; email?: string; password?: string; alreadyHaveAccount?: string; signInLink?: string };
+
   return (
     <div className="min-h-screen flex items-center justify-center bg-zinc-50">
       <div className="w-full max-w-md p-8 bg-white rounded-2xl shadow-sm border">
-        <h1 className="text-2xl font-semibold mb-6">Create Account</h1>
+        <h1 className="text-2xl font-semibold mb-6">
+          {translations.registerTitle || "Create Account"}
+        </h1>
         <form action={registerAction} className="space-y-4">
           <div>
-            <label className="block text-sm font-medium mb-1">Name</label>
+            <label className="block text-sm font-medium mb-1">
+              {translations.name || "Name"}
+            </label>
             <input
               name="name"
               type="text"
@@ -16,7 +24,9 @@ export default function RegisterPage() {
             />
           </div>
           <div>
-            <label className="block text-sm font-medium mb-1">Email</label>
+            <label className="block text-sm font-medium mb-1">
+              {translations.email || "Email"}
+            </label>
             <input
               name="email"
               type="email"
@@ -25,7 +35,9 @@ export default function RegisterPage() {
             />
           </div>
           <div>
-            <label className="block text-sm font-medium mb-1">Password</label>
+            <label className="block text-sm font-medium mb-1">
+              {translations.password || "Password"}
+            </label>
             <input
               name="password"
               type="password"
@@ -38,13 +50,13 @@ export default function RegisterPage() {
             type="submit"
             className="w-full py-3 bg-rose-600 text-white rounded-lg font-medium hover:bg-rose-700 transition-colors"
           >
-            Create Account
+            {translations.registerTitle || "Create Account"}
           </button>
         </form>
         <p className="mt-4 text-center text-sm text-zinc-500">
-          Already have an account?{" "}
+          {translations.alreadyHaveAccount || "Already have an account?"}{" "}
           <a href="/login" className="text-rose-600 font-medium">
-            Sign in
+            {translations.signInLink || "Sign in"}
           </a>
         </p>
       </div>

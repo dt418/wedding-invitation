@@ -1,0 +1,1 @@
+ALTER TABLE "template_sections" ADD COLUMN "section_order" integer DEFAULT 0 NOT NULL;

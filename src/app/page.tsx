@@ -10,6 +10,7 @@ import { Badge } from "@/components/ui/badge";
 import { Card, CardContent } from "@/components/ui/card";
 import { SectionWrapper } from "@/components/ui/section-wrapper";
 import { Icons } from "@/components/ui/icons";
+import LanguageSwitcher from "@/components/ui/language-switcher";
 
 function AnimatedSection({
   children,
@@ -71,6 +72,7 @@ function Header() {
           </Link>
         </nav>
         <div className="flex items-center gap-3">
+          <LanguageSwitcher />
           <Link href="/login">
             <Button variant="ghost" size="sm">
               Sign In

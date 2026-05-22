@@ -1,5 +1,11 @@
 import { Resend } from "resend";
 import { env } from "@/env";
+import { 
+  getGuestPronouns, 
+  formatSalutation, 
+  type Gender, 
+  type Relation 
+} from "./personalization";
 
 const resend = new Resend(env.RESEND_API_KEY);
 
@@ -15,6 +21,9 @@ export interface InviteEmailData {
   inviteUrl: string;
   deliveryId: string;
   qrCodeDataUrl?: string;
+  // Personalization
+  gender?: Gender | null;
+  relation?: Relation | null;
 }
 
 export async function sendInviteEmail(data: InviteEmailData): Promise<{ id: string }> {
@@ -23,7 +32,7 @@ export async function sendInviteEmail(data: InviteEmailData): Promise<{ id: stri
   const { data: emailResult, error } = await resend.emails.send({
     from: env.EMAIL_FROM || "wedding@yourdomain.com",
     to: data.guestEmail,
-    subject: `Loi moi cuoi - ${data.groomName} & ${data.brideName}`,
+    subject: `Lời mời cưới - ${data.groomName} & ${data.brideName}`,
     html: buildInviteEmailHtml(data, trackingPixelUrl),
   });
 
@@ -35,6 +44,10 @@ export async function sendInviteEmail(data: InviteEmailData): Promise<{ id: stri
 }
 
 function buildInviteEmailHtml(data: InviteEmailData, trackingPixelUrl: string): string {
+  // Get personalized greeting
+  const pronouns = getGuestPronouns(data.guestName, data.gender, data.relation);
+  const personalizedGreeting = formatSalutation(pronouns, data.guestName);
+
   return `
 <!DOCTYPE html>
 <html>
@@ -48,6 +61,7 @@ function buildInviteEmailHtml(data: InviteEmailData, trackingPixelUrl: string): 
     .header p { margin: 10px 0 0; opacity: 0.9; }
     .content { padding: 30px; }
     .couple-names { text-align: center; font-size: 32px; color: #333; margin-bottom: 30px; }
+    .greeting { font-size: 18px; color: #555; margin-bottom: 20px; }
     .event-details { background: #faf7f4; border-radius: 8px; padding: 20px; margin-bottom: 20px; }
     .event-details p { margin: 10px 0; color: #555; }
     .event-details strong { color: #333; }
@@ -58,23 +72,24 @@ function buildInviteEmailHtml(data: InviteEmailData, trackingPixelUrl: string): 
 <body>
   <div class="container">
     <div class="header">
-      <h1>Wedding Invitation</h1>
-      <p>You're invited to our special day</p>
+      <h1>Thư Mời Cưới</h1>
+      <p>Truy cập để xem chi tiết</p>
     </div>
     <div class="content">
+      <p class="greeting">${personalizedGreeting},</p>
       <div class="couple-names">${data.groomName} & ${data.brideName}</div>
       <div class="event-details">
-        <p><strong>Date:</strong> ${data.eventDate}</p>
-        <p><strong>Time:</strong> ${data.eventTime}</p>
-        <p><strong>Venue:</strong> ${data.venueName}</p>
-        <p><strong>Address:</strong> ${data.venueAddress}</p>
+        <p><strong>Ngày:</strong> ${data.eventDate}</p>
+        <p><strong>Giờ:</strong> ${data.eventTime}</p>
+        <p><strong>Địa điểm:</strong> ${data.venueName}</p>
+        <p><strong>Địa chỉ:</strong> ${data.venueAddress}</p>
       </div>
       <div style="text-align: center;">
-        <a href="${data.inviteUrl}" class="cta-button">View Invitation</a>
+        <a href="${data.inviteUrl}" class="cta-button">Xem Thiệp Cưới</a>
       </div>
     </div>
     <div class="footer">
-      <p>This invitation was sent to ${data.guestName}</p>
+      <p>Thư mời này được gửi đến ${data.guestName}</p>
       <img src="${trackingPixelUrl}" width="1" height="1" alt="" style="display:none;" />
     </div>
   </div>

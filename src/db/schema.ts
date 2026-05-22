@@ -90,6 +90,14 @@ export const inviteJobsStatusEnum = pgEnum("invite_jobs_status", [
   "failed",
 ]);
 
+export const languageCodeEnum = pgEnum("language_code", [
+  "vi",
+  "en",
+  "zh",
+  "ja",
+  "ko",
+]);
+
 // ─── Users ────────────────────────────────────────────────────────────────────
 
 export const users = pgTable(
@@ -140,6 +148,30 @@ export const events = pgTable(
 
     // Visual
     thumbnailUrl: text("thumbnail_url"),
+
+    // Extended event content (wizard data)
+    eventContent: jsonb("event_content").$type<{
+      groomName?: string;
+      brideName?: string;
+      groomFather?: string;
+      groomMother?: string;
+      brideFather?: string;
+      brideMother?: string;
+      groomAddress?: string;
+      brideAddress?: string;
+      ceremonyType?: string;
+      timeline?: Array<{ time: string; type: string; title: string; description: string }>;
+      images?: Array<{ url: string; caption: string }>;
+      thankYouNote?: string;
+      groomBank?: string;
+      groomAccount?: string;
+      brideBank?: string;
+      brideAccount?: string;
+      musicEnabled?: boolean;
+      musicUrl?: string;
+      rsvpEnabled?: boolean;
+      guestbookEnabled?: boolean;
+    }>().default({}),
 
     // Status
     status: eventStatusEnum("status").notNull().default("draft"),
@@ -249,6 +281,7 @@ export const templateSections = pgTable(
       .notNull()
       .references(() => events.id, { onDelete: "cascade" }),
     sectionType: varchar("section_type", { length: 50 }).notNull(),
+    order: integer("section_order").notNull().default(0),
     // JSON: user edits
     customContent: jsonb("custom_content"),
     // JSON: color/font overrides
@@ -288,6 +321,9 @@ export const guests = pgTable(
     tableNumber: integer("table_number"),
     seatCount: integer("seat_count").default(1),
     groupName: varchar("group_name", { length: 255 }),
+
+    // Personalization
+    gender: varchar("gender", { length: 20 }), // male | female | other
 
     notes: text("notes"),
     createdAt: timestamp("created_at").notNull().defaultNow(),
@@ -441,6 +477,79 @@ export const userSubscriptions = pgTable(
   (table) => [
     index("idx_user_subscriptions_user_id").on(table.userId),
     index("idx_user_subscriptions_status").on(table.status),
+  ],
+);
+
+// ─── Event Translations ───────────────────────────────────────────────────────
+
+export const eventTranslations = pgTable(
+  "event_translations",
+  {
+    id: uuid("id").primaryKey().defaultRandom(),
+    eventId: uuid("event_id")
+      .notNull()
+      .references(() => events.id, { onDelete: "cascade" }),
+    language: languageCodeEnum("language").notNull(),
+    title: varchar("title", { length: 255 }),
+    groomName: varchar("groom_name", { length: 100 }),
+    brideName: varchar("bride_name", { length: 100 }),
+    venueName: varchar("venue_name", { length: 255 }),
+    venueAddress: text("venue_address"),
+    description: text("description"),
+    thankYouNote: text("thank_you_note"),
+    createdAt: timestamp("created_at").notNull().defaultNow(),
+    updatedAt: timestamp("updated_at").notNull().defaultNow(),
+  },
+  (table) => [
+    uniqueIndex("idx_event_translations_event_lang").on(
+      table.eventId,
+      table.language
+    ),
+  ],
+);
+
+// ─── Template Translations ────────────────────────────────────────────────────
+
+export const templateTranslations = pgTable(
+  "template_translations",
+  {
+    id: uuid("id").primaryKey().defaultRandom(),
+    templateId: uuid("template_id")
+      .notNull()
+      .references(() => templates.id, { onDelete: "cascade" }),
+    language: languageCodeEnum("language").notNull(),
+    name: varchar("name", { length: 255 }),
+    description: text("description"),
+    createdAt: timestamp("created_at").notNull().defaultNow(),
+    updatedAt: timestamp("updated_at").notNull().defaultNow(),
+  },
+  (table) => [
+    uniqueIndex("idx_template_translations_template_lang").on(
+      table.templateId,
+      table.language
+    ),
+  ],
+);
+
+// ─── Section Translations ─────────────────────────────────────────────────────
+
+export const sectionTranslations = pgTable(
+  "section_translations",
+  {
+    id: uuid("id").primaryKey().defaultRandom(),
+    sectionId: uuid("section_id")
+      .notNull()
+      .references(() => sections.id, { onDelete: "cascade" }),
+    language: languageCodeEnum("language").notNull(),
+    content: jsonb("content").$type<Record<string, unknown>>(),
+    createdAt: timestamp("created_at").notNull().defaultNow(),
+    updatedAt: timestamp("updated_at").notNull().defaultNow(),
+  },
+  (table) => [
+    uniqueIndex("idx_section_translations_section_lang").on(
+      table.sectionId,
+      table.language
+    ),
   ],
 );
 
