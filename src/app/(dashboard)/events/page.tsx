@@ -5,6 +5,7 @@ import { verifyToken } from "@/lib/auth";
 import { eq, desc } from "drizzle-orm";
 import Link from "next/link";
 import Image from "next/image";
+import { getLocale, t } from "@/lib/i18n-server";
 
 export default async function EventsPage() {
   const token = (await cookies()).get("wedding_token")?.value;
@@ -13,37 +14,54 @@ export default async function EventsPage() {
   const payload = verifyToken(token);
   if (!payload) return null;
 
+  const locale = await getLocale();
+  const labels = t("eventsPage", locale) as {
+    title: string;
+    eventCount: string;
+    createEvent: string;
+    noEvents: string;
+    createFirst: string;
+    published: string;
+    draft: string;
+    archived: string;
+  };
+
   const userEvents = await db
     .select()
     .from(events)
     .where(eq(events.userId, payload.userId))
     .orderBy(desc(events.createdAt));
 
+  const eventCountText = `${userEvents.length} ${labels.eventCount}`;
+  const statusLabels: Record<string, string> = {
+    published: labels.published,
+    draft: labels.draft,
+    archived: labels.archived,
+  };
+
   return (
     <div>
       <div className="flex items-center justify-between mb-8">
         <div>
-          <h1 className="text-2xl font-semibold">My Events</h1>
-          <p className="text-zinc-500 mt-1">
-            {userEvents.length} event{userEvents.length !== 1 ? "s" : ""}
-          </p>
+          <h1 className="text-2xl font-semibold">{labels.title}</h1>
+          <p className="text-zinc-500 mt-1">{eventCountText}</p>
         </div>
         <Link
           href="/events/new"
           className="px-5 py-2.5 bg-rose-600 text-white rounded-lg font-medium hover:bg-rose-700 transition-colors"
         >
-          Create Event
+          {labels.createEvent}
         </Link>
       </div>
 
       {userEvents.length === 0 ? (
         <div className="text-center py-20 bg-white rounded-2xl border">
-          <p className="text-zinc-500 mb-4">No events yet</p>
+          <p className="text-zinc-500 mb-4">{labels.noEvents}</p>
           <Link
             href="/events/new"
             className="text-rose-600 font-medium hover:underline"
           >
-            Create your first event →
+            {labels.createFirst} →
           </Link>
         </div>
       ) : (
@@ -67,7 +85,7 @@ export default async function EventsPage() {
               )}
               <h2 className="font-semibold text-lg mb-1">{event.title}</h2>
               <p className="text-sm text-zinc-500">
-                {new Date(event.eventDate).toLocaleDateString("vi-VN")}
+                {new Date(event.eventDate).toLocaleDateString(locale === "zh" ? "zh-CN" : locale === "ja" ? "ja-JP" : locale === "ko" ? "ko-KR" : locale)}
               </p>
               <span
                 className={`inline-block mt-3 text-xs px-2 py-1 rounded-full ${
@@ -78,7 +96,7 @@ export default async function EventsPage() {
                       : "bg-zinc-100 text-zinc-500"
                 }`}
               >
-                {event.status}
+                {statusLabels[event.status] || event.status}
               </span>
             </Link>
           ))}

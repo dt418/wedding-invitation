@@ -68,6 +68,16 @@ export const translations = {
     timeline: {
       title: "Lịch trình",
     },
+    eventsPage: {
+      title: "Sự kiện của tôi",
+      eventCount: "sự kiện",
+      createEvent: "Tạo sự kiện",
+      noEvents: "Chưa có sự kiện nào",
+      createFirst: "Tạo sự kiện đầu tiên",
+      published: "Đã xuất bản",
+      draft: "Bản nháp",
+      archived: "Đã lưu trữ",
+    },
   },
   en: {
     categories: {
@@ -137,6 +147,16 @@ export const translations = {
     },
     timeline: {
       title: "Schedule",
+    },
+    eventsPage: {
+      title: "My Events",
+      eventCount: "events",
+      createEvent: "Create Event",
+      noEvents: "No events yet",
+      createFirst: "Create your first event",
+      published: "Published",
+      draft: "Draft",
+      archived: "Archived",
     },
   },
   zh: {
@@ -208,6 +228,16 @@ export const translations = {
     timeline: {
       title: "日程",
     },
+    eventsPage: {
+      title: "我的活动",
+      eventCount: "活动",
+      createEvent: "创建活动",
+      noEvents: "暂无活动",
+      createFirst: "创建您的第一个活动",
+      published: "已发布",
+      draft: "草稿",
+      archived: "已存档",
+    },
   },
   ja: {
     categories: {
@@ -278,6 +308,16 @@ export const translations = {
     timeline: {
       title: "スケジュール",
     },
+    eventsPage: {
+      title: "マイイベント",
+      eventCount: "イベント",
+      createEvent: "イベント作成",
+      noEvents: "イベントがありません",
+      createFirst: "最初のイベントを作成",
+      published: "公開済み",
+      draft: "下書き",
+      archived: "アーカイブ済み",
+    },
   },
   ko: {
     categories: {
@@ -347,6 +387,16 @@ export const translations = {
     },
     timeline: {
       title: "일정",
+    },
+    eventsPage: {
+      title: "내 이벤트",
+      eventCount: "이벤트",
+      createEvent: "이벤트 생성",
+      noEvents: "이벤트가 없습니다",
+      createFirst: "첫 번째 이벤트 만들기",
+      published: "게시됨",
+      draft: "초안",
+      archived: "보관됨",
     },
   },
 } as const;
