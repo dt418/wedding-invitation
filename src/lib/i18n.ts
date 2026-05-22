@@ -62,6 +62,8 @@ export const translations = {
       templates: "Mẫu thiết kế",
       settings: "Cài đặt",
       logout: "Đăng xuất",
+      brand: "Wedding",
+      getStarted: "Bắt đầu",
     },
     timeline: {
       title: "Lịch trình",
@@ -130,6 +132,8 @@ export const translations = {
       templates: "Templates",
       settings: "Settings",
       logout: "Logout",
+      brand: "Wedding",
+      getStarted: "Get Started",
     },
     timeline: {
       title: "Schedule",
@@ -198,6 +202,8 @@ export const translations = {
       templates: "模板",
       settings: "设置",
       logout: "退出",
+      brand: "婚礼",
+      getStarted: "开始",
     },
     timeline: {
       title: "日程",
@@ -266,6 +272,8 @@ export const translations = {
       templates: "テンプレート",
       settings: "設定",
       logout: "ログアウト",
+      brand: "ウェディング",
+      getStarted: "始める",
     },
     timeline: {
       title: "スケジュール",
@@ -334,6 +342,8 @@ export const translations = {
       templates: "템플릿",
       settings: "설정",
       logout: "로그아웃",
+      brand: "웨딩",
+      getStarted: "시작하기",
     },
     timeline: {
       title: "일정",
