@@ -18,13 +18,13 @@ export const createEventSchema = z.object({
     .min(1)
     .max(100)
     .regex(/^[a-z0-9-]+$/, "Only lowercase letters, numbers, and hyphens"),
-  templateId: z.uuid("Invalid template ID"),
+  templateId: z.string().uuid("Invalid template ID"),
   eventDate: z.string(),
   eventTime: z.string().optional(),
-  venueName: z.string().max(255).optional(),
-  venueAddress: z.string().optional(),
-  mapUrl: z.url().optional(),
-  description: z.string().optional(),
+  venueName: z.string().max(255).optional().nullable(),
+  venueAddress: z.string().optional().nullable(),
+  mapUrl: z.string().optional().nullable(),
+  description: z.string().optional().nullable(),
 });
 
 export const updateEventSchema = createEventSchema.partial();

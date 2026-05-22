@@ -28,16 +28,17 @@ export async function getCurrentUser(): Promise<CurrentUser | null> {
     return null;
   }
 
-  const user = await db.query.users.findFirst({
-    where: eq(users.id, payload.userId),
-    columns: {
-      id: true,
-      name: true,
-      email: true,
-      avatarUrl: true,
-      role: true,
-    },
-  });
+  const [user] = await db
+    .select({
+      id: users.id,
+      name: users.name,
+      email: users.email,
+      avatarUrl: users.avatarUrl,
+      role: users.role,
+    })
+    .from(users)
+    .where(eq(users.id, payload.userId))
+    .limit(1);
 
   return user ?? null;
 }

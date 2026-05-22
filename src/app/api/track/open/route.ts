@@ -30,9 +30,11 @@ export async function GET(request: NextRequest) {
       })
       .where(eq(inviteDeliveries.id, deliveryId));
 
-    const delivery = await db.query.inviteDeliveries.findFirst({
-      where: eq(inviteDeliveries.id, deliveryId),
-    });
+    const [delivery] = await db
+      .select()
+      .from(inviteDeliveries)
+      .where(eq(inviteDeliveries.id, deliveryId))
+      .limit(1);
 
     if (delivery?.inviteId) {
       await db

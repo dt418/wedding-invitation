@@ -4,16 +4,18 @@ import { templates, templateVariants } from "@/db/schema";
 import { eq, inArray } from "drizzle-orm";
 
 export async function GET() {
-  const all = await db.query.templates.findMany({
-    where: eq(templates.isActive, true),
-  });
+  const all = await db
+    .select()
+    .from(templates)
+    .where(eq(templates.isActive, true));
 
   if (all.length === 0) return NextResponse.json([]);
 
   const templateIds = all.map((t) => t.id);
-  const allVariants = await db.query.templateVariants.findMany({
-    where: inArray(templateVariants.templateId, templateIds),
-  });
+  const allVariants = await db
+    .select()
+    .from(templateVariants)
+    .where(inArray(templateVariants.templateId, templateIds));
 
   const variantsByTemplate = new Map<string, typeof allVariants>();
   for (const variant of allVariants) {

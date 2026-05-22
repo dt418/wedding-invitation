@@ -11,9 +11,11 @@ interface PageProps {
 export default async function TemplateDemoPage({ params }: PageProps) {
   const { code } = await params;
 
-  const template = await db.query.templates.findFirst({
-    where: and(eq(templates.slug, code), eq(templates.isActive, true)),
-  });
+  const [template] = await db
+    .select()
+    .from(templates)
+    .where(and(eq(templates.slug, code), eq(templates.isActive, true)))
+    .limit(1);
 
   if (!template) notFound();
 

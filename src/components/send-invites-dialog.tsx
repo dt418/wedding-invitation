@@ -11,7 +11,6 @@ import { Button } from "@/components/ui/button";
 import { RadioGroup, RadioGroupItem } from "@/components/ui/radio-group";
 import { Label } from "@/components/ui/label";
 import { toast } from "sonner";
-import { cn } from "@/lib/utils";
 
 interface SendInvitesDialogProps {
   open: boolean;

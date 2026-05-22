@@ -14,6 +14,7 @@ import InviteRenderer from "@/components/invite-renderer";
 import { Icons } from "@/components/ui/icons";
 import { Button } from "../ui/button";
 import { cn } from "@/lib/utils";
+import { generateEventSlug } from "@/lib/slug";
 
 interface TemplateFromApi {
   id: string;
@@ -226,24 +227,29 @@ export function EventWizard({ templateId }: EventWizardProps) {
   const handleSubmit = async () => {
     setIsLoading(true);
     try {
+      // Ensure templateId is valid UUID before submitting
+      const templateId = formData.templateId || templates[0]?.id || "";
+      
+      const payload = {
+        title: `${formData.groomName} & ${formData.brideName}`,
+        slug: generateEventSlug(formData.groomName, formData.brideName),
+        templateId,
+        eventDate: formData.eventDate,
+        eventTime: formData.eventTime || undefined,
+        venueName: formData.venueName || undefined,
+        venueAddress: formData.venueAddress || undefined,
+        mapUrl: formData.mapUrl || undefined,
+      };
+      
       const res = await fetch("/api/events", {
         method: "POST",
         headers: { "Content-Type": "application/json" },
-        body: JSON.stringify({
-          title: `${formData.groomName} & ${formData.brideName}`,
-          slug: `${formData.groomName.toLowerCase().replace(/\s+/g, "-")}-${formData.brideName.toLowerCase().replace(/\s+/g, "-")}`,
-          templateId: formData.templateId,
-          eventDate: formData.eventDate,
-          eventTime: formData.eventTime,
-          venueName: formData.venueName,
-          venueAddress: formData.venueAddress,
-          mapUrl: formData.mapUrl,
-          customData: formData,
-        }),
+        body: JSON.stringify(payload),
       });
 
       if (!res.ok) {
-        throw new Error("Failed to create event");
+        const errorData = await res.json().catch(() => ({ error: "Unknown error" }));
+        throw new Error(errorData.error || "Failed to create event");
       }
 
       const event = await res.json();

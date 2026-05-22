@@ -1,6 +1,6 @@
 import { NextRequest, NextResponse } from "next/server";
 import { db } from "@/db";
-import { events, templateSections } from "@/db/schema";
+import { events, templateSections, sections } from "@/db/schema";
 import { verifyToken } from "@/lib/auth";
 import { eq, and } from "drizzle-orm";
 
@@ -16,15 +16,18 @@ export async function GET(req: NextRequest, { params }: { params: Promise<{ id: 
 
   const { id: eventId } = await params;
 
-  const event = await db.query.events.findFirst({
-    where: and(eq(events.userId, userId), eq(events.id, eventId)),
-  });
+  const [event] = await db
+    .select()
+    .from(events)
+    .where(and(eq(events.userId, userId), eq(events.id, eventId)))
+    .limit(1);
   if (!event) return NextResponse.json({ error: "Not found" }, { status: 404 });
 
-  const all = await db.query.sections.findMany();
-  const overrides = await db.query.templateSections.findMany({
-    where: eq(templateSections.eventId, eventId),
-  });
+  const all = await db.select().from(sections);
+  const overrides = await db
+    .select()
+    .from(templateSections)
+    .where(eq(templateSections.eventId, eventId));
 
   const overrideMap = new Map(overrides.map((o) => [o.sectionType, o]));
 
@@ -50,21 +53,25 @@ export async function PATCH(req: NextRequest, { params }: { params: Promise<{ id
 
   const { id: eventId } = await params;
 
-  const event = await db.query.events.findFirst({
-    where: and(eq(events.userId, userId), eq(events.id, eventId)),
-  });
+  const [event] = await db
+    .select()
+    .from(events)
+    .where(and(eq(events.userId, userId), eq(events.id, eventId)))
+    .limit(1);
   if (!event) return NextResponse.json({ error: "Not found" }, { status: 404 });
 
   const body = await req.json();
 
   const { sectionType, customContent, customTheme, visibility } = body;
 
-  const existing = await db.query.templateSections.findFirst({
-    where: and(
+  const [existing] = await db
+    .select()
+    .from(templateSections)
+    .where(and(
       eq(templateSections.eventId, eventId),
       eq(templateSections.sectionType, sectionType)
-    ),
-  });
+    ))
+    .limit(1);
 
   if (existing) {
     await db

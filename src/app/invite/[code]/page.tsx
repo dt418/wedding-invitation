@@ -12,10 +12,11 @@ interface PageProps {
 export default async function InvitePage({ params }: PageProps) {
   const { code } = await params;
 
-  const invite = await db.query.invites.findFirst({
-    where: eq(invites.inviteCode, code),
-    with: { guest: true },
-  });
+  const [invite] = await db
+    .select()
+    .from(invites)
+    .where(eq(invites.inviteCode, code))
+    .limit(1);
 
   if (!invite) notFound();
 

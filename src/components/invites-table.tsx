@@ -1,11 +1,10 @@
 "use client";
 
-import { useState, useEffect } from "react";
+import { useState } from "react";
 import { Checkbox } from "@/components/ui/checkbox";
 import { Button } from "@/components/ui/button";
 import { SendInvitesDialog } from "@/components/send-invites-dialog";
 import { toast } from "sonner";
-import Link from "next/link";
 
 interface InviteWithGuest {
   id: string;
@@ -22,7 +21,7 @@ interface InvitesTableProps {
 }
 
 export function InvitesTable({ eventId, initialInvites }: InvitesTableProps) {
-  const [invites, setInvites] = useState(initialInvites);
+  const [invites] = useState(initialInvites);
   const [selectedIds, setSelectedIds] = useState<Set<string>>(new Set());
   const [showSendDialog, setShowSendDialog] = useState(false);
 

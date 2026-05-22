@@ -125,6 +125,8 @@ export const events = pgTable(
       .references(() => users.id, { onDelete: "cascade" }),
     slug: varchar("slug", { length: 100 }).notNull(),
     title: varchar("title", { length: 255 }).notNull(),
+    groomName: varchar("groom_name", { length: 100 }),
+    brideName: varchar("bride_name", { length: 100 }),
     description: text("description"),
     templateId: uuid("template_id").notNull(),
 

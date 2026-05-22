@@ -28,9 +28,11 @@ export async function GET(
 
       const pollInterval = setInterval(async () => {
         if (jobId) {
-          const job = await db.query.inviteSendJobs.findFirst({
-            where: eq(inviteSendJobs.id, jobId),
-          });
+          const [job] = await db
+            .select()
+            .from(inviteSendJobs)
+            .where(eq(inviteSendJobs.id, jobId))
+            .limit(1);
 
           if (job) {
             sendEvent({

@@ -6,9 +6,10 @@ import { TemplatesGalleryClient } from "@/components/templates/templates-gallery
 export const dynamic = "force-dynamic";
 
 export default async function TemplatesPage() {
-  const all = await db.query.templates.findMany({
-    where: eq(templates.isActive, true),
-  });
+  const all = await db
+    .select()
+    .from(templates)
+    .where(eq(templates.isActive, true));
 
   return <TemplatesGalleryClient templates={all} />;
 }

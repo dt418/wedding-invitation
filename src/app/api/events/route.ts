@@ -3,7 +3,7 @@ import { db } from "@/db";
 import { events } from "@/db/schema";
 import { verifyToken } from "@/lib/auth";
 import { createEventSchema } from "@/lib/validators";
-import { eq, and } from "drizzle-orm";
+import { eq, and, desc } from "drizzle-orm";
 
 async function getUserId(req: NextRequest) {
   const token = req.cookies.get("wedding_token")?.value;
@@ -15,10 +15,11 @@ export async function GET(req: NextRequest) {
   const userId = await getUserId(req);
   if (!userId) return NextResponse.json({ error: "Unauthorized" }, { status: 401 });
 
-  const all = await db.query.events.findMany({
-    where: eq(events.userId, userId),
-    orderBy: (e, { desc }) => [desc(e.createdAt)],
-  });
+  const all = await db
+    .select()
+    .from(events)
+    .where(eq(events.userId, userId))
+    .orderBy(desc(events.createdAt));
 
   return NextResponse.json(all);
 }
@@ -39,9 +40,12 @@ export async function POST(req: NextRequest) {
 
   const { title, slug, templateId, eventDate, eventTime, venueName, venueAddress, mapUrl, description } = parsed.data;
 
-  const existing = await db.query.events.findFirst({
-    where: and(eq(events.userId, userId), eq(events.slug, slug)),
-  });
+  const existing = await db
+    .select()
+    .from(events)
+    .where(and(eq(events.userId, userId), eq(events.slug, slug)))
+    .limit(1)
+    .then((rows) => rows[0] ?? null);
 
   if (existing) {
     return NextResponse.json(
@@ -58,11 +62,11 @@ export async function POST(req: NextRequest) {
       slug,
       templateId,
       eventDate,
-      eventTime,
-      venueName,
-      venueAddress,
-      mapUrl,
-      description,
+      eventTime: eventTime ?? null,
+      venueName: venueName ?? null,
+      venueAddress: venueAddress ?? null,
+      mapUrl: mapUrl ?? null,
+      description: description ?? null,
       status: "draft",
     })
     .returning();

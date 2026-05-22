@@ -1,6 +1,6 @@
 import { db } from "@/db";
-import { inviteDeliveries, inviteSendJobs, invites } from "@/db/schema";
-import { eq, and, inArray } from "drizzle-orm";
+import { inviteDeliveries, inviteSendJobs, invites, guests, events } from "@/db/schema";
+import { eq, and, inArray, sql } from "drizzle-orm";
 import { nanoid } from "nanoid";
 import { env } from "@/env";
 
@@ -201,18 +201,23 @@ export async function sendInvites(
 ): Promise<{ jobId: string; totalCount: number; successCount: number; failedCount: number }> {
   const jobId = nanoid();
 
-  const invitesData = await db.query.invites.findMany({
-    where: and(eq(invites.eventId, eventId), inArray(invites.id, params.inviteIds)),
-    with: {
-      guest: true,
-      event: true,
-    },
-  }) as Array<{
-    id: string;
-    inviteCode: string;
-    guest: { name: string; email: string | null; zaloId: string | null; phone: string | null } | null;
-    event: { groomName: string; brideName: string; eventDate: Date; eventTime: string; venueName: string; venueAddress: string } | null;
-  }>;
+  const invitesData = await db
+    .select()
+    .from(invites)
+    .where(and(eq(invites.eventId, eventId), inArray(invites.id, params.inviteIds)));
+
+  // Fetch related data manually
+  const guestIds = invitesData.map((i) => i.guestId).filter(Boolean);
+  const [eventData] = await db
+    .select()
+    .from(events)
+    .where(eq(events.id, eventId))
+    .limit(1);
+
+  const guestsData = guestIds.length > 0
+    ? await db.select().from(guests).where(inArray(guests.id, guestIds))
+    : [];
+  const guestMap = new Map(guestsData.map((g) => [g.id, g]));
 
   await db.insert(inviteSendJobs).values({
     id: jobId,
@@ -228,23 +233,24 @@ export async function sendInvites(
 
   for (const invite of invitesData) {
     const inviteUrl = `${env.NEXT_PUBLIC_BASE_URL}/invite/${invite.inviteCode}`;
+    const guest = guestMap.get(invite.guestId);
 
     try {
       if (params.channel === "email") {
-        if (invite.guest?.email) {
+        if (guest?.email) {
           const result = await sendViaEmail(
             invite.id,
             {
-              groomName: invite.event?.groomName || "",
-              brideName: invite.event?.brideName || "",
-              eventDate: invite.event?.eventDate?.toLocaleDateString("vi-VN") || "",
-              eventTime: invite.event?.eventTime || "",
-              venueName: invite.event?.venueName || "",
-              venueAddress: invite.event?.venueAddress || "",
+              groomName: eventData?.groomName || eventData?.title || "",
+              brideName: eventData?.brideName || eventData?.title || "",
+              eventDate: eventData?.eventDate || "",
+              eventTime: eventData?.eventTime || "",
+              venueName: eventData?.venueName || "",
+              venueAddress: eventData?.venueAddress || "",
             },
             {
-              name: invite.guest?.name || "",
-              email: invite.guest?.email,
+              name: guest?.name || "",
+              email: guest?.email,
             },
             inviteUrl
           );
@@ -259,15 +265,15 @@ export async function sendInvites(
           invite.id,
           params.zaloChannel || "hybrid",
           {
-            groomName: invite.event?.groomName || "",
-            brideName: invite.event?.brideName || "",
-            eventDate: invite.event?.eventDate?.toLocaleDateString("vi-VN") || "",
-            venueName: invite.event?.venueName || "",
+            groomName: eventData?.groomName || eventData?.title || "",
+            brideName: eventData?.brideName || eventData?.title || "",
+            eventDate: eventData?.eventDate || "",
+            venueName: eventData?.venueName || "",
           },
           {
-            zaloId: invite.guest?.zaloId,
-            name: invite.guest?.name || "",
-            phone: invite.guest?.phone,
+            zaloId: guest?.zaloId,
+            name: guest?.name || "",
+            phone: guest?.phone,
           },
           invite.inviteCode
         );
@@ -294,14 +300,29 @@ export async function sendInvites(
 }
 
 export async function getDeliveryStats(eventId: string) {
-  const deliveries = await db.query.inviteDeliveries.findMany({
-    where: eq(inviteDeliveries.inviteId, invites.id),
-    with: {
-      invite: {
-        where: eq(invites.eventId, eventId),
-      },
-    },
-  });
+  // Get all invite IDs for this event
+  const eventInvites = await db
+    .select({ id: invites.id })
+    .from(invites)
+    .where(eq(invites.eventId, eventId));
+
+  const inviteIds = eventInvites.map((inv) => inv.id);
+
+  if (inviteIds.length === 0) {
+    return {
+      total: 0,
+      pending: 0,
+      sent: 0,
+      delivered: 0,
+      opened: 0,
+      failed: 0,
+    };
+  }
+
+  // Use raw SQL to avoid relation builder issues
+  const deliveriesResult = await db.execute<{ id: string; status: string }>(
+    sql`SELECT id, status FROM invite_deliveries WHERE invite_id IN (${sql.join(inviteIds.map(id => sql`${id}`), sql`, `)})`
+  );
 
   const stats = {
     total: 0,
@@ -312,9 +333,12 @@ export async function getDeliveryStats(eventId: string) {
     failed: 0,
   };
 
-  for (const d of deliveries) {
+  for (const row of deliveriesResult) {
     stats.total++;
-    stats[d.status as keyof typeof stats]++;
+    const status = row.status as keyof typeof stats;
+    if (status in stats) {
+      stats[status]++;
+    }
   }
 
   return stats;

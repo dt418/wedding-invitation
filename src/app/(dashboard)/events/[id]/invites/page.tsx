@@ -18,19 +18,22 @@ export default async function EventInvitesPage({ params }: PageProps) {
   const payload = verifyToken(token);
   if (!payload) return null;
 
-  const event = await db.query.events.findFirst({
-    where: and(eq(events.id, id), eq(events.userId, payload.userId)),
-  });
+  const [event] = await db
+    .select()
+    .from(events)
+    .where(and(eq(events.id, id), eq(events.userId, payload.userId)))
+    .limit(1);
   if (!event) return null;
 
-  const inviteRows = await db.query.invites.findMany({
-    where: eq(invites.eventId, id),
-  });
+  const inviteRows = await db
+    .select()
+    .from(invites)
+    .where(eq(invites.eventId, id));
 
   const guestIds = inviteRows.map((i) => i.guestId);
   const guestRows =
     guestIds.length > 0
-      ? await db.query.guests.findMany({ where: inArray(guests.id, guestIds) })
+      ? await db.select().from(guests).where(inArray(guests.id, guestIds))
       : [];
   const guestMap = new Map(guestRows.map((g) => [g.id, g]));
 

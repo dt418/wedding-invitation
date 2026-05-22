@@ -8,9 +8,11 @@ export async function POST(req: NextRequest, { params }: { params: Promise<{ cod
   try {
     const { code } = await params;
 
-    const invite = await db.query.invites.findFirst({
-      where: eq(invites.inviteCode, code),
-    });
+    const [invite] = await db
+      .select()
+      .from(invites)
+      .where(eq(invites.inviteCode, code))
+      .limit(1);
 
     if (!invite) {
       return NextResponse.json({ error: "Invite not found" }, { status: 404 });
@@ -28,9 +30,11 @@ export async function POST(req: NextRequest, { params }: { params: Promise<{ cod
 
     let rsvp;
     await db.transaction(async (tx) => {
-      const existing = await tx.query.rsvps.findFirst({
-        where: eq(rsvps.inviteId, invite.id),
-      });
+      const [existing] = await tx
+        .select()
+        .from(rsvps)
+        .where(eq(rsvps.inviteId, invite.id))
+        .limit(1);
 
       if (existing) {
         [rsvp] = await tx
@@ -75,8 +79,7 @@ export async function POST(req: NextRequest, { params }: { params: Promise<{ cod
     });
 
     return NextResponse.json({ success: true, rsvp });
-  } catch (error) {
-    console.error("RSVP error:", error);
+  } catch {
     return NextResponse.json({ error: "Internal server error" }, { status: 500 });
   }
 }
