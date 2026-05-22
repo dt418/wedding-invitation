@@ -15,6 +15,32 @@ import { translations, type Locale } from "@/lib/i18n";
 
 type HomeTranslations = typeof translations.vi.home;
 
+function getAvatarColor(name: string): string {
+  const colors = [
+    "bg-rose-200 text-rose-700",
+    "bg-amber-200 text-amber-700",
+    "bg-emerald-200 text-emerald-700",
+    "bg-blue-200 text-blue-700",
+    "bg-purple-200 text-purple-700",
+    "bg-pink-200 text-pink-700",
+    "bg-teal-200 text-teal-700",
+    "bg-indigo-200 text-indigo-700",
+  ];
+  let hash = 0;
+  for (let i = 0; i < name.length; i++) {
+    hash = name.charCodeAt(i) + ((hash << 5) - hash);
+  }
+  return colors[Math.abs(hash) % colors.length];
+}
+
+function getInitials(name: string): string {
+  const parts = name.split(/[\s&]+/).filter(Boolean);
+  if (parts.length >= 2) {
+    return (parts[0][0] + parts[1][0]).toUpperCase();
+  }
+  return name.slice(0, 2).toUpperCase();
+}
+
 function AnimatedSection({
   children,
   className,
@@ -408,6 +434,14 @@ function HowItWorks({ t }: { t: HomeTranslations }) {
 
 function FeaturesSection({ t }: { t: HomeTranslations }) {
   const features = t.featuresList;
+  const featureIcons = [
+    Icons.checkCircle, // Quản lý RSVP
+    Icons.users,       // Nhập danh sách khách
+    Icons.link,       // Mã QR & Link chia sẻ
+    Icons.gift,       // Link quyên góp quà
+    Icons.monitor,    // Đẹp trên mọi thiết bị
+    Icons.shield,     // Bảo vệ quyền riêng tư
+  ];
   return (
     <SectionWrapper id="features" className="bg-white">
       <AnimatedSection>
@@ -420,15 +454,18 @@ function FeaturesSection({ t }: { t: HomeTranslations }) {
           <p className="text-zinc-600 max-w-xl mx-auto">{t.featuresSubtitle}</p>
         </div>
         <div className="grid md:grid-cols-2 lg:grid-cols-3 gap-6">
-          {features.map((feature) => (
-            <Card key={feature.title} className="p-6 transition-all duration-300 hover:shadow-lg hover:-translate-y-1">
-              <div className="w-12 h-12 rounded-xl bg-rose-100 flex items-center justify-center mb-4">
-                <Icons.calendar className="w-6 h-6 text-rose-600" />
-              </div>
-              <h3 className="text-lg font-semibold text-rose-900 mb-2">{feature.title}</h3>
-              <p className="text-sm text-zinc-600" dangerouslySetInnerHTML={{ __html: DOMPurify.sanitize(feature.description) }} />
-            </Card>
-          ))}
+          {features.map((feature, index) => {
+            const Icon = featureIcons[index] || Icons.calendar;
+            return (
+              <Card key={feature.title} className="p-6 transition-all duration-300 hover:shadow-lg hover:-translate-y-1">
+                <div className="w-12 h-12 rounded-xl bg-rose-100 flex items-center justify-center mb-4">
+                  <Icon className="w-6 h-6 text-rose-600" />
+                </div>
+                <h3 className="text-lg font-semibold text-rose-900 mb-2">{feature.title}</h3>
+                <p className="text-sm text-zinc-600" dangerouslySetInnerHTML={{ __html: DOMPurify.sanitize(feature.description) }} />
+              </Card>
+            );
+          })}
         </div>
       </AnimatedSection>
     </SectionWrapper>
@@ -451,7 +488,7 @@ function SocialProof({ t }: { t: HomeTranslations }) {
               </div>
               <p className="text-zinc-600 mb-4" dangerouslySetInnerHTML={{ __html: DOMPurify.sanitize(testimonial.text) }} />
               <div className="flex items-center gap-3">
-                <div className="w-10 h-10 rounded-full bg-rose-100 flex items-center justify-center"><Icons.heart className="w-5 h-5 text-rose-400" /></div>
+                <div className={`w-10 h-10 rounded-full ${getAvatarColor(testimonial.name)} text-sm font-semibold flex items-center justify-center`}>{getInitials(testimonial.name)}</div>
                 <div>
                   <div className="font-medium text-rose-900">{testimonial.name}</div>
                   <div className="text-sm text-zinc-500">{testimonial.location}</div>
@@ -564,13 +601,17 @@ function TestimonialsSection({ t }: { t: HomeTranslations }) {
           {testimonials.map((item) => (
             <Card key={item.name} className="p-6 border-rose-100 hover:shadow-lg transition-all duration-300 hover:-translate-y-1">
               <CardContent className="p-0">
-                <div className="text-amber-500 mb-3">{item.rating}</div>
+                <div className="flex gap-0.5 mb-3">
+                  {Array.from({ length: item.rating }).map((_, i) => (
+                    <Icons.star key={i} className="w-4 h-4 text-amber-400 fill-amber-400" />
+                  ))}
+                </div>
                 <p className="text-sm text-zinc-700 mb-5">&ldquo;{item.text}&rdquo;</p>
                 <div className="flex items-center gap-3">
-                  <div className="w-10 h-10 rounded-full bg-rose-100 text-rose-700 text-sm font-semibold flex items-center justify-center">{item.location}</div>
+                  <div className={`w-10 h-10 rounded-full ${getAvatarColor(item.name)} text-sm font-semibold flex items-center justify-center`}>{getInitials(item.name)}</div>
                   <div>
                     <div className="text-sm font-semibold text-rose-900">{item.name}</div>
-                    <div className="text-xs text-zinc-500">{item.text}</div>
+                    <div className="text-xs text-zinc-500">{item.location}</div>
                   </div>
                 </div>
               </CardContent>
