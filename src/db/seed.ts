@@ -61,6 +61,15 @@ const seedTemplates = [
     metadata: {"description": "Nhật Bình Đỏ - Retro Cổ Điển, Giấy Kem Ấm", "source": "chungdoi.com", "highlights": ["Không. Hoàng Kim Đỏ là nền đỏ thẫm với khung hoa vàng kim và phong cách hoàng gia sang trọng. Nhật Bình Đỏ là nền giấy kem, chữ nâu và đỏ son, họa tiết mây–hoa–đèn và phong bì nâu riêng — nhìn và cảm giác khác hẳn, không dùng chung giao diện với Hoàng Kim.", "Phù hợp đám cưới truyền thống, lễ gia tiên, tiệc có chủ đề di sản hoặc cặp đôi muốn thiệp ấm, thanh lịch mà vẫn rõ nét Việt — không cần nền đỏ rực toàn trang.", "Có. Chữ nâu và đỏ son trên nền giấy kem được phối để tương phản rõ, đọc tốt trên điện thoại và máy tính."]},
   },
   {
+    name: "Nhật Bình Tím - Áo Dài Lãng Mạn, Giấy Kem",
+    slug: "nhat-binh-tim",
+    category: "co_phuc" as const,
+    description: "Nhật Bình Tím - Áo Dài Lãng Mạn, Giấy Kem",
+    tags: ["nhat", "tím"],
+    thumbnailUrl: "/images/template-previews/listing/nhat-binh-tim.webp",
+    metadata: {"description": "Nhật Bình Tím - Áo Dài Lãng Mạn, Giấy Kem", "source": "chungdoi.com", "highlights": ["Nhật Bình Tím kết hợp nét đẹp áo dài truyền thống với tông tím lãng mạn. Nền giấy kem ấm áp tạo cảm giác gần gũi, thân thiện nhưng vẫn thanh lịch.", "Tông tím huyền bí nhưng không quá nặng — phù hợp cho đám cưới theo phong cách áo dài, truyền thống mà vẫn muốn điểm nhấn màu sắc độc đáo.", "Có. Chữ trắng và tím nhạt trên nền giấy kem được phối để tương phản rõ, đọc tốt trên điện thoại và máy tính."]},
+  },
+  {
     name: "Thanh Diệp Xanh - Thanh Lịch Hiện Đại",
     slug: "thanh-diep-xanh",
     category: "hien_dai" as const,
