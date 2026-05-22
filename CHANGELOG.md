@@ -8,11 +8,21 @@ The format is based on [Keep a Changelog](https://keepachangelog.com/en/1.0.0/).
 
 ### ✨ Added
 
+- **Invitation Sending System**: Complete system for sending wedding invitations via Zalo OA and Email. Features include real-time streaming progress, delivery status tracking, and batch processing.
+
 - **Slug Support for Events**: Events now have a URL-friendly slug field for SEO-optimized sharing. Generate beautiful URLs like `/invite/anh-minh-wedding` instead of UUID-based URLs.
+
+- **Zalo Integration**: Native Zalo OA messaging support for sending invitations to guests with Zalo accounts. Includes Zalo SDK wrapper, message templating, and delivery tracking.
+
+- **Email Integration**: Email delivery support via Resend API for guests without Zalo. HTML email templates with wedding branding.
+
+- **Delivery Tracking**: Comprehensive delivery status tracking with `invite_deliveries` and `invite_send_jobs` tables. Real-time status updates: pending, sending, sent, delivered, failed.
+
+- **Send Invites UI**: User-friendly interface for sending invitations with progress indicators, delivery statistics, and retry capabilities.
 
 - **Slug Utility Library**: New `src/lib/slug.ts` for generating URL-safe, transliterated slugs from Vietnamese text and other languages.
 
-- **Comprehensive Test Coverage**: Added 107 tests covering authentication, API ownership, RSVP endpoints, and slug generation.
+- **i18n Translations**: Multi-language support for invitation delivery messages (Vietnamese, English).
 
 ### 🔧 Improved
 
