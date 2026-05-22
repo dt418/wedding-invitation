@@ -159,6 +159,13 @@ export const translations = {
       copy: "Sao chép",
       copied: "Đã sao chép!",
     },
+    toasts: {
+      accountCreated: "Tài khoản đã được tạo!",
+      signInToContinue: "Vui lòng đăng nhập để tiếp tục.",
+      invalidCredentials: "Email hoặc mật khẩu không đúng.",
+      loginFailed: "Đăng nhập thất bại. Vui lòng thử lại.",
+      loggedOut: "Đã đăng xuất thành công.",
+    },
     auth: {
       email: "Email",
       password: "Mật khẩu",
@@ -351,6 +358,13 @@ export const translations = {
       cancel: "Cancel",
       copy: "Copy",
       copied: "Copied!",
+    },
+    toasts: {
+      accountCreated: "Account created!",
+      signInToContinue: "Please sign in to continue.",
+      invalidCredentials: "Invalid email or password.",
+      loginFailed: "Login failed. Please try again.",
+      loggedOut: "Logged out successfully.",
     },
     auth: {
       email: "Email",
@@ -545,6 +559,13 @@ export const translations = {
       copy: "复制",
       copied: "已复制！",
     },
+    toasts: {
+      accountCreated: "账号已创建！",
+      signInToContinue: "请登录以继续。",
+      invalidCredentials: "邮箱或密码不正确。",
+      loginFailed: "登录失败。请重试。",
+      loggedOut: "已成功退出。",
+    },
     auth: {
       email: "邮箱",
       password: "密码",
@@ -738,6 +759,13 @@ export const translations = {
       copy: "コピー",
       copied: "コピーしました！",
     },
+    toasts: {
+      accountCreated: "アカウントが作成されました！",
+      signInToContinue: "続行するにはログインしてください。",
+      invalidCredentials: "メールまたはパスワードが正しくありません。",
+      loginFailed: "ログインに失敗しました。もう一度お試しください。",
+      loggedOut: "ログアウトしました。",
+    },
     auth: {
       email: "メール",
       password: "パスワード",
@@ -930,6 +958,13 @@ export const translations = {
       cancel: "취소",
       copy: "복사",
       copied: "복사됨!",
+    },
+    toasts: {
+      accountCreated: "계정이 생성되었습니다!",
+      signInToContinue: "계속하려면 로그인하세요.",
+      invalidCredentials: "이메일 또는 비밀번호가 올바르지 않습니다.",
+      loginFailed: "로그인에 실패했습니다. 다시 시도해 주세요.",
+      loggedOut: "로그아웃되었습니다.",
     },
     auth: {
       email: "이메일",
