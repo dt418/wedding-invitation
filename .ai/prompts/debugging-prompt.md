@@ -27,7 +27,7 @@ Use for diagnosing and fixing bugs.
 ### 5. Verify
 - Test the fix
 - Check edge cases
-- Run lint and typecheck
+- Run lint and build
 
 ## Common Issues
 
@@ -65,11 +65,11 @@ Use for diagnosing and fixing bugs.
 pnpm dev
 # Look at terminal output
 
-# Type check
-pnpm typecheck
-
 # Lint
 pnpm lint
+
+# Build
+pnpm build
 
 # Database check
 docker compose ps

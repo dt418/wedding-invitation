@@ -76,6 +76,6 @@ Role: Code review, quality assurance, security review.
 
 Before approval:
 - `pnpm lint` passes
-- `pnpm typecheck` passes
 - `pnpm build` succeeds
 - No security issues
+- Manual verification in browser

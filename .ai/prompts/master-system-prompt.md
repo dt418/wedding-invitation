@@ -30,9 +30,9 @@ Follow `.ai/rules/` files for:
 
 Before marking complete:
 - `pnpm lint` passes
-- `pnpm typecheck` passes
 - `pnpm build` succeeds
 - No console errors in browser
+- Manual verification in browser
 
 ## Key Files
 
@@ -41,6 +41,20 @@ Before marking complete:
 - Auth: `src/lib/auth.ts`
 - Renderer: `src/components/invite-renderer.tsx`
 - UI Primitives: `src/components/ui/`
+- Wizard: `src/components/wizard/`
+- Delivery: `src/lib/delivery.ts`
+
+## Command Reference
+
+```bash
+pnpm dev          # Start dev server (Turbopack)
+pnpm build        # Production build
+pnpm lint         # ESLint
+pnpm db:seed      # Seed demo user + templates
+pnpm db:migrate   # Run Drizzle migrations
+pnpm db:generate  # Generate migration from schema changes
+pnpm test         # Run tests
+```
 
 ## Getting Help
 

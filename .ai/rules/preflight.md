@@ -130,5 +130,55 @@ These rules are binding for code generation tasks.
 
 ---
 
+## Quality Gates
+
+Before marking any implementation complete, verify all gates pass:
+
+### 1. Lint
+```bash
+pnpm lint
+```
+- No ESLint errors
+- No warnings in critical rules
+
+### 2. TypeScript
+```bash
+pnpm build
+```
+- Build completes without errors (includes type checking)
+- No TypeScript errors
+
+### 3. Format
+```bash
+pnpm lint
+```
+- ESLint handles formatting checks
+- No lint errors
+
+### 4. Tests
+```bash
+pnpm test
+```
+- All tests pass
+- No skipped tests in critical paths
+
+### 5. Build
+```bash
+pnpm build
+```
+- Production build succeeds
+- No bundle analysis errors
+
+### Quality Gate Checklist
+
+```
+□ pnpm lint passes
+□ pnpm build succeeds
+□ pnpm test passes (if tests exist)
+□ Manual verification in browser (if UI changes)
+```
+
+---
+
 *Last updated: 2026-05-20*
 *Version: 1.1*

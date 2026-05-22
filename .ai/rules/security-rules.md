@@ -55,7 +55,7 @@ async function getEvent(id: string, userId: string) {
 
 ### Middleware
 ```typescript
-// src/middleware.ts
+// src/proxy.ts - Middleware proxy for auth
 export function middleware(request: NextRequest) {
   const token = request.cookies.get('wedding_token')?.value;
   const isAuthRoute = request.nextUrl.pathname.startsWith('/(dashboard)');

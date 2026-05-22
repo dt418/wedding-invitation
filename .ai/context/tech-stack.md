@@ -21,9 +21,17 @@
 - **jsonwebtoken** - JWT handling
 - **bcryptjs** - Password hashing
 - **papaparse** - CSV parsing for guest import
-- **dompurify** - HTML sanitization
+- **dompurify** / **isomorphic-dompurify** - HTML sanitization
 - **drizzle-zod** - Drizzle-Zod integration
 - **sonner** - Toast notifications
+- **formwright** - Schema-driven form builder
+- **resend** - Email delivery
+- **@base-ui/react** - Headless UI primitives (shadcn)
+- **class-variance-authority** - Variant composition
+- **clsx** / **tailwind-merge** - Class utilities
+- **tw-animate-css** - Tailwind animations
+- **sharp** - Image processing
+- **canvas** - QR code canvas rendering
 
 ### Project Structure
 ```
@@ -39,6 +47,7 @@ src/
 ├── components/
 │   ├── builder/           # Event builder components
 │   ├── templates/         # Template gallery
+│   ├── wizard/            # Event wizard steps
 │   ├── ui/                # Primitives (button, card, badge, icons)
 │   └── invite-renderer.tsx
 ├── db/
@@ -48,10 +57,14 @@ src/
 └── lib/
     ├── auth.ts            # JWT utilities
     ├── validators.ts      # Zod schemas
+    ├── slug.ts            # Slug generation
     ├── invite-code.ts     # Code generation
-    ├── qr.ts             # QR generation
-    ├── utils.ts          # Utilities (cn)
-    └── useInView.ts      # Scroll animation hook
+    ├── qr.ts              # QR generation
+    ├── delivery.ts        # Email/Zalo delivery
+    ├── email.ts           # Email templates
+    ├── zalo.ts            # Zalo OA integration
+    ├── i18n.ts            # Internationalization
+    └── utils.ts           # Utilities (cn)
 ```
 
 ## Backend Stack
@@ -90,13 +103,14 @@ export async function GET(req: NextRequest) {
 ## Dev Commands
 
 ```bash
-pnpm dev        # Start dev server (Turbopack)
-pnpm build      # Production build
-pnpm lint       # ESLint
-pnpm typecheck  # TypeScript check
-pnpm db:seed    # Seed demo data
-pnpm db:migrate # Run migrations
-pnpm db:generate # Generate migrations
+pnpm dev          # Start dev server (Turbopack)
+pnpm build        # Production build
+pnpm lint         # ESLint
+pnpm test         # Run tests
+pnpm test:run     # Run tests once
+pnpm db:seed      # Seed demo data
+pnpm db:migrate   # Run migrations
+pnpm db:generate  # Generate migrations
 ```
 
 ## Environment Variables
