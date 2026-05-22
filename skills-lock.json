@@ -49,6 +49,12 @@
       "skillPath": "skills/finishing-a-development-branch/SKILL.md",
       "computedHash": "932d23af11a3eb2b758f5b1d9aec7b6d28ddd26658328414f87f34dff7179d19"
     },
+    "formwright": {
+      "source": "adarshaacharya/formwright",
+      "sourceType": "github",
+      "skillPath": "skills/formwright/SKILL.md",
+      "computedHash": "f88dd1309e698527d477ab0c14daee3a462cd867767e3efd883db4760e861fda"
+    },
     "frontend-design": {
       "source": "anthropics/claude-code",
       "sourceType": "github",
