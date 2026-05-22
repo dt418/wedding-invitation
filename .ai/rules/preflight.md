@@ -143,17 +143,17 @@ pnpm lint
 
 ### 2. TypeScript
 ```bash
+pnpm typecheck
+```
+- No TypeScript errors
+- All types resolved correctly
+
+### 3. Build
+```bash
 pnpm build
 ```
-- Build completes without errors (includes type checking)
-- No TypeScript errors
-
-### 3. Format
-```bash
-pnpm lint
-```
-- ESLint handles formatting checks
-- No lint errors
+- Production build succeeds
+- No bundle analysis errors
 
 ### 4. Tests
 ```bash
@@ -161,13 +161,6 @@ pnpm test
 ```
 - All tests pass
 - No skipped tests in critical paths
-
-### 5. Build
-```bash
-pnpm build
-```
-- Production build succeeds
-- No bundle analysis errors
 
 ### Quality Gate Checklist
 

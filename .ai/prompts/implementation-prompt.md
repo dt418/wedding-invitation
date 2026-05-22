@@ -73,6 +73,7 @@ const parsed = schema.safeParse(data);
 - [ ] Error handling
 - [ ] TypeScript types
 - [ ] `pnpm lint` passes
+- [ ] `pnpm typecheck` passes
 - [ ] `pnpm build` succeeds
 
 ## Remember

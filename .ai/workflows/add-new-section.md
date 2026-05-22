@@ -88,6 +88,7 @@ export function SectionNameEditor({ section, onUpdate }: Props) {
 ## Step 7: Verify
 ```bash
 pnpm lint
+pnpm typecheck
 pnpm build
 ```
 

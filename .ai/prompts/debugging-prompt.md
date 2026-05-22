@@ -68,6 +68,9 @@ pnpm dev
 # Lint
 pnpm lint
 
+# TypeScript
+pnpm typecheck
+
 # Build
 pnpm build
 
