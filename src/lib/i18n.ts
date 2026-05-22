@@ -14,7 +14,7 @@ export const translations = {
       trustCount: "46,000+",
       trustLabel: "cặp đôi tin tưởng",
       thiepTitle: "Trân trọng kính mời",
-      thiepNames: "Minh Quân & Thanh Lan",
+      thiepNames: "Minh Quâni & Thanh Lan",
       thiepDate: "15 · 06 · 2025 · 11:00 SA",
       thiepVenue: "Diamond Palace – Hà Nội",
       personalMsg: "Lời nhắn",
@@ -167,6 +167,8 @@ export const translations = {
       loggedOut: "Đã đăng xuất thành công.",
       welcomeBack: "Chào mừng trở lại!",
       loginSuccess: "Bạn đã đăng nhập thành công.",
+      invitationsSent: "Đã gửi thành công {count} thiệp",
+      failedToSend: "Gửi thiệp thất bại",
     },
     auth: {
       email: "Email",
@@ -369,6 +371,8 @@ export const translations = {
       loggedOut: "Logged out successfully.",
       welcomeBack: "Welcome back!",
       loginSuccess: "You have successfully logged in.",
+      invitationsSent: "Successfully sent {count} invitations",
+      failedToSend: "Failed to send invitations",
     },
     auth: {
       email: "Email",
@@ -571,6 +575,8 @@ export const translations = {
       loggedOut: "已成功退出。",
       welcomeBack: "欢迎回来！",
       loginSuccess: "您已成功登录。",
+      invitationsSent: "成功发送 {count} 封邀请函",
+      failedToSend: "发送邀请函失败",
     },
     auth: {
       email: "邮箱",
@@ -773,6 +779,8 @@ export const translations = {
       loggedOut: "ログアウトしました。",
       welcomeBack: "おかえりなさい！",
       loginSuccess: "ログインに成功しました。",
+      invitationsSent: "{count}件の招待状を送信しました",
+      failedToSend: "招待状の送信に失敗しました",
     },
     auth: {
       email: "メール",
@@ -975,6 +983,8 @@ export const translations = {
       loggedOut: "로그아웃되었습니다.",
       welcomeBack: "돌아오신 것을 환영합니다!",
       loginSuccess: "로그인에 성공했습니다.",
+      invitationsSent: "{count}개의 초대장을 성공적으로 전송했습니다",
+      failedToSend: "초대장 전송 실패",
     },
     auth: {
       email: "이메일",

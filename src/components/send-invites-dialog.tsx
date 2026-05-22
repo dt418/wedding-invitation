@@ -11,6 +11,13 @@ import { Button } from "@/components/ui/button";
 import { RadioGroup, RadioGroupItem } from "@/components/ui/radio-group";
 import { Label } from "@/components/ui/label";
 import { toast } from "sonner";
+import { translations, type Locale } from "@/lib/i18n";
+
+function getLocale(): Locale {
+  if (typeof document === "undefined") return "vi";
+  const match = document.cookie.match(/locale=([^;]+)/);
+  return (match?.[1] as Locale) || "vi";
+}
 
 interface SendInvitesDialogProps {
   open: boolean;
@@ -54,14 +61,16 @@ export function SendInvitesDialog({
         throw new Error(data.error || "Failed to send invites");
       }
 
+      const t = translations[getLocale()].toasts;
       toast.success(
-        `Sent ${data.successCount}/${data.totalCount} invitations`
+        t.invitationsSent.replace("{count}", String(data.successCount))
       );
       onSent();
       onOpenChange(false);
     } catch (error) {
+      const t = translations[getLocale()].toasts;
       toast.error(
-        error instanceof Error ? error.message : "Failed to send invitations"
+        error instanceof Error ? error.message : t.failedToSend
       );
     } finally {
       setSending(false);

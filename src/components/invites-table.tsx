@@ -143,7 +143,7 @@ export function InvitesTable({ eventId, initialInvites }: InvitesTableProps) {
         selectedInviteIds={Array.from(selectedIds)}
         onSent={() => {
           setSelectedIds(new Set());
-          toast.success("Invitations sent successfully");
+          toast.success("Invitations sent");
         }}
       />
     </div>
