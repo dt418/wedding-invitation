@@ -8,11 +8,7 @@ vi.mock("next/headers", () => ({
 
 vi.mock("@/db", () => ({
   db: {
-    query: {
-      users: {
-        findFirst: vi.fn(),
-      },
-    },
+    select: vi.fn(),
   },
 }));
 
@@ -55,13 +51,21 @@ describe("getCurrentUser", () => {
       email: "test@example.com",
       role: "user",
     });
-    vi.mocked(db.query.users.findFirst).mockResolvedValue({
-      id: "user_123",
-      email: "test@example.com",
-      name: "Test User",
-      avatarUrl: null,
-      role: "user",
-    });
+
+    // Mock db.select().from().where().limit() chain for Drizzle
+    vi.mocked(db.select).mockReturnValue({
+      from: vi.fn().mockReturnValue({
+        where: vi.fn().mockReturnValue({
+          limit: vi.fn().mockResolvedValue([{
+            id: "user_123",
+            email: "test@example.com",
+            name: "Test User",
+            avatarUrl: null,
+            role: "user",
+          }]),
+        }),
+      }),
+    } as never);
 
     const { getCurrentUser } = await import("@/app/(auth)/get-current-user");
     const result = await getCurrentUser();
@@ -85,7 +89,14 @@ describe("getCurrentUser", () => {
       email: "ghost@example.com",
       role: "user",
     });
-    vi.mocked(db.query.users.findFirst).mockResolvedValue(null);
+
+    vi.mocked(db.select).mockReturnValue({
+      from: vi.fn().mockReturnValue({
+        where: vi.fn().mockReturnValue({
+          limit: vi.fn().mockResolvedValue([]),
+        }),
+      }),
+    } as never);
 
     const { getCurrentUser } = await import("@/app/(auth)/get-current-user");
     const result = await getCurrentUser();

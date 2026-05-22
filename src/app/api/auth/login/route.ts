@@ -20,9 +20,11 @@ export async function POST(request: Request) {
       );
     }
 
-    const user = await db.query.users.findFirst({
-      where: eq(users.email, email),
-    });
+    const [user] = await db
+      .select()
+      .from(users)
+      .where(eq(users.email, email))
+      .limit(1);
 
     if (!user) {
       return NextResponse.redirect(
@@ -49,8 +51,7 @@ export async function POST(request: Request) {
     });
 
     return NextResponse.redirect(new URL("/events?justLoggedIn=true", request.url));
-  } catch (error) {
-    console.error("Login error:", error);
+  } catch {
     return NextResponse.redirect(
       new URL("/login?error=generic", request.url)
     );

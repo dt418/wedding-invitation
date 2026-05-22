@@ -6,6 +6,7 @@ import { StepHeader } from "./wizard-components";
 import { Button } from "@/components/ui/button";
 import { Icons } from "@/components/ui/icons";
 import { cn } from "@/lib/utils";
+import { getAllCategories, type Locale } from "@/lib/i18n";
 
 const ITEMS_PER_PAGE = 12;
 
@@ -23,6 +24,7 @@ interface StepTemplateProps {
   selectedTemplateId: string;
   onTemplateSelect: (templateId: string, variantId?: string) => void;
   templates?: Template[];
+  locale?: Locale;
 }
 
 const CATEGORY_MAP: Record<string, string> = {
@@ -35,8 +37,6 @@ const CATEGORY_MAP: Record<string, string> = {
   toi_gian: "Tối giản",
   de_thuong: "Dễ thương",
 };
-
-const CATEGORIES = ["Tất cả", ...Object.values(CATEGORY_MAP)];
 
 function getCategoryKey(label: string): string {
   return Object.entries(CATEGORY_MAP).find(([, v]) => v === label)?.[0] ?? label;
@@ -56,7 +56,7 @@ function TemplateCard({
       onClick={onSelect}
       className={cn(
         "group w-full cursor-pointer overflow-hidden rounded-lg shadow-md transition-all duration-300 bg-white",
-        isSelected ? "ring-2 ring-rose-600 shadow-lg shadow-rose-200" : "hover:shadow-xl"
+        isSelected ? "ring-2 ring-rose-600 shadow-lg shadow-rose-200" : "hover:ring-2 hover:ring-rose-300 hover:shadow-xl hover:scale-[1.02]"
       )}
     >
       <div className="relative aspect-9/16 w-full overflow-hidden bg-zinc-100">
@@ -77,30 +77,18 @@ function TemplateCard({
 
         <div className="absolute inset-0 bg-linear-to-t from-black/80 via-black/20 to-transparent opacity-100 md:opacity-0 md:group-hover:opacity-100 transition-opacity duration-300" />
 
-        <div className="absolute bottom-0 left-0 right-0 p-3 opacity-100 md:opacity-0 md:group-hover:opacity-100 transition-opacity duration-300">
-          {isSelected && (
-            <div className="w-6 h-6 bg-rose-600 rounded-full flex items-center justify-center shadow-md mb-2">
-              <Icons.check className="w-4 h-4 text-white" />
-            </div>
-          )}
-          {template.isPremium && (
-            <span className="rounded bg-amber-500/80 px-2 py-0.5 text-[10px] text-white">
-              Premium
-            </span>
-          )}
-        </div>
-
-        {!isSelected && template.isPremium && (
-          <span className="absolute top-2 right-2 rounded bg-amber-500 px-2 py-0.5 text-[10px] text-white">
-            Premium
-          </span>
-        )}
-        {isSelected && !template.isPremium && (
-          <div className="absolute top-2 left-2 z-10">
+        {isSelected && (
+          <div className="absolute top-2 left-2 z-10 animate-in zoom-in-125 duration-200">
             <div className="w-6 h-6 bg-rose-600 rounded-full flex items-center justify-center shadow-md">
               <Icons.check className="w-4 h-4 text-white" />
             </div>
           </div>
+        )}
+
+        {template.isPremium && !isSelected && (
+          <span className="absolute top-2 right-2 rounded bg-amber-500 px-2 py-0.5 text-[10px] text-white">
+            Premium
+          </span>
         )}
       </div>
       <div className="p-2">
@@ -126,12 +114,20 @@ export function StepTemplate({
   selectedTemplateId,
   onTemplateSelect,
   templates = DEFAULT_TEMPLATES,
+  locale = "vi",
 }: StepTemplateProps) {
-  const [selectedCategory, setSelectedCategory] = useState("Tất cả");
+  const [selectedCategory, setSelectedCategory] = useState<string>("Tất cả");
   const [visibleCount, setVisibleCount] = useState(ITEMS_PER_PAGE);
 
+  const allCategories = [
+    { key: "all", label: locale === "en" ? "All" : "Tất cả" },
+    ...getAllCategories(locale)
+      .filter((c) => c.key !== "all")
+      .map((c) => ({ key: c.key, label: c.label })),
+  ];
+
   const filteredTemplates =
-    selectedCategory === "Tất cả"
+    selectedCategory === "Tất cả" || selectedCategory === "All"
       ? templates
       : templates.filter((t) => t.category === getCategoryKey(selectedCategory));
 
@@ -150,25 +146,25 @@ export function StepTemplate({
 return (
     <div className="flex flex-col">
       <StepHeader
-        title="Chọn mẫu thiệp"
-        description="Chọn mẫu thiệp phù hợp với phong cách đám cưới của bạn"
+        title={locale === "en" ? "Choose Template" : "Chọn mẫu thiệp"}
+        description={locale === "en" ? "Pick a template that matches your wedding style" : "Chọn mẫu thiệp phù hợp với phong cách đám cưới của bạn"}
         step={0}
         totalSteps={7}
       />
 
-      <div className="flex gap-2 mb-4 overflow-x-auto pb-2">
-        {CATEGORIES.map((category) => (
+      <div className="sticky top-0 z-10 bg-background/95 backdrop-blur-sm py-3 flex gap-2 mb-4 overflow-x-auto pb-2">
+        {allCategories.map((category) => (
           <button
-            key={category}
-            onClick={() => handleCategoryChange(category)}
+            key={category.key}
+            onClick={() => handleCategoryChange(category.label)}
             className={cn(
               "px-4 py-2 rounded-full text-sm font-medium whitespace-nowrap transition-all",
-              selectedCategory === category
+              selectedCategory === category.label
                 ? "bg-rose-600 text-white"
                 : "bg-muted hover:bg-muted/80 text-muted-foreground"
             )}
           >
-            {category}
+            {category.label}
           </button>
         ))}
       </div>

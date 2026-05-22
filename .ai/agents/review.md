@@ -79,3 +79,4 @@ Before approval:
 - `pnpm typecheck` passes
 - `pnpm build` succeeds
 - No security issues
+- Manual verification in browser

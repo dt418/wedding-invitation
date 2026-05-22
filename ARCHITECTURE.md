@@ -66,7 +66,7 @@
 | `/events/[id]/edit` | CSR | Section editor + preview |
 | `/events/[id]/analytics` | RSC + CSR | Analytics dashboard |
 | `/events/[id]/guests` | RSC + CSR | Guest management |
-| `/events/[id]/invites` | RSC + CSR | Invite generation |
+| `/events/[id]/invites` | RSC + CSR | Invite generation + sending |
 | `/templates` | RSC + CSR | Template gallery |
 | `/settings` | RSC + CSR | User settings |
 
@@ -80,8 +80,13 @@
 | `/api/events/[id]/sections` | GET/PATCH | JWT cookie | Get/patch section overrides |
 | `/api/events/[id]/analytics` | GET | JWT cookie | Event analytics |
 | `/api/events/[id]/guests/import` | POST | JWT cookie | Bulk guest import |
+| `/api/events/[id]/invites/send` | POST | JWT cookie | Send invites (bulk) |
+| `/api/events/[id]/invites/stream` | GET | JWT cookie | SSE stream for delivery progress |
 | `/api/invites/[code]` | GET | Public | Load invite + sections + variant |
 | `/api/invites/[code]/rsvp` | POST | Public | Submit RSVP |
+| `/api/track/open` | GET | None | Email tracking pixel |
+| `/api/webhooks/email` | POST | Signature | Resend webhook handler |
+| `/api/webhooks/zalo` | POST | None | Zalo OA webhook handler |
 
 ## Server / Client Boundaries
 
@@ -169,6 +174,10 @@ Merge rules (applied in /api/invites/[code]):
 | `src/components/builder/preview.tsx` | Desktop/mobile preview wrapper |
 | `src/app/api/invites/[code]/route.ts` | Section merge + analytics pipeline |
 | `src/app/api/invites/[code]/rsvp/route.ts` | RSVP transaction + status update |
+| `src/lib/delivery.ts` | Invitation delivery orchestrator (email, Zalo) |
+| `src/lib/zalo.ts` | Zalo SDK integration (Mini App, Bot deep links) |
+| `src/components/send-invites-dialog.tsx` | Send invites modal UI |
+| `src/components/invites-table.tsx` | Invite list with send functionality |
 
 ## Current Implementation
 
@@ -181,6 +190,9 @@ Merge rules (applied in /api/invites/[code]):
 - RSVP upsert with transaction (edit existing or insert new)
 - Analytics event logging on page view and RSVP submit
 - Section visibility toggle persisted to `template_sections`
+- **Multi-channel invitation sending** (Zalo Mini App + Bot, Email via Resend, Messenger)
+- **Delivery tracking** with webhooks (email, Zalo) and SSE real-time updates
+- **Delivery stats** aggregation via `getDeliveryStats()`
 
 ### Technical Debt
 
@@ -194,8 +206,11 @@ Merge rules (applied in /api/invites/[code]):
 
 5. **No optimistic updates for section visibility**: Dashboard edit page fetches full data but uses local state for toggles; on network failure the UI may desync.
 
+6. **Zalo API is simulated**: Current Zalo delivery logs invite URL but doesn't send via Zalo OA API. Full integration requires OA credentials.
+
 ## Scalability Notes
 
 - Section renderer uses a plain `Record<sectionType, React.ComponentType>` map — adding new section types requires a code change (no plugin architecture). Consider a registry pattern if templates grow beyond 20 section types.
 - JSONB fields are indexed individually (`idx_sections_content_schema`, `idx_template_variants_colors`) — for complex JSON path queries, consider GIN indexes instead of btree.
 - `analytics_events` is append-only — no TTL cleanup currently. Partitioning by date or a background cleanup job will be needed at scale.
+- `invite_deliveries` table grows with each send attempt — consider cleanup of old/failed records or archiving strategy.

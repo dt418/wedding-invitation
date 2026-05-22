@@ -16,15 +16,17 @@ export default async function EventDetailPage({ params }: PageProps) {
   const payload = verifyToken(token);
   if (!payload) return null;
 
-  const event = await db.query.events.findFirst({
-    where: and(eq(events.id, id), eq(events.userId, payload.userId)),
-  });
+  const [event] = await db
+    .select()
+    .from(events)
+    .where(and(eq(events.id, id), eq(events.userId, payload.userId)))
+    .limit(1);
   if (!event) return null;
 
-  const eventInvites = await db.query.invites.findMany({
-    where: eq(invites.eventId, id),
-    with: { guest: true },
-  });
+  const eventInvites = await db
+    .select()
+    .from(invites)
+    .where(eq(invites.eventId, id));
 
   const guestCount = eventInvites.length;
   const sentCount = eventInvites.filter((i) => i.status !== "pending").length;

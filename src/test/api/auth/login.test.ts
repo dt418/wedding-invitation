@@ -3,6 +3,7 @@ import { NextRequest } from "next/server";
 
 vi.mock("@/db", () => ({
   db: {
+    select: vi.fn(),
     query: {
       users: {
         findFirst: vi.fn(),
@@ -63,7 +64,15 @@ describe("POST /api/auth/login", () => {
       success: true,
       data: { email: "test@test.com", password: "password123" },
     } as never);
-    vi.mocked(db.query.users.findFirst).mockResolvedValue(null);
+
+    // Mock db.select().from().where().limit() chain for Drizzle
+    vi.mocked(db.select).mockReturnValue({
+      from: vi.fn().mockReturnValue({
+        where: vi.fn().mockReturnValue({
+          limit: vi.fn().mockResolvedValue([]),
+        }),
+      }),
+    } as never);
 
     const { POST } = await importRoute();
     const formData = new FormData();
@@ -88,11 +97,18 @@ describe("POST /api/auth/login", () => {
       success: true,
       data: { email: "test@test.com", password: "wrongpassword" },
     } as never);
-    vi.mocked(db.query.users.findFirst).mockResolvedValue({
-      id: "user_1",
-      email: "test@test.com",
-      passwordHash: "hashed_password",
-      role: "user",
+
+    vi.mocked(db.select).mockReturnValue({
+      from: vi.fn().mockReturnValue({
+        where: vi.fn().mockReturnValue({
+          limit: vi.fn().mockResolvedValue([{
+            id: "user_1",
+            email: "test@test.com",
+            passwordHash: "hashed_password",
+            role: "user",
+          }]),
+        }),
+      }),
     } as never);
     vi.mocked(verifyPassword).mockResolvedValue(false);
 
@@ -113,18 +129,24 @@ describe("POST /api/auth/login", () => {
   it("returns redirect to /events when login succeeds", async () => {
     const { loginSchema } = await import("@/lib/validators");
     const { db } = await import("@/db");
-    const { verifyPassword } = await import("@/lib/auth");
-    const { signToken } = await import("@/lib/auth");
+    const { verifyPassword, signToken } = await import("@/lib/auth");
 
     vi.mocked(loginSchema.safeParse).mockReturnValue({
       success: true,
       data: { email: "test@test.com", password: "correctpassword" },
     } as never);
-    vi.mocked(db.query.users.findFirst).mockResolvedValue({
-      id: "user_1",
-      email: "test@test.com",
-      passwordHash: "hashed_password",
-      role: "user",
+
+    vi.mocked(db.select).mockReturnValue({
+      from: vi.fn().mockReturnValue({
+        where: vi.fn().mockReturnValue({
+          limit: vi.fn().mockResolvedValue([{
+            id: "user_1",
+            email: "test@test.com",
+            passwordHash: "hashed_password",
+            role: "user",
+          }]),
+        }),
+      }),
     } as never);
     vi.mocked(verifyPassword).mockResolvedValue(true);
     vi.mocked(signToken).mockReturnValue("valid_jwt_token");

@@ -16,9 +16,11 @@ export default async function EventAnalyticsPage({ params }: PageProps) {
   const payload = verifyToken(token);
   if (!payload) return null;
 
-  const event = await db.query.events.findFirst({
-    where: and(eq(events.id, id), eq(events.userId, payload.userId)),
-  });
+  const [event] = await db
+    .select()
+    .from(events)
+    .where(and(eq(events.id, id), eq(events.userId, payload.userId)))
+    .limit(1);
   if (!event) return null;
 
   const baseUrl = process.env.NEXT_PUBLIC_BASE_URL || "http://localhost:3000";

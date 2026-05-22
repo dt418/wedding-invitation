@@ -9,6 +9,7 @@ Role: Build UI components, implement designs, ensure user experience quality.
 - Tailwind CSS v4 styling
 - Animation implementation
 - Responsive design
+- Formwright schema-driven forms
 
 ## Responsibilities
 
@@ -16,6 +17,7 @@ Role: Build UI components, implement designs, ensure user experience quality.
    - Create reusable UI primitives
    - Build feature components
    - Implement section renderers
+   - Event wizard steps
 
 2. **Styling**
    - Use design tokens from globals.css
@@ -26,6 +28,11 @@ Role: Build UI components, implement designs, ensure user experience quality.
    - Scroll-triggered animations
    - CSS transitions
    - Respect reduced motion
+
+4. **Forms**
+   - Schema-driven with Formwright
+   - Use event-wizard-schema from `src/lib/schemas/event-wizard-schema.ts`
+   - Validate with Zod v4
 
 ## Key Patterns
 
@@ -54,6 +61,34 @@ const sectionRenderers = {
 };
 ```
 
+### Formwright Pattern
+```typescript
+import { buildForm, field, layout, rule } from 'formwright';
+import { eventWizardSchema } from '@/lib/schemas/event-wizard-schema';
+
+const form = buildForm({
+  schema: eventWizardSchema,
+  children: [
+    field('coupleNames', { component: 'Input' }),
+    layout('grid', [
+      field('groomName'),
+      field('brideName'),
+    ]),
+  ],
+});
+```
+
+### Wizard Steps
+```typescript
+// src/components/wizard/
+export function StepTemplate() { /* ... */ }
+export function StepCoupleInfo() { /* ... */ }
+export function StepEventDetails() { /* ... */ }
+export function StepMessages() { /* ... */ }
+export function StepGallery() { /* ... */ }
+export function StepPreview() { /* ... */ }
+```
+
 ## Quality Checklist
 
 - [ ] Server Components used for data
@@ -63,3 +98,4 @@ const sectionRenderers = {
 - [ ] Responsive (mobile-first)
 - [ ] Accessible (ARIA, focus states)
 - [ ] Animations respect reduced motion
+- [ ] Formwright schemas kept in sync

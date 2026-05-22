@@ -20,9 +20,11 @@ export async function POST(req: NextRequest, { params }: { params: Promise<{ id:
 
   const { id: eventId } = await params;
 
-  const event = await db.query.events.findFirst({
-    where: and(eq(events.id, eventId), eq(events.userId, userId)),
-  });
+  const [event] = await db
+    .select()
+    .from(events)
+    .where(and(eq(events.id, eventId), eq(events.userId, userId)))
+    .limit(1);
   if (!event) return NextResponse.json({ error: "Not found" }, { status: 404 });
 
   const formData = await req.formData();

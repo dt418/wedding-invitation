@@ -8,6 +8,7 @@ Role: Database schema design, query optimization, migration planning.
 - Drizzle ORM queries
 - Index strategy
 - Migration management
+- Streaming invites (SSE)
 
 ## PostgreSQL Schema
 
@@ -24,6 +25,23 @@ export const users = pgTable('users', {
 }, (table) => ({
   idxUsersEmail: index('idx_users_email').on(table.email),
 }));
+```
+
+## Database Client Pattern
+
+```typescript
+// src/db/index.ts
+import 'dotenv/config';
+import { drizzle } from "drizzle-orm/postgres-js";
+import postgres from "postgres";
+import * as schema from "./schema";
+
+const connectionString = process.env.DATABASE_URL!;
+const queryClient = postgres(connectionString, { max: 1 });
+export const db = drizzle(queryClient, { schema });
+
+// Separate client for migrations
+export const migrationClient = postgres(connectionString, { max: 1 });
 ```
 
 ## Query Patterns
@@ -76,9 +94,9 @@ await db.transaction(async (tx) => {
 ## Migrations
 
 ```bash
-pnpm db:generate  # Create migration
-pnpm db:migrate    # Apply
-pnpm db:seed       # Seed demo data
+pnpm db:generate  # Create migration from schema changes
+pnpm db:migrate   # Apply migrations
+pnpm db:seed      # Seed demo data
 ```
 
 ## Rules

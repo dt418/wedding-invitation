@@ -44,7 +44,7 @@ export default function BuilderPreview({ sections, colorTokens, isFullPreview }:
         </div>
 
         <div className="flex-1 overflow-auto bg-zinc-100 p-6">
-          <div className="bg-white rounded-xl shadow-xl overflow-hidden min-h-[600px]">
+          <div className="bg-white rounded-xl shadow-xl overflow-hidden min-h-150">
             <InviteRenderer
               sections={sections}
               colorTokens={colorTokens}
@@ -83,7 +83,7 @@ export default function BuilderPreview({ sections, colorTokens, isFullPreview }:
       </div>
 
       <div className="flex-1 overflow-auto bg-zinc-100 p-6">
-        <div className="bg-white rounded-lg shadow-lg overflow-hidden min-h-[600px]">
+        <div className="bg-white rounded-lg shadow-lg overflow-hidden min-h-150">
           <InviteRenderer
             sections={sections}
             colorTokens={colorTokens}

@@ -13,7 +13,7 @@ interface StepEventDetailsProps {
     venueAddress: string;
     mapUrl: string;
   };
-  onChange: (field: string, value: string) => void;
+  onChange: (field: string, value: unknown) => void;
 }
 
 export function StepEventDetails({ data, onChange }: StepEventDetailsProps) {

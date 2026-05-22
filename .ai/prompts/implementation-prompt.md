@@ -81,4 +81,5 @@ const parsed = schema.safeParse(data);
 - Use `uuid` not `integer` for IDs
 - Use `timestamp` not `integer` for dates
 - Use `pgTable` not `sqliteTable`
-- Use Drizzle `neon-http` for Neon Postgres
+- Use `postgres` package (NOT `neon-http` or `pg`)
+- Import pattern: `import postgres from "postgres"`

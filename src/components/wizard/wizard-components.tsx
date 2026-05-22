@@ -117,10 +117,11 @@ export function StepNavigation({
           </Button>
         )}
         <Button
-          variant={isLastStep ? "accent" : "default"}
+          variant="default"
           onClick={onNext}
           disabled={isLoading}
           size={isLastStep ? "lg" : "default"}
+          className={isLastStep ? "bg-rose-600 hover:bg-rose-700" : ""}
         >
           {isLoading ? (
             <>

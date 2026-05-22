@@ -8,6 +8,20 @@
       "when": 1778943616745,
       "tag": "0000_steep_mach_iv",
       "breakpoints": true
+    },
+    {
+      "idx": 1,
+      "version": "7",
+      "when": 1779389135849,
+      "tag": "0001_milky_daimon_hellstrom",
+      "breakpoints": true
+    },
+    {
+      "idx": 2,
+      "version": "7",
+      "when": 1779470018682,
+      "tag": "0002_wild_wasp",
+      "breakpoints": true
     }
   ]
 }

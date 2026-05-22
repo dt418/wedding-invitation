@@ -6,33 +6,41 @@ import { eq } from "drizzle-orm";
 export async function GET(req: NextRequest, { params }: { params: Promise<{ code: string }> }) {
   const { code } = await params;
 
-  const invite = await db.query.invites.findFirst({
-    where: eq(invites.inviteCode, code),
-  });
+  const [invite] = await db
+    .select()
+    .from(invites)
+    .where(eq(invites.inviteCode, code))
+    .limit(1);
 
   if (!invite) {
     return NextResponse.json({ error: "Invite not found" }, { status: 404 });
   }
 
-  const guest = await db.query.guests.findFirst({
-    where: eq(guests.id, invite.guestId),
-  });
+  const [guest] = await db
+    .select()
+    .from(guests)
+    .where(eq(guests.id, invite.guestId))
+    .limit(1);
 
-  const event = await db.query.events.findFirst({
-    where: eq(events.id, invite.eventId),
-  });
+  const [event] = await db
+    .select()
+    .from(events)
+    .where(eq(events.id, invite.eventId))
+    .limit(1);
 
   if (!event) {
     return NextResponse.json({ error: "Event not found" }, { status: 404 });
   }
 
-  const templateSectionsList = await db.query.sections.findMany({
-    where: eq(sections.templateId, event.templateId),
-  });
+  const templateSectionsList = await db
+    .select()
+    .from(sections)
+    .where(eq(sections.templateId, event.templateId));
 
-  const overrides = await db.query.templateSections.findMany({
-    where: eq(templateSections.eventId, event.id),
-  });
+  const overrides = await db
+    .select()
+    .from(templateSections)
+    .where(eq(templateSections.eventId, event.id));
 
   const overrideMap = new Map(overrides.map((o) => [o.sectionType, o]));
 
@@ -48,9 +56,10 @@ export async function GET(req: NextRequest, { params }: { params: Promise<{ code
     };
   }).sort((a, b) => (a.order as number) - (b.order as number));
 
-  const variants = await db.query.templateVariants.findMany({
-    where: eq(templateVariants.templateId, event.templateId),
-  });
+  const variants = await db
+    .select()
+    .from(templateVariants)
+    .where(eq(templateVariants.templateId, event.templateId));
 
   const defaultVariant = variants.find((v) => v.isDefault) || variants[0];
 

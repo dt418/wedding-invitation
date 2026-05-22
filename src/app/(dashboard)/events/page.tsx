@@ -13,10 +13,11 @@ export default async function EventsPage() {
   const payload = verifyToken(token);
   if (!payload) return null;
 
-  const userEvents = await db.query.events.findMany({
-    where: eq(events.userId, payload.userId),
-    orderBy: [desc(events.createdAt)],
-  });
+  const userEvents = await db
+    .select()
+    .from(events)
+    .where(eq(events.userId, payload.userId))
+    .orderBy(desc(events.createdAt));
 
   return (
     <div>

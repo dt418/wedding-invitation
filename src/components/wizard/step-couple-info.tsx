@@ -15,7 +15,7 @@ interface StepCoupleInfoProps {
     groomAddress: string;
     brideAddress: string;
   };
-  onChange: (field: string, value: string) => void;
+  onChange: (field: string, value: unknown) => void;
 }
 
 export function StepCoupleInfo({ data, onChange }: StepCoupleInfoProps) {

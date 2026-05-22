@@ -21,9 +21,12 @@ export async function registerAction(formData: FormData) {
 
   const { email, password, name } = parsed.data;
 
-  const existing = await db.query.users.findFirst({
-    where: eq(users.email, email),
-  });
+  const existing = await db
+    .select()
+    .from(users)
+    .where(eq(users.email, email))
+    .limit(1)
+    .then((rows) => rows[0] ?? null);
 
   if (existing) {
     return;
@@ -61,9 +64,12 @@ export async function loginAction(_prevState: unknown, formData: FormData) {
 
   const { email, password } = parsed.data;
 
-  const user = await db.query.users.findFirst({
-    where: eq(users.email, email),
-  });
+  const user = await db
+    .select()
+    .from(users)
+    .where(eq(users.email, email))
+    .limit(1)
+    .then((rows) => rows[0] ?? null);
 
   if (!user) {
     redirect("/login?error=invalid_credentials");

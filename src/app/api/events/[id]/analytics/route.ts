@@ -16,9 +16,11 @@ export async function GET(req: NextRequest, { params }: { params: Promise<{ id: 
 
   const { id: eventId } = await params;
 
-  const event = await db.query.events.findFirst({
-    where: and(eq(events.userId, userId), eq(events.id, eventId)),
-  });
+  const [event] = await db
+    .select()
+    .from(events)
+    .where(and(eq(events.userId, userId), eq(events.id, eventId)))
+    .limit(1);
   if (!event) return NextResponse.json({ error: "Not found" }, { status: 404 });
 
   const pageViews = await db

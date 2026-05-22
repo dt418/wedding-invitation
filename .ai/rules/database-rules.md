@@ -2,10 +2,11 @@
 
 ## Connection Pattern
 
-**DRIVER**: `postgres-js` (NOT `pg` or `neon`).
+**DRIVER**: `postgres` package (not `pg` or `neon-http`).
 
 ```typescript
 // src/db/index.ts
+import 'dotenv/config';
 import { drizzle } from "drizzle-orm/postgres-js";
 import postgres from "postgres";
 import * as schema from "./schema";
@@ -13,6 +14,9 @@ import * as schema from "./schema";
 const connectionString = process.env.DATABASE_URL!;
 const queryClient = postgres(connectionString, { max: 1 });
 export const db = drizzle(queryClient, { schema });
+
+// Separate client for migrations
+export const migrationClient = postgres(connectionString, { max: 1 });
 ```
 
 ### Import Pattern
@@ -29,7 +33,7 @@ import { sqliteTable, integer } from 'drizzle-orm/sqlite-core';
 ```typescript
 // Neon serverless - use drizzle-orm/neon-http + @neondatabase/serverless
 // pg driver - use drizzle-orm/node-postgres + pg
-// Project uses postgres-js - don't change unless specified
+// Project uses `postgres` package - don't change unless specified
 ```
 
 ### Schema Definition
