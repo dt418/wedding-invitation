@@ -61,7 +61,7 @@ export default function LanguageSelector({
             className="fixed inset-0 z-40" 
             onClick={() => setIsOpen(false)}
           />
-          <div className="absolute right-0 mt-2 z-50 bg-white rounded-lg shadow-lg border border-zinc-200 py-1 min-w-[140px]">
+          <div className="absolute right-0 mt-2 z-50 bg-white rounded-lg shadow-lg border border-zinc-200 py-1 min-w-35">
             {supportedLocales.map((locale) => (
               <button
                 key={locale}
