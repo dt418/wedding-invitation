@@ -10,11 +10,13 @@ import { StepTimeline } from "./step-timeline";
 import { StepGallery } from "./step-gallery";
 import { StepMessages } from "./step-messages";
 import { StepPreview } from "./step-preview";
-import InviteRenderer from "@/components/invite-renderer";
+import InviteRenderer from "@/components/classic-invite-renderer";
+import { SectionEditor } from "./section-editor";
 import { Icons } from "@/components/ui/icons";
 import { Button } from "../ui/button";
 import { cn } from "@/lib/utils";
 import { generateEventSlug } from "@/lib/slug";
+import { buildPreviewSections } from "@/lib/templates/preview-sections";
 
 interface TemplateFromApi {
   id: string;
@@ -239,6 +241,27 @@ export function EventWizard({ templateId }: EventWizardProps) {
         venueName: formData.venueName || undefined,
         venueAddress: formData.venueAddress || undefined,
         mapUrl: formData.mapUrl || undefined,
+        // Include all wizard form data for eventContent
+        groomName: formData.groomName,
+        brideName: formData.brideName,
+        groomFather: formData.groomFather || undefined,
+        groomMother: formData.groomMother || undefined,
+        brideFather: formData.brideFather || undefined,
+        brideMother: formData.brideMother || undefined,
+        groomAddress: formData.groomAddress || undefined,
+        brideAddress: formData.brideAddress || undefined,
+        ceremonyType: formData.ceremonyType || undefined,
+        timeline: formData.timeline,
+        images: formData.images,
+        thankYouNote: formData.thankYouNote || undefined,
+        groomBank: formData.groomBank || undefined,
+        groomAccount: formData.groomAccount || undefined,
+        brideBank: formData.brideBank || undefined,
+        brideAccount: formData.brideAccount || undefined,
+        musicEnabled: formData.musicEnabled,
+        musicUrl: formData.musicUrl || undefined,
+        rsvpEnabled: formData.rsvpEnabled,
+        guestbookEnabled: formData.guestbookEnabled,
       };
       
       const res = await fetch("/api/events", {
@@ -402,16 +425,112 @@ export function EventWizard({ templateId }: EventWizardProps) {
         </div>
 
         {/* Content Area */}
-        <div className="flex-1 overflow-auto">
-          {previewMode === "editor" ? (
-            <div className="max-w-4xl mx-auto p-6 pb-24">{renderStep()}</div>
-          ) : (
-            <div className="h-full bg-zinc-100 p-6">
-              <div className="bg-white rounded-xl shadow-xl overflow-hidden mx-auto max-w-4xl h-[calc(100vh-180px)]">
-                <InviteRenderer sections={[]} previewMode={previewDevice} />
+        <div className="flex-1 flex overflow-hidden">
+          {/* Section Editor Sidebar */}
+          <div className="w-80 border-r bg-background p-4 overflow-auto hidden xl:block">
+            <SectionEditor
+              sections={[
+                {
+                  step: 0,
+                  stepName: "Chọn mẫu",
+                  stepIcon: <Icons.layout className="w-4 h-4" />,
+                  sections: formData.templateId ? [
+                    { id: "template", name: "Mẫu thiệp", preview: templates.find(t => t.id === formData.templateId)?.name || formData.templateId, hasContent: true },
+                  ] : [],
+                },
+                {
+                  step: 1,
+                  stepName: "Cặp đôi",
+                  stepIcon: <Icons.heart className="w-4 h-4" />,
+                  sections: [
+                    { id: "couple", name: "Tên cặp đôi", preview: formData.groomName && formData.brideName ? `${formData.groomName} & ${formData.brideName}` : "", hasContent: !!formData.groomName && !!formData.brideName },
+                    { id: "parents", name: "Thông tin cha mẹ", preview: [formData.groomFather, formData.groomMother, formData.brideFather, formData.brideMother].filter(Boolean).join(", ") || "", hasContent: !!(formData.groomFather || formData.groomMother || formData.brideFather || formData.brideMother) },
+                  ],
+                },
+                {
+                  step: 2,
+                  stepName: "Sự kiện",
+                  stepIcon: <Icons.calendar className="w-4 h-4" />,
+                  sections: [
+                    { id: "event-info", name: "Ngày giờ", preview: formData.eventDate ? new Date(formData.eventDate).toLocaleDateString("vi-VN") : "", hasContent: !!formData.eventDate },
+                    { id: "venue", name: "Địa điểm", preview: formData.venueName || "", hasContent: !!formData.venueName },
+                  ],
+                },
+                {
+                  step: 3,
+                  stepName: "Lịch trình",
+                  stepIcon: <Icons.clock className="w-4 h-4" />,
+                  sections: formData.timeline.length > 0 ? formData.timeline.slice(0, 3).map((t, i) => ({
+                    id: `timeline-${i}`,
+                    name: t.title || `Sự kiện ${i + 1}`,
+                    preview: `${t.time} - ${t.title}`,
+                    hasContent: true,
+                  })) : [{ id: "timeline-empty", name: "Lịch trình", preview: "Chưa có sự kiện", hasContent: false }],
+                },
+                {
+                  step: 4,
+                  stepName: "Bộ sưu tập",
+                  stepIcon: <Icons.image className="w-4 h-4" />,
+                  sections: [
+                    { id: "gallery", name: "Hình ảnh", preview: formData.images.length > 0 ? `${formData.images.length} ảnh` : "", hasContent: formData.images.length > 0 },
+                  ],
+                },
+                {
+                  step: 5,
+                  stepName: "Lời nhắn",
+                  stepIcon: <Icons.messageSquare className="w-4 h-4" />,
+                  sections: [
+                    { id: "thank-you", name: "Lời cảm ơn", preview: formData.thankYouNote?.slice(0, 50) || "", hasContent: !!formData.thankYouNote },
+                    { id: "bank", name: "Thông tin ngân hàng", preview: (formData.groomBank || formData.brideBank) ? "Đã cài đặt" : "", hasContent: !!(formData.groomBank || formData.brideBank) },
+                  ],
+                },
+                {
+                  step: 6,
+                  stepName: "Xem trước",
+                  stepIcon: <Icons.eye className="w-4 h-4" />,
+                  sections: [
+                    { id: "preview", name: "Thiệp cưới", preview: formData.groomName && formData.brideName ? `${formData.groomName} & ${formData.brideName}` : "Xem trước thiệp", hasContent: !!formData.groomName && !!formData.brideName },
+                  ],
+                },
+              ]}
+              currentStep={currentStep}
+              onSectionClick={(step) => setCurrentStep(step)}
+            />
+          </div>
+
+          {/* Main Editor */}
+          <div className="flex-1 flex flex-col overflow-hidden">
+            {previewMode === "editor" ? (
+              <div className="max-w-4xl mx-auto p-6 pb-24 w-full">{renderStep()}</div>
+            ) : (
+              <div className="h-full bg-zinc-100 p-6">
+                <div className="bg-white rounded-xl shadow-xl overflow-hidden mx-auto max-w-4xl h-[calc(100vh-180px)]">
+                  <InviteRenderer 
+                    sections={buildPreviewSections({
+                      groomName: formData.groomName,
+                      brideName: formData.brideName,
+                      groomFather: formData.groomFather,
+                      groomMother: formData.groomMother,
+                      brideFather: formData.brideFather,
+                      brideMother: formData.brideMother,
+                      groomAddress: formData.groomAddress,
+                      brideAddress: formData.brideAddress,
+                      eventDate: formData.eventDate,
+                      eventTime: formData.eventTime,
+                      venueName: formData.venueName,
+                      venueAddress: formData.venueAddress,
+                      mapUrl: formData.mapUrl,
+                      timeline: formData.timeline,
+                      images: formData.images,
+                      thankYouNote: formData.thankYouNote,
+                      ceremonyType: formData.ceremonyType,
+                    })} 
+                    previewMode={previewDevice} 
+                  />
+                </div>
               </div>
-            </div>
-          )}
+            )}
+          </div>
         </div>
       </div>
 

@@ -1,7 +1,9 @@
 "use client";
 
+import Image from "next/image";
 import { translations, type Locale } from "@/lib/i18n";
 import { getGuestPronouns, formatSalutation, type Gender, type Relation } from "@/lib/personalization";
+import { Icons } from "@/components/ui/icons";
 
 interface SectionData {
   id: string;
@@ -133,6 +135,43 @@ const sectionRenderers: Record<string, React.FC<SectionRendererProps>> = {
               </div>
             ))}
           </div>
+        </div>
+      </section>
+    );
+  },
+  gallery: ({ content, locale = "vi" }) => {
+    const t = translations[locale];
+    const images = content.images as Array<{ url: string; caption: string }> || [];
+    return (
+      <section className="py-12 px-8 bg-linear-to-b from-rose-50 to-white">
+        <div className="max-w-4xl mx-auto">
+          <h3 className="text-xl font-semibold mb-6 text-center">{t.gallery.title}</h3>
+          <div className="grid grid-cols-2 md:grid-cols-3 gap-4">
+            {images.slice(0, 6).map((img, i) => (
+              <div key={i} className="aspect-square rounded-lg overflow-hidden bg-muted">
+                {img.url ? (
+                  <Image src={img.url} alt={img.caption || ""} fill className="object-cover" sizes="(max-width: 768px) 50vw, 33vw" />
+                ) : (
+                  <div className="w-full h-full flex items-center justify-center text-muted-foreground">
+                    <Icons.image className="w-8 h-8" />
+                  </div>
+                )}
+              </div>
+            ))}
+          </div>
+        </div>
+      </section>
+    );
+  },
+  "thank-you": ({ content, locale = "vi" }) => {
+    const t = translations[locale];
+    return (
+      <section className="py-16 px-8 text-center bg-linear-to-b from-white to-rose-50">
+        <div className="max-w-xl mx-auto">
+          <div className="text-4xl mb-4">💝</div>
+          <p className="text-lg" style={{ color: "var(--color-text)" }}>
+            {String(content.message || t.thankYou?.message || "Cảm ơn quý khách đã đến chia vui cùng chúng tôi!")}
+          </p>
         </div>
       </section>
     );

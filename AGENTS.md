@@ -94,7 +94,40 @@ Required in `.env.local`:
 - Use `import type` for type-only imports to reduce bundle size
 - Auth check inside each route/action — don't rely solely on middleware
 - Prefer `React.cache()` for server-side DB call deduplication within a request
-- Always commit with a descriptive commit message; never use `--allow-empty-message` or skip description
+
+## Git Commit Rules
+
+- **ALWAYS write detailed commit messages with body description** - never commit with just a short subject line
+- Commit message format:
+  ```
+  <type>: <short summary> (max 72 chars)
+
+  Detailed description explaining WHY this change was made.
+  What problem does it solve? What was the motivation?
+
+  - Bullet points for multiple changes
+  - Include relevant file paths or component names
+  - Mention related issues or features if applicable
+  ```
+- Good commit examples:
+  - `fix: improve Dialog overlay with darker backdrop and blur effect`
+
+    Added backdrop-blur-sm and bg-black/50 for better visual separation from background. Previous bg-black/10 was too subtle and made the dialog feel disconnected.
+    
+    - src/components/ui/dialog.tsx: updated DialogOverlay and DialogContent classes
+  - `feat: add delete confirmation dialog with i18n labels for event cards`
+
+    Users requested a way to safely delete events without accidental deletion. Added confirmation dialog with warning message and i18n support for all 5 locales.
+    
+    - src/components/events/event-list-client.tsx: new component
+    - src/lib/i18n.ts: added view, edit, delete, confirmDelete labels
+- Bad commit examples (too vague or missing description):
+  - `fix: update dialog`
+  - `fix: bug`
+  - `wip`
+  - `feat: add feature` (no explanation of what/why)
+- **Minimum requirement**: Subject line + at least 2 sentences of body description
+- Never commit with `--allow-empty-message` or skip description
 
 ## Figma-to-Code Design System Rules
 

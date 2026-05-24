@@ -1,0 +1,169 @@
+{
+  "config": {
+    "configFile": "/home/thanh/wedding-invitation/.worktrees/invite-sending/playwright.config.ts",
+    "rootDir": "/home/thanh/wedding-invitation/.worktrees/invite-sending/tests/e2e",
+    "forbidOnly": false,
+    "fullyParallel": true,
+    "globalSetup": null,
+    "globalTeardown": null,
+    "globalTimeout": 0,
+    "grep": {},
+    "grepInvert": null,
+    "maxFailures": 0,
+    "metadata": {
+      "actualWorkers": 1
+    },
+    "preserveOutput": "always",
+    "projects": [
+      {
+        "outputDir": "/home/thanh/wedding-invitation/.worktrees/invite-sending/test-results",
+        "repeatEach": 1,
+        "retries": 0,
+        "metadata": {
+          "actualWorkers": 1
+        },
+        "id": "chromium",
+        "name": "chromium",
+        "testDir": "/home/thanh/wedding-invitation/.worktrees/invite-sending/tests/e2e",
+        "testIgnore": [],
+        "testMatch": [
+          "**/*.@(spec|test).?(c|m)[jt]s?(x)"
+        ],
+        "timeout": 30000
+      }
+    ],
+    "quiet": false,
+    "reporter": [
+      [
+        "html",
+        {
+          "outputFolder": "playwright-report"
+        }
+      ],
+      [
+        "json",
+        {
+          "outputFile": "playwright-results.json"
+        }
+      ]
+    ],
+    "reportSlowTests": {
+      "max": 5,
+      "threshold": 300000
+    },
+    "shard": null,
+    "tags": [],
+    "updateSnapshots": "missing",
+    "updateSourceMethod": "patch",
+    "version": "1.60.0",
+    "workers": 2,
+    "webServer": {
+      "command": "pnpm dev",
+      "url": "http://localhost:3000",
+      "reuseExistingServer": true,
+      "timeout": 120000
+    }
+  },
+  "suites": [
+    {
+      "title": "events/create-event.spec.ts",
+      "file": "events/create-event.spec.ts",
+      "column": 0,
+      "line": 0,
+      "specs": [],
+      "suites": [
+        {
+          "title": "Event Creation & Invitation Rendering",
+          "file": "events/create-event.spec.ts",
+          "line": 8,
+          "column": 6,
+          "specs": [
+            {
+              "title": "should create event and render invitation correctly",
+              "ok": false,
+              "tags": [],
+              "tests": [
+                {
+                  "timeout": 30000,
+                  "annotations": [],
+                  "expectedStatus": "passed",
+                  "projectId": "chromium",
+                  "projectName": "chromium",
+                  "results": [
+                    {
+                      "workerIndex": 0,
+                      "parallelIndex": 0,
+                      "status": "failed",
+                      "duration": 17524,
+                      "error": {
+                        "message": "TimeoutError: page.waitForSelector: Timeout 10000ms exceeded.\nCall log:\n\u001b[2m  - waiting for locator('text=Tạo thiệp cưới, text=Thông tin cặp đôi, [class*=\"space-y-6\"]') to be visible\u001b[22m\n",
+                        "stack": "TimeoutError: page.waitForSelector: Timeout 10000ms exceeded.\nCall log:\n\u001b[2m  - waiting for locator('text=Tạo thiệp cưới, text=Thông tin cặp đôi, [class*=\"space-y-6\"]') to be visible\u001b[22m\n\n    at /home/thanh/wedding-invitation/.worktrees/invite-sending/tests/e2e/events/create-event.spec.ts:29:16",
+                        "location": {
+                          "file": "/home/thanh/wedding-invitation/.worktrees/invite-sending/tests/e2e/events/create-event.spec.ts",
+                          "column": 16,
+                          "line": 29
+                        },
+                        "snippet": "  27 |     \n  28 |     // Wait for the wizard content to load\n> 29 |     await page.waitForSelector('text=Tạo thiệp cưới, text=Thông tin cặp đôi, [class*=\"space-y-6\"]', { timeout: 10000 });\n     |                ^\n  30 |     \n  31 |     // Try clicking continue button (template step may be optional)\n  32 |     const continueBtn = page.locator('button:has-text(\"Tiếp tục\")').first();"
+                      },
+                      "errors": [
+                        {
+                          "location": {
+                            "file": "/home/thanh/wedding-invitation/.worktrees/invite-sending/tests/e2e/events/create-event.spec.ts",
+                            "column": 16,
+                            "line": 29
+                          },
+                          "message": "TimeoutError: page.waitForSelector: Timeout 10000ms exceeded.\nCall log:\n\u001b[2m  - waiting for locator('text=Tạo thiệp cưới, text=Thông tin cặp đôi, [class*=\"space-y-6\"]') to be visible\u001b[22m\n\n\n  27 |     \n  28 |     // Wait for the wizard content to load\n> 29 |     await page.waitForSelector('text=Tạo thiệp cưới, text=Thông tin cặp đôi, [class*=\"space-y-6\"]', { timeout: 10000 });\n     |                ^\n  30 |     \n  31 |     // Try clicking continue button (template step may be optional)\n  32 |     const continueBtn = page.locator('button:has-text(\"Tiếp tục\")').first();\n    at /home/thanh/wedding-invitation/.worktrees/invite-sending/tests/e2e/events/create-event.spec.ts:29:16"
+                        }
+                      ],
+                      "stdout": [],
+                      "stderr": [],
+                      "retry": 0,
+                      "startTime": "2026-05-24T10:39:17.511Z",
+                      "annotations": [],
+                      "attachments": [
+                        {
+                          "name": "screenshot",
+                          "contentType": "image/png",
+                          "path": "/home/thanh/wedding-invitation/.worktrees/invite-sending/test-results/events-create-event-Event--e20a7-render-invitation-correctly-chromium/test-failed-1.png"
+                        },
+                        {
+                          "name": "video",
+                          "contentType": "video/webm",
+                          "path": "/home/thanh/wedding-invitation/.worktrees/invite-sending/test-results/events-create-event-Event--e20a7-render-invitation-correctly-chromium/video.webm"
+                        },
+                        {
+                          "name": "error-context",
+                          "contentType": "text/markdown",
+                          "path": "/home/thanh/wedding-invitation/.worktrees/invite-sending/test-results/events-create-event-Event--e20a7-render-invitation-correctly-chromium/error-context.md"
+                        }
+                      ],
+                      "errorLocation": {
+                        "file": "/home/thanh/wedding-invitation/.worktrees/invite-sending/tests/e2e/events/create-event.spec.ts",
+                        "column": 16,
+                        "line": 29
+                      }
+                    }
+                  ],
+                  "status": "unexpected"
+                }
+              ],
+              "id": "c3dd647257906579c1d5-39f8819e23f62510a525",
+              "file": "events/create-event.spec.ts",
+              "line": 9,
+              "column": 7
+            }
+          ]
+        }
+      ]
+    }
+  ],
+  "errors": [],
+  "stats": {
+    "startTime": "2026-05-24T10:39:16.754Z",
+    "duration": 18438.173,
+    "expected": 0,
+    "skipped": 0,
+    "unexpected": 1,
+    "flaky": 0
+  }
+}

@@ -4,8 +4,8 @@ import { events } from "@/db/schema";
 import { verifyToken } from "@/lib/auth";
 import { eq, desc } from "drizzle-orm";
 import Link from "next/link";
-import Image from "next/image";
 import { getLocale, t } from "@/lib/i18n-server";
+import { EventListClient } from "@/components/events/event-list-client";
 
 export default async function EventsPage() {
   const token = (await cookies()).get("wedding_token")?.value;
@@ -24,6 +24,13 @@ export default async function EventsPage() {
     published: string;
     draft: string;
     archived: string;
+    view: string;
+    edit: string;
+    delete: string;
+    confirmDelete: string;
+    deleteWarning: string;
+    cancel: string;
+    confirmDeleteBtn: string;
   };
 
   const userEvents = await db
@@ -65,42 +72,20 @@ export default async function EventsPage() {
           </Link>
         </div>
       ) : (
-        <div className="grid grid-cols-1 md:grid-cols-2 lg:grid-cols-3 gap-6">
-          {userEvents.map((event) => (
-            <Link
-              key={event.id}
-              href={`/events/${event.id}`}
-              className="bg-white rounded-xl border p-6 hover:shadow-md transition-shadow"
-            >
-              {event.thumbnailUrl && (
-                <div className="aspect-video bg-zinc-100 rounded-lg mb-4 overflow-hidden">
-                  <Image
-                    src={event.thumbnailUrl}
-                    alt={event.title}
-                    width={640}
-                    height={360}
-                    className="w-full h-full object-cover"
-                  />
-                </div>
-              )}
-              <h2 className="font-semibold text-lg mb-1">{event.title}</h2>
-              <p className="text-sm text-zinc-500">
-                {new Date(event.eventDate).toLocaleDateString(locale === "zh" ? "zh-CN" : locale === "ja" ? "ja-JP" : locale === "ko" ? "ko-KR" : locale)}
-              </p>
-              <span
-                className={`inline-block mt-3 text-xs px-2 py-1 rounded-full ${
-                  event.status === "published"
-                    ? "bg-green-100 text-green-700"
-                    : event.status === "draft"
-                      ? "bg-amber-100 text-amber-700"
-                      : "bg-zinc-100 text-zinc-500"
-                }`}
-              >
-                {statusLabels[event.status] || event.status}
-              </span>
-            </Link>
-          ))}
-        </div>
+        <EventListClient
+          events={userEvents}
+          labels={statusLabels}
+          eventLabels={{
+            view: labels.view,
+            edit: labels.edit,
+            delete: labels.delete,
+            confirmDelete: labels.confirmDelete,
+            deleteWarning: labels.deleteWarning,
+            cancel: labels.cancel,
+            confirmDeleteBtn: labels.confirmDeleteBtn,
+          }}
+          locale={locale}
+        />
       )}
     </div>
   );

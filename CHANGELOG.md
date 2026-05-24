@@ -26,6 +26,8 @@ The format is based on [Keep a Changelog](https://keepachangelog.com/en/1.0.0/).
 
 ### 🔧 Improved
 
+- **Dialog Component**: Improved Dialog styling with darker backdrop (bg-black/50 + backdrop-blur-sm), cleaner content box (rounded-2xl, better shadows), and cleaner footer layout. Better UX for confirmation dialogs.
+
 - **API Routes**: Updated all API routes to support slug-based queries while maintaining backward compatibility with ID-based access.
 
 - **Event Wizard**: Added slug preview during event creation, showing how the invitation URL will look.
