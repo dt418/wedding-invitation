@@ -48,21 +48,25 @@ export async function GET(req: NextRequest, { params }: { params: Promise<{ id: 
     const ov = overrideMap.get(s.sectionType);
     const defaultContent = (s.defaultContent || {}) as Record<string, unknown>;
     
-    // Merge eventContent into section content
+    // Merge event data into all sections (for classic invite preview)
     const mergedContent = {
       ...defaultContent,
       ...(ov?.customContent || {}),
-      // Add event data if section is classic-invite
-      ...(s.sectionType === "classic-invite" ? {
-        groomName: event.groomName || eventContent.groomName || "",
-        brideName: event.brideName || eventContent.brideName || "",
-        eventDate: event.eventDate?.toString() || "",
-        eventTime: event.eventTime?.toString() || "",
-        venueName: event.venueName || "",
-        venueAddress: event.venueAddress || "",
-        mapUrl: event.mapUrl || "",
-        ...eventContent,
-      } : {}),
+      groomName: event.groomName || eventContent.groomName || defaultContent.groomName || "",
+      brideName: event.brideName || eventContent.brideName || defaultContent.brideName || "",
+      groomFather: eventContent.groomFather || defaultContent.groomFather || "",
+      groomMother: eventContent.groomMother || defaultContent.groomMother || "",
+      brideFather: eventContent.brideFather || defaultContent.brideFather || "",
+      brideMother: eventContent.brideMother || defaultContent.brideMother || "",
+      groomAddress: eventContent.groomAddress || defaultContent.groomAddress || "",
+      brideAddress: eventContent.brideAddress || defaultContent.brideAddress || "",
+      eventDate: event.eventDate?.toString() || "",
+      eventTime: event.eventTime?.toString() || "",
+      ceremonyTime: event.eventTime?.toString() || "",
+      venueName: event.venueName || "",
+      venueAddress: event.venueAddress || "",
+      mapUrl: event.mapUrl || "",
+      ...eventContent,
     };
 
     return {

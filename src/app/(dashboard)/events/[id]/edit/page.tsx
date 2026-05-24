@@ -171,6 +171,13 @@ export default function EventEditPage() {
                   sections={sections}
                   onToggleVisibility={handleToggleVisibility}
                   onSectionUpdate={handleSectionUpdate}
+                  onContentChange={(id, content) => {
+                    setSections((prev) =>
+                      prev.map((s) =>
+                        s.id === id ? { ...s, customContent: content } : s
+                      )
+                    );
+                  }}
                 />
               </div>
             </div>

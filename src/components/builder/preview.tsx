@@ -14,7 +14,7 @@ interface PreviewProps {
   isFullPreview?: boolean;
 }
 
-export default function BuilderPreview({ sections, colorTokens, isFullPreview }: PreviewProps) {
+export default function BuilderPreview({ sections, isFullPreview }: PreviewProps) {
   const [mode, setMode] = useState<"desktop" | "mobile">("desktop");
 
   if (isFullPreview) {

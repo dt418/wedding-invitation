@@ -19,6 +19,7 @@ interface SectionListProps {
   sections: SectionItem[];
   onToggleVisibility: (id: string) => void;
   onSectionUpdate?: (id: string, updates: Partial<SectionItem>) => void;
+  onContentChange?: (id: string, content: Record<string, unknown>) => void;
 }
 
 const SECTION_LABELS: Record<string, string> = {
@@ -47,7 +48,7 @@ const SECTION_ICONS: Record<string, React.ComponentType<{ className?: string }>>
   "footer": FileTextIcon,
 };
 
-export default function SectionList({ sections, onToggleVisibility, onSectionUpdate }: SectionListProps) {
+export default function SectionList({ sections, onToggleVisibility, onSectionUpdate, onContentChange }: SectionListProps) {
   const [expandedSections, setExpandedSections] = useState<Set<string>>(new Set());
   const [localContent, setLocalContent] = useState<Record<string, Record<string, unknown>>>({});
 
@@ -64,13 +65,21 @@ export default function SectionList({ sections, onToggleVisibility, onSectionUpd
   };
 
   const handleContentChange = (sectionId: string, field: string, value: unknown) => {
+    const newContent = {
+      ...(localContent[sectionId] || {}),
+      [field]: value,
+    };
     setLocalContent((prev) => ({
       ...prev,
-      [sectionId]: {
-        ...prev[sectionId],
-        [field]: value,
-      },
+      [sectionId]: newContent,
     }));
+    if (onContentChange) {
+      const section = sections.find((s) => s.id === sectionId);
+      onContentChange(sectionId, {
+        ...section?.customContent,
+        ...newContent,
+      });
+    }
   };
 
   const handleSave = (sectionId: string) => {
@@ -189,6 +198,175 @@ export default function SectionList({ sections, onToggleVisibility, onSectionUpd
                       placeholder="Nhập mô tả..."
                       rows={3}
                       className="w-full min-w-0 rounded-lg border border-input bg-transparent px-2.5 py-1.5 text-sm transition-colors outline-none focus-visible:border-ring focus-visible:ring-3 focus-visible:ring-ring/50 resize-none"
+                    />
+                  </div>
+                )}
+
+                {/* Wedding Card Fields */}
+                {customData.groomName && (
+                  <div className="space-y-1">
+                    <label className="text-xs font-medium text-zinc-500">Tên chú rể</label>
+                    <Input
+                      value={(customData.groomName as string) || ""}
+                      onChange={(e) => handleContentChange(section.id, "groomName", e.target.value)}
+                      placeholder="Nhập tên chú rể..."
+                      className="h-8 bg-white"
+                    />
+                  </div>
+                )}
+
+                {customData.brideName && (
+                  <div className="space-y-1">
+                    <label className="text-xs font-medium text-zinc-500">Tên cô dâu</label>
+                    <Input
+                      value={(customData.brideName as string) || ""}
+                      onChange={(e) => handleContentChange(section.id, "brideName", e.target.value)}
+                      placeholder="Nhập tên cô dâu..."
+                      className="h-8 bg-white"
+                    />
+                  </div>
+                )}
+
+                {customData.groomNickname && (
+                  <div className="space-y-1">
+                    <label className="text-xs font-medium text-zinc-500">Biệt danh chú rể</label>
+                    <Input
+                      value={(customData.groomNickname as string) || ""}
+                      onChange={(e) => handleContentChange(section.id, "groomNickname", e.target.value)}
+                      placeholder="Nhập biệt danh..."
+                      className="h-8 bg-white"
+                    />
+                  </div>
+                )}
+
+                {customData.brideNickname && (
+                  <div className="space-y-1">
+                    <label className="text-xs font-medium text-zinc-500">Biệt danh cô dâu</label>
+                    <Input
+                      value={(customData.brideNickname as string) || ""}
+                      onChange={(e) => handleContentChange(section.id, "brideNickname", e.target.value)}
+                      placeholder="Nhập biệt danh..."
+                      className="h-8 bg-white"
+                    />
+                  </div>
+                )}
+
+                {customData.groomFather && (
+                  <div className="space-y-1">
+                    <label className="text-xs font-medium text-zinc-500">Bố chú rể</label>
+                    <Input
+                      value={(customData.groomFather as string) || ""}
+                      onChange={(e) => handleContentChange(section.id, "groomFather", e.target.value)}
+                      placeholder="Nhập tên bố chú rể..."
+                      className="h-8 bg-white"
+                    />
+                  </div>
+                )}
+
+                {customData.groomMother && (
+                  <div className="space-y-1">
+                    <label className="text-xs font-medium text-zinc-500">Mẹ chú rể</label>
+                    <Input
+                      value={(customData.groomMother as string) || ""}
+                      onChange={(e) => handleContentChange(section.id, "groomMother", e.target.value)}
+                      placeholder="Nhập tên mẹ chú rể..."
+                      className="h-8 bg-white"
+                    />
+                  </div>
+                )}
+
+                {customData.brideFather && (
+                  <div className="space-y-1">
+                    <label className="text-xs font-medium text-zinc-500">Bố cô dâu</label>
+                    <Input
+                      value={(customData.brideFather as string) || ""}
+                      onChange={(e) => handleContentChange(section.id, "brideFather", e.target.value)}
+                      placeholder="Nhập tên bố cô dâu..."
+                      className="h-8 bg-white"
+                    />
+                  </div>
+                )}
+
+                {customData.brideMother && (
+                  <div className="space-y-1">
+                    <label className="text-xs font-medium text-zinc-500">Mẹ cô dâu</label>
+                    <Input
+                      value={(customData.brideMother as string) || ""}
+                      onChange={(e) => handleContentChange(section.id, "brideMother", e.target.value)}
+                      placeholder="Nhập tên mẹ cô dâu..."
+                      className="h-8 bg-white"
+                    />
+                  </div>
+                )}
+
+                {customData.groomAddress && (
+                  <div className="space-y-1">
+                    <label className="text-xs font-medium text-zinc-500">Địa chỉ nhà gái</label>
+                    <Input
+                      value={(customData.groomAddress as string) || ""}
+                      onChange={(e) => handleContentChange(section.id, "groomAddress", e.target.value)}
+                      placeholder="Nhập địa chỉ..."
+                      className="h-8 bg-white"
+                    />
+                  </div>
+                )}
+
+                {customData.brideAddress && (
+                  <div className="space-y-1">
+                    <label className="text-xs font-medium text-zinc-500">Địa chỉ nhà trai</label>
+                    <Input
+                      value={(customData.brideAddress as string) || ""}
+                      onChange={(e) => handleContentChange(section.id, "brideAddress", e.target.value)}
+                      placeholder="Nhập địa chỉ..."
+                      className="h-8 bg-white"
+                    />
+                  </div>
+                )}
+
+                {customData.eventDate && (
+                  <div className="space-y-1">
+                    <label className="text-xs font-medium text-zinc-500">Ngày cưới</label>
+                    <Input
+                      value={(customData.eventDate as string) || ""}
+                      onChange={(e) => handleContentChange(section.id, "eventDate", e.target.value)}
+                      type="date"
+                      className="h-8 bg-white"
+                    />
+                  </div>
+                )}
+
+                {customData.eventTime && (
+                  <div className="space-y-1">
+                    <label className="text-xs font-medium text-zinc-500">Giờ tổ chức</label>
+                    <Input
+                      value={(customData.eventTime as string) || ""}
+                      onChange={(e) => handleContentChange(section.id, "eventTime", e.target.value)}
+                      placeholder="VD: 18:00"
+                      className="h-8 bg-white"
+                    />
+                  </div>
+                )}
+
+                {customData.venueName && (
+                  <div className="space-y-1">
+                    <label className="text-xs font-medium text-zinc-500">Địa điểm</label>
+                    <Input
+                      value={(customData.venueName as string) || ""}
+                      onChange={(e) => handleContentChange(section.id, "venueName", e.target.value)}
+                      placeholder="Nhập tên nhà hàng..."
+                      className="h-8 bg-white"
+                    />
+                  </div>
+                )}
+
+                {customData.mapUrl && (
+                  <div className="space-y-1">
+                    <label className="text-xs font-medium text-zinc-500">Link bản đồ</label>
+                    <Input
+                      value={(customData.mapUrl as string) || ""}
+                      onChange={(e) => handleContentChange(section.id, "mapUrl", e.target.value)}
+                      placeholder="https://..."
+                      className="h-8 bg-white"
                     />
                   </div>
                 )}

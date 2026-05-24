@@ -44,7 +44,6 @@ function getYear(dateStr: string): string {
 export default function ClassicInviteRenderer({
   sections,
   previewMode = "desktop",
-  locale: _locale = "vi"
 }: RendererProps) {
   const containerClass = previewMode === "mobile" 
     ? "w-[375px] mx-auto border-x" 
@@ -54,8 +53,8 @@ export default function ClassicInviteRenderer({
   
   const groomName = (content.groomName as string) || "Chú Rể";
   const brideName = (content.brideName as string) || "Cô Dâu";
-  const groomNickname = (content.groomNickname as string) || "";
-  const brideNickname = (content.brideNickname as string) || "";
+  const groomNickname = (content.groomNickname as string) || (content.nicknames as string)?.split(" & ")[0] || "";
+  const brideNickname = (content.brideNickname as string) || (content.nicknames as string)?.split(" & ")[1] || "";
   const groomFather = (content.groomFather as string) || "";
   const groomMother = (content.groomMother as string) || "";
   const brideFather = (content.brideFather as string) || "";
@@ -74,22 +73,24 @@ export default function ClassicInviteRenderer({
   const countdownMinutes = 0;
   const countdownSeconds = 0;
 
+  const CDN_URL = "/images";
+
   return (
     <div className={containerClass} style={{ backgroundColor: CLASSIC_COLORS.linen, padding: 0 }}>
       {/* Header with dragon pattern */}
       <div className="relative w-full h-12 sm:h-16 md:h-[128px]" style={{ backgroundColor: CLASSIC_COLORS.red }}>
-        <div className="absolute inset-0 opacity-40" style={{ backgroundImage: "url('/images/double-dragon.webp')", backgroundSize: "clamp(300px, 50vw, 500px)" }} />
+        <div className="absolute inset-0 opacity-40" style={{ backgroundImage: `url('${CDN_URL}/double-dragon.webp')`, backgroundSize: "clamp(300px, 50vw, 500px)" }} />
       </div>
 
       {/* Couple info section */}
       <div className="relative w-full py-6 sm:py-8 md:py-10 px-2 overflow-hidden" style={{ backgroundColor: CLASSIC_COLORS.linen }}>
-        <div className="absolute inset-0 opacity-25" style={{ backgroundImage: "url('/images/double-dragon.webp')", backgroundSize: "clamp(300px, 50vw, 500px)", backgroundPositionY: "50%", mixBlendMode: "color-dodge" }} />
+        <div className="absolute inset-0 opacity-25" style={{ backgroundImage: `url('${CDN_URL}/double-dragon.webp')`, backgroundSize: "clamp(300px, 50vw, 500px)", backgroundPositionY: "50%", mixBlendMode: "color-dodge" }} />
         
         {/* Red bar with chu-hy image */}
         <div className="absolute left-0 right-0 h-[40px] sm:h-[50px] md:h-[70px] top-[66px] sm:top-[88px] md:top-[125px] z-10" style={{ backgroundColor: CLASSIC_COLORS.red }}>
-          <div className="absolute inset-0 opacity-40" style={{ backgroundImage: "url('/images/double-dragon.webp')", backgroundSize: "clamp(300px, 50vw, 500px)", backgroundPositionY: "30%" }} />
+          <div className="absolute inset-0 opacity-40" style={{ backgroundImage: `url('${CDN_URL}/double-dragon.webp')`, backgroundSize: "clamp(300px, 50vw, 500px)", backgroundPositionY: "30%" }} />
           {/* eslint-disable-next-line @next/next/no-img-element */}
-          <img alt="" className="absolute left-1/2 top-1/2 -translate-x-1/2 -translate-y-1/2 w-[52px] h-[52px] sm:w-[70px] sm:h-[70px] md:w-[96px] md:h-[96px]" src="/images/chu-hy.webp" />
+          <img alt="" className="absolute left-1/2 top-1/2 -translate-x-1/2 -translate-y-1/2 w-[52px] h-[52px] sm:w-[70px] sm:h-[70px] md:w-[96px] md:h-[96px] object-contain" src={`${CDN_URL}/chu-hy.webp`} />
         </div>
 
         {/* Couple avatars and names */}
@@ -97,7 +98,7 @@ export default function ClassicInviteRenderer({
           {/* Groom */}
           <div className="flex flex-col items-center flex-1 min-w-0 pointer-events-auto">
             {/* eslint-disable-next-line @next/next/no-img-element */}
-            <img className="rounded-full w-[120px] h-[120px] sm:w-[160px] sm:h-[160px] md:w-[240px] md:h-[240px] object-cover" alt={groomName} src="/images/avatar-placeholder.jpeg" />
+            <img className="rounded-full w-[120px] h-[120px] sm:w-[160px] sm:h-[160px] md:w-[240px] md:h-[240px] object-cover bg-rose-100" alt={groomName} src={`${CDN_URL}/avatar-placeholder.jpeg`} />
             {groomNickname && <div className="font-light font-helvetica text-xs sm:text-sm md:text-base mt-2 sm:mt-3 md:mt-4" style={{ color: CLASSIC_COLORS.gray }}>{groomNickname}</div>}
             <div className="text-2xl sm:text-3xl md:text-4xl font-fz-aghita whitespace-nowrap" style={{ color: CLASSIC_COLORS.red }}>{groomName}</div>
           </div>
@@ -107,7 +108,7 @@ export default function ClassicInviteRenderer({
           {/* Bride */}
           <div className="flex flex-col items-center flex-1 min-w-0 pointer-events-auto">
             {/* eslint-disable-next-line @next/next/no-img-element */}
-            <img className="rounded-full w-[120px] h-[120px] sm:w-[160px] sm:h-[160px] md:w-[240px] md:h-[240px] object-cover" alt={brideName} src="/images/avatar-placeholder.jpeg" />
+            <img className="rounded-full w-[120px] h-[120px] sm:w-[160px] sm:h-[160px] md:w-[240px] md:h-[240px] object-cover bg-rose-100" alt={brideName} src={`${CDN_URL}/avatar-placeholder.jpeg`} />
             {brideNickname && <div className="font-light font-helvetica text-xs sm:text-sm md:text-base mt-2 sm:mt-3 md:mt-4" style={{ color: CLASSIC_COLORS.gray }}>{brideNickname}</div>}
             <div className="text-2xl sm:text-3xl md:text-4xl font-fz-aghita whitespace-nowrap" style={{ color: CLASSIC_COLORS.red }}>{brideName}</div>
           </div>
@@ -123,7 +124,7 @@ export default function ClassicInviteRenderer({
 
       {/* Parents Info */}
       <div className="relative w-full overflow-hidden" style={{ backgroundColor: CLASSIC_COLORS.linen }}>
-        <div className="absolute inset-0 opacity-25" style={{ backgroundImage: "url('/images/double-dragon.webp')", backgroundSize: "clamp(300px, 50vw, 500px)", backgroundPositionY: "10%", mixBlendMode: "color-dodge" }} />
+        <div className="absolute inset-0 opacity-25" style={{ backgroundImage: `url('${CDN_URL}/double-dragon.webp')`, backgroundSize: "clamp(300px, 50vw, 500px)", backgroundPositionY: "10%", mixBlendMode: "color-dodge" }} />
         
         <div className="relative z-10">
           {/* Parents names */}
@@ -167,7 +168,7 @@ export default function ClassicInviteRenderer({
 
       {/* Dragon pattern divider */}
       <div className="relative w-full overflow-hidden" style={{ backgroundColor: CLASSIC_COLORS.linen }}>
-        <div className="absolute inset-0 opacity-25" style={{ backgroundImage: "url('/images/double-dragon.webp')", backgroundSize: "clamp(300px, 50vw, 500px)", backgroundPositionY: "40%", mixBlendMode: "color-dodge" }} />
+        <div className="absolute inset-0 opacity-25" style={{ backgroundImage: `url('${CDN_URL}/double-dragon.webp')`, backgroundSize: "clamp(300px, 50vw, 500px)", backgroundPositionY: "40%", mixBlendMode: "color-dodge" }} />
       </div>
 
       {/* Reception Info Header */}
@@ -179,7 +180,7 @@ export default function ClassicInviteRenderer({
 
       {/* Reception Info Content */}
       <div className="relative w-full overflow-hidden" style={{ backgroundColor: CLASSIC_COLORS.linen }}>
-        <div className="absolute inset-0 opacity-25" style={{ backgroundImage: "url('/images/double-dragon.webp')", backgroundSize: "clamp(300px, 50vw, 500px)", backgroundPositionY: "60%", mixBlendMode: "color-dodge" }} />
+        <div className="absolute inset-0 opacity-25" style={{ backgroundImage: `url('${CDN_URL}/double-dragon.webp')`, backgroundSize: "clamp(300px, 50vw, 500px)", backgroundPositionY: "60%", mixBlendMode: "color-dodge" }} />
         
         <div className="relative z-10 flex flex-col items-center justify-center w-full px-2 sm:px-4 pt-6 pb-8 -mt-[1px]">
           {/* Time */}
@@ -251,7 +252,7 @@ export default function ClassicInviteRenderer({
 
       {/* Guestbook Section */}
       <div className="relative w-full overflow-hidden" style={{ backgroundColor: CLASSIC_COLORS.linen }}>
-        <div className="absolute inset-0 opacity-25" style={{ backgroundImage: "url('/images/double-dragon.webp')", backgroundSize: "clamp(300px, 50vw, 500px)", backgroundPositionY: "70%", mixBlendMode: "color-dodge" }} />
+        <div className="absolute inset-0 opacity-25" style={{ backgroundImage: `url('${CDN_URL}/double-dragon.webp')`, backgroundSize: "clamp(300px, 50vw, 500px)", backgroundPositionY: "70%", mixBlendMode: "color-dodge" }} />
       </div>
 
       <div className="w-full py-3 md:py-4" style={{ backgroundColor: CLASSIC_COLORS.red }}>
@@ -261,7 +262,7 @@ export default function ClassicInviteRenderer({
       </div>
 
       <div className="relative w-full overflow-hidden" style={{ backgroundColor: CLASSIC_COLORS.linen }}>
-        <div className="absolute inset-0 opacity-25" style={{ backgroundImage: "url('/images/double-dragon.webp')", backgroundSize: "clamp(300px, 50vw, 500px)", backgroundPositionY: "80%", mixBlendMode: "color-dodge" }} />
+        <div className="absolute inset-0 opacity-25" style={{ backgroundImage: `url('${CDN_URL}/double-dragon.webp')`, backgroundSize: "clamp(300px, 50vw, 500px)", backgroundPositionY: "80%", mixBlendMode: "color-dodge" }} />
         
         <section className="relative z-10 flex flex-col items-center justify-center w-full py-8 px-2 sm:px-4" style={{ color: CLASSIC_COLORS.gray }}>
           {/* Guestbook form placeholder */}
@@ -291,7 +292,7 @@ export default function ClassicInviteRenderer({
 
       {/* Thank You Message */}
       <div className="relative w-full overflow-hidden" style={{ backgroundColor: CLASSIC_COLORS.linen }}>
-        <div className="absolute inset-0 opacity-25" style={{ backgroundImage: "url('/images/double-dragon.webp')", backgroundSize: "clamp(300px, 50vw, 500px)", backgroundPositionY: "85%", mixBlendMode: "color-dodge" }} />
+        <div className="absolute inset-0 opacity-25" style={{ backgroundImage: `url('${CDN_URL}/double-dragon.webp')`, backgroundSize: "clamp(300px, 50vw, 500px)", backgroundPositionY: "85%", mixBlendMode: "color-dodge" }} />
         
         <div className="relative z-10 py-8 text-center max-w-4xl mx-auto px-2 sm:px-4">
           <span className="whitespace-pre-line flex flex-col items-center gap-1 text-xl" style={{ color: CLASSIC_COLORS.gray, fontFamily: 'Baskerville, "Times New Roman", serif' }}>
@@ -302,14 +303,8 @@ export default function ClassicInviteRenderer({
 
       {/* Footer */}
       <div className="relative h-12 sm:h-16" style={{ backgroundColor: CLASSIC_COLORS.red }}>
-        <div className="absolute inset-0 opacity-40" style={{ backgroundImage: "url('/images/double-dragon.webp')", backgroundSize: "clamp(300px, 50vw, 500px)", backgroundPositionY: "75%" }} />
+        <div className="absolute inset-0 opacity-40" style={{ backgroundImage: `url('${CDN_URL}/double-dragon.webp')`, backgroundSize: "clamp(300px, 50vw, 500px)", backgroundPositionY: "75%" }} />
       </div>
-
-      <footer className="w-full flex items-center justify-center py-1.5" style={{ backgroundColor: CLASSIC_COLORS.linen }}>
-        <a href="https://chungdoi.com" target="_blank" rel="noopener noreferrer" className="text-xs opacity-50 hover:opacity-70 transition-opacity" style={{ color: CLASSIC_COLORS.gray }}>
-          ♡ chungdoi.com
-        </a>
-      </footer>
     </div>
   );
 }

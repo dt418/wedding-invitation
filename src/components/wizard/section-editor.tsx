@@ -43,14 +43,9 @@ export function SectionEditor({
   className,
 }: SectionEditorProps) {
   const [expandedStep, setExpandedStep] = useState<number | null>(currentStep);
-  const [editingSection, setEditingSection] = useState<string | null>(null);
 
   const toggleStep = (step: number) => {
     setExpandedStep(expandedStep === step ? null : step);
-  };
-
-  const handleEditClick = (step: number, sectionId: string) => {
-    onSectionClick(step, sectionId);
   };
 
   const handleJumpToStep = (step: number) => {
@@ -133,7 +128,7 @@ export function SectionEditor({
                       {/* Quick Edit Button */}
                       {onSectionUpdate && section.hasContent && (
                         <button
-                          onClick={() => setEditingSection(section.id)}
+                          onClick={() => onSectionClick(group.step, section.id)}
                           className="p-1.5 rounded-md hover:bg-muted text-muted-foreground hover:text-foreground transition-colors"
                           title="Chỉnh sửa nhanh"
                         >
@@ -225,7 +220,6 @@ interface QuickEditPanelProps {
 }
 
 export function QuickEditPanel({
-  sectionId,
   sectionName,
   fields,
   onFieldChange,
