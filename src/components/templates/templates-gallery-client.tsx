@@ -3,6 +3,7 @@
 import { useState } from "react";
 import Image from "next/image";
 import { TemplateActionModal } from "./template-action-modal";
+import { translations, type Locale } from "@/lib/i18n";
 
 type Template = {
   id: string;
@@ -20,18 +21,28 @@ type Template = {
 
 interface TemplatesGalleryClientProps {
   templates: Template[];
+  locale?: Locale;
+}
+
+function getLocaleFromCookies(): Locale {
+  if (typeof document === "undefined") return "vi";
+  const match = document.cookie.match(/locale=([^;]+)/);
+  return (match?.[1] as Locale) || "vi";
 }
 
 export function TemplatesGalleryClient({
   templates,
+  locale = getLocaleFromCookies(),
 }: TemplatesGalleryClientProps) {
   const [selectedTemplate, setSelectedTemplate] = useState<Template | null>(null);
+  const t = translations[locale].home;
+  const cats = translations[locale].categories;
 
   return (
     <>
       <div className="w-full">
-        <h1 className="text-2xl font-semibold mb-2">All Templates</h1>
-        <p className="text-zinc-500 mb-8">Choose a template for your wedding invitation</p>
+        <h1 className="text-2xl font-semibold mb-2">{t.viewAll}</h1>
+        <p className="text-zinc-500 mb-8">{t.featuresSubtitle.split(".")[0]}</p>
 
         <div className="grid grid-cols-2 md:grid-cols-3 lg:grid-cols-4 xl:grid-cols-5 gap-3">
           {templates.map((tmpl) => (
@@ -61,7 +72,7 @@ export function TemplatesGalleryClient({
                   <h3 className="mb-1 text-sm font-semibold text-white">{tmpl.name}</h3>
                   <div className="mb-2 flex flex-wrap gap-1">
                     <span className="rounded bg-white/20 px-1.5 py-0.5 text-[10px] text-white">
-                      {tmpl.category}
+                      {cats[tmpl.category as keyof typeof cats] || tmpl.category}
                     </span>
                     {tmpl.isPremium && (
                       <span className="rounded bg-amber-500/80 px-1.5 py-0.5 text-[10px] text-white">

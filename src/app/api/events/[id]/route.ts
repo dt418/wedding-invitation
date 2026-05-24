@@ -41,9 +41,17 @@ export async function PATCH(req: NextRequest, { params }: { params: Promise<{ id
     );
   }
 
+  // Handle eventContent separately since it's JSONB
+  const { eventContent, ...rest } = parsed.data;
+
+  const updateData: Record<string, unknown> = { ...rest, updatedAt: new Date() };
+  if (eventContent !== undefined) {
+    updateData.eventContent = eventContent;
+  }
+
   const [updated] = await db
     .update(events)
-    .set({ ...parsed.data, updatedAt: new Date() })
+    .set(updateData)
     .where(and(eq(events.id, id), eq(events.userId, userId)))
     .returning();
 

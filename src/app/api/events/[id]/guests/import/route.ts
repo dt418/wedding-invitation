@@ -61,6 +61,7 @@ export async function POST(req: NextRequest, { params }: { params: Promise<{ id:
       email: row.email || row.Email || row["E-mail"],
       phone: row.phone || row.Phone || row.Số_điện_thoại,
       relation: row.relation || row.Relation || row["Phía"],
+      gender: row.gender || row.Gender || row.Giới_tính,
       tableNumber: row.tableNumber ? parseInt(row.tableNumber, 10) : undefined,
       seatCount: row.seatCount ? parseInt(row.seatCount, 10) : undefined,
       groupName: row.groupName || row.Group,

@@ -7,6 +7,8 @@ import LoginSuccessToastWrapper from "@/components/login-success-toast";
 import { Button } from "@/components/ui/button";
 import { Icons } from "@/components/ui/icons";
 import { User } from "lucide-react";
+import LanguageSelector from "@/components/ui/language-selector";
+import { getLocale, t } from "@/lib/i18n-server";
 
 export default async function DashboardLayout({
   children,
@@ -14,6 +16,9 @@ export default async function DashboardLayout({
   children: React.ReactNode;
 }) {
   const user = await getCurrentUser();
+  const locale = await getLocale();
+
+  const labels = t("dashboard", locale) as unknown as Record<string, string>;
 
   return (
     <>
@@ -24,31 +29,32 @@ export default async function DashboardLayout({
           <div className="flex items-center justify-between max-w-7xl mx-auto">
             <div className="flex items-center gap-8">
               <Link href="/" className="text-xl font-semibold text-rose-600">
-                Wedding Invite
+                {labels.brand}
               </Link>
               <nav className="flex gap-6 text-sm">
                 <Link
                   href="/events"
                   className="text-zinc-600 hover:text-zinc-900 transition-colors"
                 >
-                  Events
+                  {labels.events}
                 </Link>
                 <Link
                   href="/templates"
                   className="text-zinc-600 hover:text-zinc-900 transition-colors"
                 >
-                  Templates
+                  {labels.templates}
                 </Link>
               </nav>
             </div>
             <div className="flex items-center gap-4">
+              <LanguageSelector currentLocale={locale} />
               {user ? (
                 <>
                   <Link
                     href="/settings"
                     className="text-sm text-zinc-600 hover:text-zinc-900 transition-colors"
                   >
-                    Settings
+                    {labels.settings}
                   </Link>
                   <div className="flex items-center gap-3">
                     {/* Avatar */}
@@ -89,7 +95,7 @@ export default async function DashboardLayout({
                         type="submit"
                         className="text-sm text-zinc-500 hover:text-zinc-700 transition-colors"
                       >
-                        Logout
+                        {labels.logout}
                       </button>
                     </form>
                   </div>
@@ -99,11 +105,11 @@ export default async function DashboardLayout({
                   <Link href="/login">
                     <Button variant="ghost" size="sm">
                       <Icons.user className="w-4 h-4 mr-2" />
-                      Sign In
+                      {labels.signIn}
                     </Button>
                   </Link>
                   <Link href="/register">
-                    <Button size="sm">Get Started</Button>
+                    <Button size="sm">{labels.getStarted}</Button>
                   </Link>
                 </>
               )}
