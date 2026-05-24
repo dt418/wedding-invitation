@@ -1,6 +1,6 @@
 import { NextRequest, NextResponse } from "next/server";
 import { db } from "@/db";
-import { events, templateSections, sections } from "@/db/schema";
+import { events, templateSections as eventOverrides, sections } from "@/db/schema";
 import { verifyToken } from "@/lib/auth";
 import { eq, and } from "drizzle-orm";
 
@@ -23,26 +23,58 @@ export async function GET(req: NextRequest, { params }: { params: Promise<{ id: 
     .limit(1);
   if (!event) return NextResponse.json({ error: "Not found" }, { status: 404 });
 
-  const all = await db.select().from(sections);
+  // Get sections for this event's template
+  const templateSections = event.templateId
+    ? await db
+        .select()
+        .from(sections)
+        .where(eq(sections.templateId, event.templateId))
+        .orderBy(sections.order)
+    : [];
+
+  // Get event-specific overrides
   const overrides = await db
     .select()
-    .from(templateSections)
-    .where(eq(templateSections.eventId, eventId));
+    .from(eventOverrides)
+    .where(eq(eventOverrides.eventId, eventId));
 
   const overrideMap = new Map(overrides.map((o) => [o.sectionType, o]));
 
-  const result = all.map((s) => {
+  // Get eventContent for classic invite data
+  const eventContent = event.eventContent as Record<string, unknown> || {};
+
+  // Build sections with event-specific data
+  const result = templateSections.map((s) => {
     const ov = overrideMap.get(s.sectionType);
+    const defaultContent = (s.defaultContent || {}) as Record<string, unknown>;
+    
+    // Merge eventContent into section content
+    const mergedContent = {
+      ...defaultContent,
+      ...(ov?.customContent || {}),
+      // Add event data if section is classic-invite
+      ...(s.sectionType === "classic-invite" ? {
+        groomName: event.groomName || eventContent.groomName || "",
+        brideName: event.brideName || eventContent.brideName || "",
+        eventDate: event.eventDate?.toString() || "",
+        eventTime: event.eventTime?.toString() || "",
+        venueName: event.venueName || "",
+        venueAddress: event.venueAddress || "",
+        mapUrl: event.mapUrl || "",
+        ...eventContent,
+      } : {}),
+    };
+
     return {
       id: ov?.id || s.id,
       sectionType: s.sectionType,
-      customContent: ov?.customContent || s.defaultContent,
+      customContent: mergedContent,
       customTheme: ov?.customTheme,
       visibility: ov?.visibility || "visible",
       order: s.order,
       isRequired: s.isRequired,
     };
-  }).sort((a, b) => (a.order as number) - (b.order as number));
+  });
 
   return NextResponse.json(result);
 }
@@ -66,20 +98,20 @@ export async function PATCH(req: NextRequest, { params }: { params: Promise<{ id
 
   const [existing] = await db
     .select()
-    .from(templateSections)
+    .from(eventOverrides)
     .where(and(
-      eq(templateSections.eventId, eventId),
-      eq(templateSections.sectionType, sectionType)
+      eq(eventOverrides.eventId, eventId),
+      eq(eventOverrides.sectionType, sectionType)
     ))
     .limit(1);
 
   if (existing) {
     await db
-      .update(templateSections)
+      .update(eventOverrides)
       .set({ customContent, customTheme, visibility, updatedAt: new Date() })
-      .where(eq(templateSections.id, existing.id));
+      .where(eq(eventOverrides.id, existing.id));
   } else {
-    await db.insert(templateSections).values({
+    await db.insert(eventOverrides).values({
       eventId,
       sectionType,
       customContent,

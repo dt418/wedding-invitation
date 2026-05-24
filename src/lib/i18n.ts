@@ -192,6 +192,13 @@ export const translations = {
     timeline: {
       title: "Lịch trình",
     },
+    gallery: {
+      title: "Album Ảnh Cưới",
+    },
+    thankYou: {
+      title: "Cảm ơn",
+      message: "Cảm ơn bạn đã ghé thăm!",
+    },
     eventsPage: {
       title: "Sự kiện của tôi",
       eventCount: "sự kiện",
@@ -201,6 +208,13 @@ export const translations = {
       published: "Đã xuất bản",
       draft: "Bản nháp",
       archived: "Đã lưu trữ",
+      view: "Xem",
+      edit: "Chỉnh sửa",
+      delete: "Xóa",
+      confirmDelete: "Bạn có chắc muốn xóa sự kiện này?",
+      deleteWarning: "Hành động này không thể hoàn tác.",
+      cancel: "Hủy",
+      confirmDeleteBtn: "Xóa",
     },
   },
   en: {
@@ -393,8 +407,15 @@ export const translations = {
       brand: "Wedding",
       getStarted: "Get Started",
     },
-    timeline: {
-      title: "Schedule",
+timeline: {
+      title: "Timeline",
+    },
+    gallery: {
+      title: "Wedding Album",
+    },
+    thankYou: {
+      title: "Thank You",
+      message: "Thank you for visiting!",
     },
     eventsPage: {
       title: "My Events",
@@ -405,6 +426,13 @@ export const translations = {
       published: "Published",
       draft: "Draft",
       archived: "Archived",
+      view: "View",
+      edit: "Edit",
+      delete: "Delete",
+      confirmDelete: "Are you sure you want to delete this event?",
+      deleteWarning: "This action cannot be undone.",
+      cancel: "Cancel",
+      confirmDeleteBtn: "Delete",
     },
   },
   zh: {
@@ -600,6 +628,13 @@ export const translations = {
     timeline: {
       title: "日程",
     },
+    gallery: {
+      title: "婚礼相册",
+    },
+    thankYou: {
+      title: "谢谢",
+      message: "感谢您的到来！",
+    },
     eventsPage: {
       title: "我的活动",
       eventCount: "活动",
@@ -609,6 +644,13 @@ export const translations = {
       published: "已发布",
       draft: "草稿",
       archived: "已存档",
+      view: "查看",
+      edit: "编辑",
+      delete: "删除",
+      confirmDelete: "您确定要删除此活动吗？",
+      deleteWarning: "此操作无法撤消。",
+      cancel: "取消",
+      confirmDeleteBtn: "删除",
     },
   },
   ja: {
@@ -804,6 +846,13 @@ export const translations = {
     timeline: {
       title: "スケジュール",
     },
+    gallery: {
+      title: "ウェディングアルバム",
+    },
+thankYou: {
+      title: "ありがとう",
+      message: "ご訪問ありがとうございます",
+    },
     eventsPage: {
       title: "マイイベント",
       eventCount: "イベント",
@@ -813,6 +862,13 @@ export const translations = {
       published: "公開済み",
       draft: "下書き",
       archived: "アーカイブ済み",
+      view: "表示",
+      edit: "編集",
+      delete: "削除",
+      confirmDelete: "このイベントを削除してもよろしいですか？",
+      deleteWarning: "この操作は元に戻せません。",
+      cancel: "キャンセル",
+      confirmDeleteBtn: "削除",
     },
   },
   ko: {
@@ -1008,6 +1064,13 @@ export const translations = {
     timeline: {
       title: "일정",
     },
+    gallery: {
+      title: "웨딩 앨범",
+    },
+    thankYou: {
+      title: "감사합니다",
+      message: "방문해 주셔서 감사합니다",
+    },
     eventsPage: {
       title: "내 이벤트",
       eventCount: "이벤트",
@@ -1017,6 +1080,13 @@ export const translations = {
       published: "게시됨",
       draft: "초안",
       archived: "보관됨",
+      view: "보기",
+      edit: "편집",
+      delete: "삭제",
+      confirmDelete: "이 이벤트를 삭제하시겠습니까?",
+      deleteWarning: "이 작업은 취소할 수 없습니다.",
+      cancel: "취소",
+      confirmDeleteBtn: "삭제",
     },
   },
 } as const;

@@ -54,6 +54,30 @@ export async function POST(req: NextRequest) {
     );
   }
 
+  // Extract eventContent from additional fields in body
+  const eventContent = {
+    groomName: body.groomName,
+    brideName: body.brideName,
+    groomFather: body.groomFather,
+    groomMother: body.groomMother,
+    brideFather: body.brideFather,
+    brideMother: body.brideMother,
+    groomAddress: body.groomAddress,
+    brideAddress: body.brideAddress,
+    ceremonyType: body.ceremonyType,
+    timeline: body.timeline,
+    images: body.images,
+    thankYouNote: body.thankYouNote,
+    groomBank: body.groomBank,
+    groomAccount: body.groomAccount,
+    brideBank: body.brideBank,
+    brideAccount: body.brideAccount,
+    musicEnabled: body.musicEnabled,
+    musicUrl: body.musicUrl,
+    rsvpEnabled: body.rsvpEnabled,
+    guestbookEnabled: body.guestbookEnabled,
+  };
+
   const [created] = await db
     .insert(events)
     .values({
@@ -67,6 +91,9 @@ export async function POST(req: NextRequest) {
       venueAddress: venueAddress ?? null,
       mapUrl: mapUrl ?? null,
       description: description ?? null,
+      groomName: body.groomName,
+      brideName: body.brideName,
+      eventContent,
       status: "draft",
     })
     .returning();

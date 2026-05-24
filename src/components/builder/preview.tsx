@@ -1,7 +1,7 @@
 "use client";
 
 import { useState } from "react";
-import InviteRenderer from "@/components/invite-renderer";
+import InviteRenderer from "@/components/classic-invite-renderer";
 
 interface PreviewProps {
   sections: Array<{
@@ -47,7 +47,6 @@ export default function BuilderPreview({ sections, colorTokens, isFullPreview }:
           <div className="bg-white rounded-xl shadow-xl overflow-hidden min-h-150">
             <InviteRenderer
               sections={sections}
-              colorTokens={colorTokens}
               previewMode={mode}
             />
           </div>
@@ -86,7 +85,6 @@ export default function BuilderPreview({ sections, colorTokens, isFullPreview }:
         <div className="bg-white rounded-lg shadow-lg overflow-hidden min-h-150">
           <InviteRenderer
             sections={sections}
-            colorTokens={colorTokens}
             previewMode={mode}
           />
         </div>
