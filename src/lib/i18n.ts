@@ -14,7 +14,7 @@ export const translations = {
       trustCount: "46,000+",
       trustLabel: "cặp đôi tin tưởng",
       thiepTitle: "Trân trọng kính mời",
-      thiepNames: "Minh Quâni & Thanh Lan",
+      thiepNames: "Minh Quân & Thanh Lan",
       thiepDate: "15 · 06 · 2025 · 11:00 SA",
       thiepVenue: "Diamond Palace – Hà Nội",
       personalMsg: "Lời nhắn",
