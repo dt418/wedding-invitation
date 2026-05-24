@@ -94,7 +94,29 @@ Required in `.env.local`:
 - Use `import type` for type-only imports to reduce bundle size
 - Auth check inside each route/action — don't rely solely on middleware
 - Prefer `React.cache()` for server-side DB call deduplication within a request
-- Always commit with a descriptive commit message; never use `--allow-empty-message` or skip description
+
+## Git Commit Rules
+
+- **ALWAYS write detailed commit messages** - describe WHAT changed and WHY, not just WHAT
+- Commit message format:
+  ```
+  <type>: <short summary>
+  
+  <detailed description of changes>
+  
+  - Bullet points for multiple changes
+  - Include relevant file paths or component names
+  - Mention related issues or features if applicable
+  ```
+- Good commit examples:
+  - `fix: improve Dialog overlay with darker backdrop and blur effect`
+  - `feat: add delete confirmation dialog with i18n labels for event cards`
+  - `refactor: extract preview sections logic to separate utility function`
+- Bad commit examples (too vague):
+  - `fix: update dialog`
+  - `fix: bug`
+  - `wip`
+- Never commit with `--allow-empty-message` or skip description
 
 ## Figma-to-Code Design System Rules
 
